@@ -1,0 +1,1143 @@
+<!doctype html>
+<html lang="pt" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Levo o Cão</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: '#5B7553',
+            sand: '#F5F0E8',
+            bark: '#3D2C1E',
+            cream: '#FFFDF7',
+            moss: '#8BA67A'
+          },
+          fontFamily: {
+            display: ['Fraunces', 'Georgia', 'serif'],
+            body: ['DM Sans', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+    .app-wrapper { min-height: 100%; overflow-y: auto; overflow-x: hidden; }
+    .fade-in { animation: fadeIn 0.6s ease both; }
+    .fade-in-d1 { animation: fadeIn 0.6s 0.1s ease both; }
+    .fade-in-d2 { animation: fadeIn 0.6s 0.2s ease both; }
+    .fade-in-d3 { animation: fadeIn 0.6s 0.3s ease both; }
+    .fade-in-d4 { animation: fadeIn 0.6s 0.4s ease both; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(61, 44, 30, 0.1); }
+    .cat-btn { transition: all 0.2s ease; }
+    .cat-btn:hover, .cat-btn.active { background: #5B7553; color: #FFFDF7; transform: scale(1.04); }
+    .view-transition { animation: slideUp 0.35s ease both; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: #8BA67A; border-radius: 3px; }
+  </style>
+</head>
+<body class="h-full bg-cream font-body text-bark">
+  <div class="app-wrapper" id="app">
+    <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand">
+      <div class="max-w-3xl mx-auto px-4 py-3 flex items-center justify-between">
+        <button type="button" onclick="showView('home')" class="flex items-center gap-2 group">
+          <div class="w-9 h-9 rounded-full bg-white p-[2px] shadow-sm flex items-center justify-center overflow-hidden cursor-pointer" id="mac-nav-wrap">
+            <img id="mac-nav" src="" alt="Mac" class="w-full h-full rounded-full object-cover border border-sand" />
+          </div>
+          <span id="nav-brand" class="font-display font-bold text-lg text-sage">Levo o Cão</span>
+        </button>
+        <div class="flex items-center gap-1">
+          <button type="button" onclick="showView('list')" class="p-2 rounded-full hover:bg-sand transition" aria-label="Lista de locais">
+            <i data-lucide="list" class="w-5 h-5"></i>
+          </button>
+          <button type="button" onclick="showView('suggest')" class="p-2 rounded-full hover:bg-sand transition" aria-label="Sugerir local">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="view-home">
+      <section class="relative overflow-hidden bg-gradient-to-br from-sand via-cream to-sand">
+        <div class="absolute inset-0 opacity-[0.04]" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='1.5' fill='%233D2C1E'/%3E%3C/svg%3E&quot;);"></div>
+        <div class="relative max-w-3xl mx-auto px-5 pt-12 pb-10 text-center">
+          <div class="fade-in mb-4 flex justify-center">
+            <div class="w-24 h-24 rounded-full bg-white p-[3px] shadow-lg flex items-center justify-center overflow-hidden cursor-pointer" id="mac-hero-wrap">
+              <img id="mac-hero" src="" alt="Mac" class="w-full h-full rounded-full object-cover border-2 border-sage" />
+            </div>
+          </div>
+          <h1 id="el-hero-title" class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">Levo o Cão?</h1>
+          <p id="el-hero-subtitle" class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Descobre e partilha locais pet-friendly em Portugal — cafés, praias, restaurantes e alojamentos onde os cães são mesmo bem-vindos.</p>
+          <p class="text-xs text-bark/50 mt-1">Inspirado no Mac 🐾</p>
+          <div class="fade-in-d2 mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
+            <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
+            <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">📍 Descobre novos locais</span>
+            <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">✅ Confirma o que é mesmo pet-friendly</span>
+          </div>
+          <div class="fade-in-d3 flex items-center bg-white rounded-2xl shadow-lg shadow-bark/5 border border-sand max-w-md mx-auto overflow-hidden mt-6">
+            <i data-lucide="search" class="w-5 h-5 text-bark/40 ml-4 shrink-0"></i>
+            <input id="search-input" type="text" placeholder="Onde queres ir?" class="flex-1 py-3.5 px-3 bg-transparent outline-none text-bark placeholder:text-bark/40" oninput="filterLocations()" />
+          </div>
+          <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              <i data-lucide="map-pin" class="w-4 h-4"></i>
+              Explorar locais
+            </button>
+            <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              Adicionar local
+            </button>
+          </div>
+          <p class="mt-4 text-sm text-bark/60 max-w-lg mx-auto">Este projeto cresce com a comunidade: descobre sítios bons e adiciona novos locais para outros donos de cães.</p>
+          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto">As novas sugestões são revistas antes de ficarem visíveis no site.</p>
+        </div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 py-8">
+        <div class="mb-6 rounded-3xl bg-sand/70 border border-sand p-5">
+          <div class="grid sm:grid-cols-3 gap-4 text-left">
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">1. Descobre</p>
+              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, categoria ou sugestões recentes.</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">2. Confirma</p>
+              <p class="text-sm text-bark/70">Ajuda a comunidade a saber quais os locais onde os cães são realmente bem-vindos.</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">3. Adiciona</p>
+              <p class="text-sm text-bark/70">Conheces um bom sítio? Partilha-o para outros donos de cães o descobrirem.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-6 rounded-3xl bg-white border border-sand shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
+            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor mapa pet-friendly</h2>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um café, praia, restaurante ou alojamento onde os cães são bem-vindos, adiciona-o.</p>
+          </div>
+          <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar local
+          </button>
+        </div>
+
+        <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cat-grid">
+          <button type="button" onclick="filterByCategory('Restaurante', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Restaurantes</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Café', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">☕</span><span class="text-sm font-medium">Cafés</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Praia', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🏖️</span><span class="text-sm font-medium">Praias</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Alojamento', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🏡</span><span class="text-sm font-medium">Alojamentos</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 pb-6">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">Adicionados recentemente</h2>
+          <button type="button" onclick="showView('suggest')" class="text-sage text-sm font-medium inline-flex items-center gap-1">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar o teu
+          </button>
+        </div>
+        <div id="cards-recent" class="grid gap-4 sm:grid-cols-2"></div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 pb-6">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">Mais confirmados pela comunidade</h2>
+          <span class="text-sm text-bark/55">Os favoritos do momento</span>
+        </div>
+        <div id="cards-top" class="grid gap-4 sm:grid-cols-2"></div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 pb-12">
+        <h2 class="font-display text-xl font-bold mb-4">Locais em destaque</h2>
+        <div id="cards-home" class="grid gap-4 sm:grid-cols-2"></div>
+      </section>
+    </div>
+
+    <div id="view-list" class="hidden">
+      <div class="max-w-3xl mx-auto px-5 py-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-display text-xl font-bold">Locais pet-friendly</h2>
+            <p class="text-sm text-bark/55 mt-1">Explora, confirma e ajuda a melhorar a informação.</p>
+          </div>
+          <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+          </button>
+        </div>
+
+        <div class="flex gap-2 flex-wrap mb-5" id="filter-bar">
+          <button type="button" onclick="filterByCategory(null)" class="cat-btn active text-sm px-4 py-2 rounded-full bg-sage text-cream border border-sage font-medium" data-cat="all">Todos</button>
+          <button type="button" onclick="filterByCategory('Restaurante')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Restaurante">Restaurantes</button>
+          <button type="button" onclick="filterByCategory('Café')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Café">Cafés</button>
+          <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
+          <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
+        </div>
+
+        <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
+        <div class="mt-5 text-center">
+          <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-5 py-3 rounded-full shadow-sm border border-sage hover:bg-sand transition active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Não encontraste? Adiciona um local
+          </button>
+        </div>
+        <p id="no-results" class="hidden text-center text-bark/50 py-12">Nenhum local encontrado 🐾</p>
+      </div>
+    </div>
+
+    <div id="view-detail" class="hidden">
+      <div class="max-w-3xl mx-auto px-5 py-6 view-transition" id="detail-content"></div>
+    </div>
+
+    <div id="view-suggest" class="hidden">
+      <div class="max-w-3xl mx-auto px-5 py-10 text-center view-transition">
+        <span class="text-5xl mb-4 block">📍</span>
+        <h2 id="el-suggest-title" class="font-display text-2xl font-bold mb-2">Conheces um sítio pet-friendly?</h2>
+        <p class="text-bark/60 mb-8 max-w-sm mx-auto">Ajuda-nos a crescer! Sugere um local e ajuda outros donos de cães.</p>
+        <p class="text-xs text-bark/45 mb-6 max-w-sm mx-auto">As sugestões entram primeiro em revisão e só depois ficam visíveis publicamente.</p>
+
+        <form id="suggest-form" class="max-w-sm mx-auto text-left space-y-4">
+          <div class="rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">Partilha um local que conheças. Não precisa de estar perfeito — podes começar com o básico e melhorar depois.</div>
+          <div>
+            <label for="sg-name" class="block text-sm font-medium mb-1">Nome do local</label>
+            <input id="sg-name" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Café do Parque" />
+          </div>
+          <div>
+            <label for="sg-city" class="block text-sm font-medium mb-1">Cidade</label>
+            <input id="sg-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Lisboa" />
+          </div>
+          <div>
+            <label for="sg-address" class="block text-sm font-medium mb-1">Morada ou zona</label>
+            <input id="sg-address" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Rua..., Praia..., Zona antiga..." />
+          </div>
+          <div>
+            <label for="sg-type" class="block text-sm font-medium mb-1">Tipo de local</label>
+            <select id="sg-type" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option>Restaurante</option>
+              <option>Café</option>
+              <option>Praia</option>
+              <option>Alojamento</option>
+            </select>
+          </div>
+          <div>
+            <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
+            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Tem esplanada, água para cães..."></textarea>
+          </div>
+          <div>
+            <label for="sg-website" class="block text-sm font-medium mb-1">Website (opcional)</label>
+            <input id="sg-website" type="url" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: www.cafepark.pt" />
+          </div>
+          <button type="submit" class="w-full bg-sage text-cream font-semibold py-3.5 rounded-full shadow-md hover:bg-moss transition active:scale-95">Enviar sugestão</button>
+        </form>
+
+        <div id="suggest-success" class="hidden mt-6 p-4 bg-sage/10 rounded-2xl text-sage font-medium">
+          ✅ Obrigado pela sugestão! Vamos rever o local antes de o mostrar no site.
+          <div class="mt-2 text-sm text-bark/70">Podes acompanhar e aprovar sugestões no painel Admin.</div>
+          <div class="mt-4">
+            <button type="button" onclick="resetSuggestForm()" class="inline-flex items-center gap-2 bg-white text-sage border border-sage font-semibold px-4 py-2 rounded-full hover:bg-sand transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              Adicionar outro local
+            </button>
+          </div>
+        </div>
+
+        <button type="button" onclick="showView('home')" class="mt-6 text-sage font-medium text-sm inline-flex items-center gap-1">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao início
+        </button>
+      </div>
+    </div>
+
+    <div id="view-admin" class="hidden">
+      <div class="max-w-3xl mx-auto px-5 py-6 view-transition">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-display text-xl font-bold">Painel Admin</h2>
+            <p class="text-sm text-bark/55 mt-1">Revê e aprova sugestões antes de ficarem visíveis.</p>
+          </div>
+          <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+          </button>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-3 mb-6">
+          <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+            <p class="text-sm text-bark/55">Pendentes</p>
+            <p id="admin-pending-count" class="font-display text-2xl font-bold mt-1">0</p>
+          </div>
+          <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+            <p class="text-sm text-bark/55">Aprovados</p>
+            <p id="admin-approved-count" class="font-display text-2xl font-bold mt-1">0</p>
+          </div>
+          <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+            <p class="text-sm text-bark/55">Rejeitados</p>
+            <p id="admin-rejected-count" class="font-display text-2xl font-bold mt-1">0</p>
+          </div>
+        </div>
+
+        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-4">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
+            <button type="button" onclick="renderAdminSuggestions()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              Atualizar
+            </button>
+          </div>
+          <div id="admin-suggestions" class="space-y-3"></div>
+          <p id="admin-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há sugestões pendentes neste momento.</p>
+        </div>
+
+        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h3 class="font-display text-lg font-bold">Correções reportadas</h3>
+            <span class="text-sm text-bark/50">Para rever</span>
+          </div>
+          <div id="admin-issues" class="space-y-3"></div>
+          <p id="admin-issues-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há correções reportadas neste momento.</p>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" onclick="showView('suggest')" class="sm:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-lg hover:bg-moss transition active:scale-95">
+      <i data-lucide="plus-circle" class="w-4 h-4"></i>
+      Adicionar
+    </button>
+
+    <footer class="bg-bark text-cream/80 mt-auto">
+      <div class="max-w-3xl mx-auto px-5 py-8">
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
+          <div class="flex-1">
+            <p class="font-display font-bold text-lg text-cream mb-2">🐾 Levo o Cão</p>
+            <p id="el-footer-about" class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Porque o teu melhor amigo merece sair contigo.</p>
+          </div>
+          <div class="flex flex-col gap-2 text-sm">
+            <a href="#" onclick="event.preventDefault(); showView('suggest')" class="hover:text-cream transition">Sugerir local</a>
+            <a href="mailto:levocao.pt@gmail.com" class="hover:text-cream transition">levocao.pt@gmail.com</a>
+            <a href="https://instagram.com/levocao.pt" target="_blank" rel="noopener noreferrer" class="hover:text-cream transition flex items-center gap-1">
+              <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
+            </a>
+          </div>
+        </div>
+        <p class="text-xs text-cream/30 mt-6 border-t border-cream/10 pt-4">© <span id="year"></span> Levo o Cão — Feito com ❤️ em Portugal</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const locations = [
+      {
+        id: 1,
+        name: 'Café da Praça',
+        city: 'Lisboa',
+        type: 'Café',
+        emoji: '☕',
+        desc: 'Café acolhedor com esplanada onde o teu cão é bem-vindo. Tigela de água sempre disponível.',
+        address: 'Praça do Comércio 12, Lisboa',
+        notes: 'Esplanada ampla, água para cães, snacks caninos disponíveis.',
+        dogs: true,
+        confirmations: 12,
+        colors: ['#8BA67A', '#C4A882', '#E8D5B7']
+      },
+      {
+        id: 2,
+        name: 'Restaurante Mar Aberto',
+        city: 'Porto',
+        type: 'Restaurante',
+        emoji: '🍽️',
+        desc: 'Cozinha portuguesa com vista para o Douro. Esplanada pet-friendly com sombra.',
+        address: 'Cais da Ribeira 45, Porto',
+        notes: 'Esplanada com sombra, pratos regionais, aceita cães de todos os tamanhos.',
+        dogs: true,
+        confirmations: 8,
+        colors: ['#5B7553', '#D4C5A9', '#F0E6D3']
+      },
+      {
+        id: 3,
+        name: 'Praia do Meco (zona canina)',
+        city: 'Sesimbra',
+        type: 'Praia',
+        emoji: '🏖️',
+        desc: 'Zona de praia onde podes levar o teu cão livremente. Mar calmo e areia limpa.',
+        address: 'Praia do Meco, Sesimbra',
+        notes: 'Zona delimitada para cães, sem trela obrigatória na área canina.',
+        dogs: true,
+        confirmations: 15,
+        colors: ['#7AADCF', '#E8D5B7', '#F5F0E8']
+      },
+      {
+        id: 4,
+        name: 'Casa do Vale',
+        city: 'Gerês',
+        type: 'Alojamento',
+        emoji: '🏡',
+        desc: 'Casa rural no Gerês que aceita cães. Perfeita para escapadelas na natureza.',
+        address: 'Lugar do Vale, Terras de Bouro',
+        notes: 'Jardim vedado, trilhos próximos, até 2 cães por reserva.',
+        dogs: true,
+        confirmations: 6,
+        colors: ['#5B7553', '#8BA67A', '#F5F0E8']
+      },
+      {
+        id: 5,
+        name: 'Botânico Café',
+        city: 'Coimbra',
+        type: 'Café',
+        emoji: '☕',
+        desc: 'Café no Jardim Botânico com ambiente tranquilo. Ideal para manhãs com o patudo.',
+        address: 'Rua do Jardim Botânico 8, Coimbra',
+        notes: 'Interior não permite cães, esplanada sim. Brunch aos domingos.',
+        dogs: true,
+        confirmations: 9,
+        colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
+      },
+      {
+        id: 6,
+        name: 'Tasca do Bairro',
+        city: 'Faro',
+        type: 'Restaurante',
+        emoji: '🍽️',
+        desc: 'Petiscos algarvios numa tasca típica com pátio interior pet-friendly.',
+        address: 'Rua do Compromisso 3, Faro',
+        notes: 'Pátio interior com sombra, porções generosas, vinho da casa excelente.',
+        dogs: true,
+        confirmations: 11,
+        colors: ['#C4A882', '#8BA67A', '#F0E6D3']
+      }
+    ];
+
+    let currentFilter = null;
+    let currentSearch = '';
+
+    const CONFIRM_STORAGE_KEY = 'levocao_confirmations';
+    const USER_CONFIRM_STORAGE_KEY = 'levocao_user_confirmations';
+    const SUGGESTIONS_STORAGE_KEY = 'levocao_suggestions';
+    const ISSUE_REPORTS_STORAGE_KEY = 'levocao_issue_reports';
+    const ADMIN_ACCESS_CODE = 'mac123';
+    const MAC_IMAGE_DATA = 'data:image/webp;base64,UklGRrwIAABXRUJQVlA4ILAIAADQIgCdASpgAGAAPm0qkUWkIqGYeh9IQAbEswBgw7kH2kqW1/Ibx2V+3h6aPMA56vmQ81v0keRn/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/UAA/v89/0d+V/y4n+Y6m1g+YJxwjo5RZ3+fPZ6p4E7+Qn1H4o2s1Q3KQ7LbgVnq2w0Af8H7k5sL0dFj4r2mC2f0Q7l1w7h+1h3uQ1QXj3F9w1mHqfVvP7vU8m1m6xgJt6m8kz7n1h4c0W5x0Yd1m1M3gkM2v0dM8P2i6rjB7g3Wqg6Y3G7iP4h6+vG5a+3y8l3fL7wL1yOe1u6y5k5zqQ8cM7m9Y4mV1o6mC5K1m6d2h6b0g3v8q1c0c5g3G8i5k1b6vY6wq8vY1n6x3F7Yz4o7d8vR2F1Z3e5o5k1W7vY7kM8x1f7YvY8i3G4a+6l5vM7g8V+1k5a5j2o6c6M4m+4vQ8d3g9f2o4h5R8i6c6g4Y+7m6h5Y6Y9m6n8mQ5p4s7n7nM6d7V8Z+4x3l7W7u6T8t9m3M5k+4vR7i8W7g8b9k6m4j6q8f7n7o9s6P7q8Z6a+8m8x8m5e4t8R7V7a+8k8P6s9q7y+X8b7s8a7w+Z8o7s7r8f6n7m+f6g8s8o7g8V7b9i8u8q6f9o6W9i7m9m7l+e8x7k6f8v6g9v6m8z8m5m8c7s9X8Z7u+Y8r7w+e8o7j7o8g7m9n7n9r6X9g7n9u7Z8o9m6e9s7v9m8o8m7x9v7b8l8s8o7i9r6h9x7b9m7b9o7c9n7Y9m6g9u7a8p9o7m9n7X9q7d9n7V8r7e9s6g9v7Y9o7l9m6h9u7W8q7f9s6f9v7V9p7k9m6i9u7U9r7g9s6e9v7T9q7j9m6j9u7S9s7h9s6d9v7R9r7i9m6k9u7Q9t7j9s6c9v7P9s7k9m6l9u7O9u7l9s6b9v7N9t7m9m6m9u7L9v7n9s6a9v7J9u7o9m6n9u7H9w7p9s6Z9v7F9v7q9m6o9u7D9x7r9s6Y9v7B9w7s9m6p9u69y7t9s6X9u59x7u9m6q9u19z7v9s6W9uA=';
+
+    function getStoredConfirmationMap() {
+      try {
+        return JSON.parse(localStorage.getItem(CONFIRM_STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function getUserConfirmedMap() {
+      try {
+        return JSON.parse(localStorage.getItem(USER_CONFIRM_STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveStoredConfirmationMap(map) {
+      localStorage.setItem(CONFIRM_STORAGE_KEY, JSON.stringify(map));
+    }
+
+    function saveUserConfirmedMap(map) {
+      localStorage.setItem(USER_CONFIRM_STORAGE_KEY, JSON.stringify(map));
+    }
+
+    function getStoredSuggestions() {
+      try {
+        return JSON.parse(localStorage.getItem(SUGGESTIONS_STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveStoredSuggestions(list) {
+      localStorage.setItem(SUGGESTIONS_STORAGE_KEY, JSON.stringify(list));
+    }
+
+    function getStoredIssueReports() {
+      try {
+        return JSON.parse(localStorage.getItem(ISSUE_REPORTS_STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveStoredIssueReports(list) {
+      localStorage.setItem(ISSUE_REPORTS_STORAGE_KEY, JSON.stringify(list));
+    }
+
+    function getApprovedLocations() {
+      const approvedSuggestions = getStoredSuggestions().filter((item) => item.status === 'approved');
+      return [...approvedSuggestions, ...locations];
+    }
+
+    function getPendingSuggestions() {
+      return getStoredSuggestions().filter((item) => item.status === 'pending');
+    }
+
+    function getOpenIssueReports() {
+      return getStoredIssueReports().filter((item) => item.status !== 'resolved');
+    }
+
+    function getStoredPlaceVotes(id) {
+      const stored = getStoredConfirmationMap();
+      const value = stored[id];
+      if (typeof value === 'number') {
+        return { yes: value, no: 0, maybe: 0 };
+      }
+      if (value && typeof value === 'object') {
+        return {
+          yes: Number(value.yes || 0),
+          no: Number(value.no || 0),
+          maybe: Number(value.maybe || 0)
+        };
+      }
+      const loc = getApprovedLocations().find((item) => item.id === id);
+      return { yes: Number(loc?.confirmations || 0), no: 0, maybe: 0 };
+    }
+
+    function getConfirmationCount(id) {
+      const votes = getStoredPlaceVotes(id);
+      return votes.yes + votes.no + votes.maybe;
+    }
+
+    function hasUserConfirmed(id) {
+      const userMap = getUserConfirmedMap();
+      return Boolean(userMap[id]);
+    }
+
+    function initializeConfirmations() {
+      const stored = getStoredConfirmationMap();
+      let changed = false;
+      getApprovedLocations().forEach((loc) => {
+        if (stored[loc.id] == null) {
+          stored[loc.id] = { yes: Number(loc.confirmations || 0), no: 0, maybe: 0 };
+          changed = true;
+        } else if (typeof stored[loc.id] === 'number') {
+          stored[loc.id] = { yes: Number(stored[loc.id]), no: 0, maybe: 0 };
+          changed = true;
+        }
+      });
+      if (changed) saveStoredConfirmationMap(stored);
+    }
+
+    function isRecentLocation(loc) {
+      if (!loc.createdAt) return false;
+      const ageMs = Date.now() - new Date(loc.createdAt).getTime();
+      return ageMs <= 7 * 24 * 60 * 60 * 1000;
+    }
+
+    function getRecentLocations(limit = 4) {
+      return getApprovedLocations()
+        .slice()
+        .sort((a, b) => {
+          const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return bTime - aTime || b.id - a.id;
+        })
+        .slice(0, limit);
+    }
+
+    function getTopConfirmedLocations(limit = 4) {
+      return getApprovedLocations()
+        .slice()
+        .sort((a, b) => getConfirmationCount(b.id) - getConfirmationCount(a.id))
+        .slice(0, limit);
+    }
+
+    function getTrustLevel(id) {
+      const votes = getStoredPlaceVotes(id);
+      if (votes.no > votes.yes && votes.no >= 2) {
+        return { label: 'Não aceitam', shortLabel: '❌ Não aceitam', className: 'bg-bark text-cream' };
+      }
+      if (votes.yes >= 10) {
+        return { label: 'Muito recomendado', shortLabel: '⭐ Muito recomendado', className: 'bg-sage text-cream' };
+      }
+      if (votes.yes >= 3) {
+        return { label: 'Confirmado', shortLabel: '👍 Confirmado', className: 'bg-moss/20 text-sage' };
+      }
+      if (votes.maybe > 0) {
+        return { label: 'Com restrições', shortLabel: '⚠️ Restrições', className: 'bg-sand text-bark/70' };
+      }
+      return { label: 'Por confirmar', shortLabel: '⚠️ Por confirmar', className: 'bg-sand text-bark/70' };
+    }
+
+    function createCard(loc) {
+      const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
+      const confirmationCount = getConfirmationCount(loc.id);
+      const trustLevel = getTrustLevel(loc.id);
+      const recentBadge = isRecentLocation(loc) ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>' : '';
+      return `
+        <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
+          <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
+            <span class="text-5xl">${loc.emoji}</span>
+            <div class="absolute top-3 right-3 flex items-center gap-2 flex-wrap justify-end">
+              ${recentBadge}
+              <span class="bg-sage/90 text-cream text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">🐕 Aceita cães</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-display font-bold text-lg">${loc.name}</h3>
+            <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5">
+              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.type}
+            </p>
+            <p class="text-bark/70 text-sm mt-2 line-clamp-2">${loc.desc}</p>
+            <div class="mt-3 flex items-center justify-between gap-2 flex-wrap">
+              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} respostas</span>
+              <span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>
+            </div>
+            <div class="mt-2">
+              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">Ver detalhes →</span>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function renderCards(targetId, locs) {
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      el.innerHTML = locs.map(createCard).join('');
+      const noResults = document.getElementById('no-results');
+      if (noResults && targetId === 'cards-list') {
+        noResults.classList.toggle('hidden', locs.length > 0);
+      }
+      lucide.createIcons();
+    }
+
+    function getFiltered() {
+      return getApprovedLocations().filter((loc) => {
+        const matchCat = !currentFilter || loc.type === currentFilter;
+        const matchSearch = !currentSearch || loc.name.toLowerCase().includes(currentSearch) || loc.city.toLowerCase().includes(currentSearch) || loc.type.toLowerCase().includes(currentSearch);
+        return matchCat && matchSearch;
+      });
+    }
+
+    function updateFilterButtons(cat) {
+      document.querySelectorAll('#filter-bar .cat-btn').forEach((button) => {
+        const buttonCat = button.dataset.cat;
+        const isActive = (!cat && buttonCat === 'all') || buttonCat === cat;
+        button.classList.toggle('active', isActive);
+        if (isActive) {
+          button.classList.add('bg-sage', 'text-cream', 'border-sage');
+          button.classList.remove('bg-white', 'border-sand');
+        } else {
+          button.classList.remove('bg-sage', 'text-cream', 'border-sage');
+          button.classList.add('bg-white', 'border-sand');
+        }
+      });
+    }
+
+    function updateHomeCategoryButtons(btn) {
+      document.querySelectorAll('#cat-grid .cat-btn').forEach((button) => button.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function renderHomeSections() {
+      renderCards('cards-home', getFiltered().slice(0, 4));
+      renderCards('cards-recent', getRecentLocations());
+      renderCards('cards-top', getTopConfirmedLocations());
+    }
+
+    function getSuggestionCounts() {
+      const suggestions = getStoredSuggestions();
+      return {
+        pending: suggestions.filter((item) => item.status === 'pending').length,
+        approved: suggestions.filter((item) => item.status === 'approved').length,
+        rejected: suggestions.filter((item) => item.status === 'rejected').length
+      };
+    }
+
+    function renderAdminSuggestions() {
+      const container = document.getElementById('admin-suggestions');
+      const empty = document.getElementById('admin-empty');
+      const pendingCount = document.getElementById('admin-pending-count');
+      const approvedCount = document.getElementById('admin-approved-count');
+      const rejectedCount = document.getElementById('admin-rejected-count');
+      const issuesContainer = document.getElementById('admin-issues');
+      const issuesEmpty = document.getElementById('admin-issues-empty');
+      if (!container || !empty || !pendingCount || !approvedCount || !rejectedCount || !issuesContainer || !issuesEmpty) return;
+
+      const counts = getSuggestionCounts();
+      pendingCount.textContent = String(counts.pending);
+      approvedCount.textContent = String(counts.approved);
+      rejectedCount.textContent = String(counts.rejected);
+
+      const pending = getPendingSuggestions();
+      if (pending.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+        container.innerHTML = pending.map((item) => `
+          <article class="border border-sand rounded-2xl p-4 bg-sand/30">
+            <div class="flex items-start justify-between gap-3 mb-3">
+              <div>
+                <h4 class="font-display text-lg font-bold">${item.name}</h4>
+                <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.type}</p>
+              </div>
+              <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Pendente</span>
+            </div>
+            <div class="space-y-2 text-sm text-bark/70 mb-4">
+              <p><strong>Morada:</strong> ${item.address || '—'}</p>
+              <p><strong>Notas:</strong> ${item.notes || '—'}</p>
+              <p><strong>Website:</strong> ${item.website ? `<a href="${item.website}" target="_blank" rel="noopener noreferrer" class="text-sage hover:underline">${item.website}</a>` : '—'}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button type="button" onclick="approveSuggestionFromUI(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                Aprovar
+              </button>
+              <button type="button" onclick="rejectSuggestionFromUI(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+                <i data-lucide="x" class="w-4 h-4"></i>
+                Rejeitar
+              </button>
+            </div>
+          </article>`).join('');
+      }
+
+      const issues = getOpenIssueReports();
+      if (issues.length === 0) {
+        issuesContainer.innerHTML = '';
+        issuesEmpty.classList.remove('hidden');
+      } else {
+        issuesEmpty.classList.add('hidden');
+        issuesContainer.innerHTML = issues.map((item) => `
+          <article class="border border-sand rounded-2xl p-4 bg-white">
+            <div class="flex items-start justify-between gap-3 mb-2">
+              <div>
+                <h4 class="font-display text-lg font-bold">${item.placeName}</h4>
+                <p class="text-sm text-bark/55 mt-1">Reportado em ${new Date(item.createdAt).toLocaleString('pt-PT')}</p>
+              </div>
+              <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Correção</span>
+            </div>
+            <p class="text-sm text-bark/70 mb-4">${item.message}</p>
+            <button type="button" onclick="resolveIssueReport(${item.id})" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-4 py-2 rounded-full border border-sage shadow-sm hover:bg-sand transition">
+              <i data-lucide="check-check" class="w-4 h-4"></i>
+              Marcar como resolvido
+            </button>
+          </article>`).join('');
+      }
+
+      lucide.createIcons();
+    }
+
+    function approveSuggestionFromUI(id) {
+      levocaoAdmin.approveSuggestion(id);
+    }
+
+    function rejectSuggestionFromUI(id) {
+      levocaoAdmin.rejectSuggestion(id);
+    }
+
+    function filterByCategory(cat, btn = null) {
+      currentFilter = cat;
+      updateFilterButtons(cat);
+      updateHomeCategoryButtons(btn);
+      renderCards('cards-list', getFiltered());
+      renderHomeSections();
+      showView('list', true);
+    }
+
+    function filterLocations() {
+      const input = document.getElementById('search-input');
+      currentSearch = input ? input.value.toLowerCase().trim() : '';
+      renderCards('cards-list', getFiltered());
+      renderHomeSections();
+    }
+
+    function showView(view, bypassAuth = false) {
+      if (view === 'admin' && !bypassAuth) {
+        const pass = prompt('Código de acesso:');
+        if (pass !== ADMIN_ACCESS_CODE) return;
+      }
+      ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
+        const el = document.getElementById(`view-${section}`);
+        if (el) el.classList.toggle('hidden', section !== view);
+      });
+      const wrapper = document.querySelector('.app-wrapper');
+      if (wrapper) wrapper.scrollTop = 0;
+      if (view === 'list') renderCards('cards-list', getFiltered());
+      if (view === 'home') renderHomeSections();
+      if (view === 'admin') renderAdminSuggestions();
+      lucide.createIcons();
+    }
+
+    let macClickCount = 0;
+    let macClickTimer = null;
+
+    function handleMacClick(event) {
+      if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      macClickCount += 1;
+      if (macClickTimer) clearTimeout(macClickTimer);
+      macClickTimer = setTimeout(() => {
+        macClickCount = 0;
+      }, 1200);
+      if (macClickCount >= 5) {
+        macClickCount = 0;
+        showView('admin', true);
+      }
+    }
+
+    function showDetail(id) {
+      const loc = getApprovedLocations().find((item) => item.id === id);
+      if (!loc) return;
+      const votes = getStoredPlaceVotes(loc.id);
+      const confirmationCount = getConfirmationCount(loc.id);
+      const trustLevel = getTrustLevel(loc.id);
+      const alreadyConfirmed = getUserConfirmedMap()[loc.id];
+      const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
+      document.getElementById('detail-content').innerHTML = `
+        <button type="button" onclick="showView('list', true)" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+        </button>
+        <div class="rounded-2xl overflow-hidden border border-sand shadow-sm bg-white">
+          <div class="h-48 flex items-center justify-center relative" style="background:${grad}">
+            <span class="text-6xl">${loc.emoji}</span>
+            <span class="absolute top-4 right-4 bg-sage text-cream text-sm font-medium px-3 py-1.5 rounded-full">🐕 Aceita cães</span>
+          </div>
+          <div class="p-5 space-y-4">
+            <div>
+              <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
+              <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.type}</p>
+            </div>
+            <p class="text-bark/80 leading-relaxed">${loc.desc}</p>
+            <div class="bg-sand/60 rounded-xl p-4 space-y-2">
+              <p class="font-medium text-sm flex items-center gap-2"><i data-lucide="navigation" class="w-4 h-4 text-sage"></i> Morada</p>
+              <p class="text-sm text-bark/70">${loc.address}</p>
+              ${loc.website ? `<a href="${loc.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm text-sage font-medium hover:underline mt-2"><i data-lucide="external-link" class="w-4 h-4"></i> Ver website</a>` : ''}
+            </div>
+            <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
+                  <p class="text-sm text-bark/60">${confirmationCount} respostas · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
+                </div>
+                <span class="text-xs ${alreadyConfirmed ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${alreadyConfirmed ? 'Já respondeste' : 'Ainda não respondeste'}</span>
+              </div>
+              <div class="flex items-center justify-between gap-3 flex-wrap">
+                <span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>
+                <p class="text-xs text-bark/55">Sem reviews. Só respostas práticas: sim, não ou com restrições.</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="confirmPlace(${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-2 rounded-full text-sm">✅ Sim</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'no')" class="bg-bark/70 text-cream font-semibold py-2 rounded-full text-sm">❌ Não</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-2 rounded-full text-sm border border-sand">⚠️ Restr.</button>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-3">
+              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
+                <i data-lucide="map" class="w-5 h-5"></i> Abrir no Google Maps
+              </a>
+              <button type="button" onclick="reportIssue(${loc.id})" class="flex items-center justify-center gap-2 w-full bg-white text-sage font-semibold py-4 rounded-full border border-sage shadow-sm hover:bg-sand transition active:scale-95 text-base">
+                <i data-lucide="flag" class="w-5 h-5"></i> Corrigir informação
+              </button>
+            </div>
+          </div>
+        </div>`;
+      showView('detail', true);
+      lucide.createIcons();
+    }
+
+    function reportIssue(id) {
+      const loc = getApprovedLocations().find((item) => item.id === id);
+      if (!loc) return;
+      const message = prompt(`O que está errado em "${loc.name}"?`);
+      if (!message || !message.trim()) return;
+      const reports = getStoredIssueReports();
+      reports.unshift({
+        id: Date.now(),
+        placeId: loc.id,
+        placeName: loc.name,
+        message: message.trim(),
+        status: 'open',
+        createdAt: new Date().toISOString()
+      });
+      saveStoredIssueReports(reports);
+      renderAdminSuggestions();
+      alert('Obrigado. A correção foi enviada para revisão.');
+    }
+
+    function resolveIssueReport(id) {
+      const reports = getStoredIssueReports();
+      const updated = reports.map((item) => item.id === id ? { ...item, status: 'resolved' } : item);
+      saveStoredIssueReports(updated);
+      renderAdminSuggestions();
+    }
+
+    function resetSuggestForm() {
+      const form = document.getElementById('suggest-form');
+      const success = document.getElementById('suggest-success');
+      if (form) {
+        form.reset();
+        form.classList.remove('hidden');
+      }
+      if (success) success.classList.add('hidden');
+      showView('suggest', true);
+      lucide.createIcons();
+    }
+
+    function confirmPlace(id, type = 'yes') {
+      const loc = getApprovedLocations().find((item) => item.id === id);
+      if (!loc) return;
+      const userMap = getUserConfirmedMap();
+      if (userMap[id]) {
+        alert(`Já respondeste sobre "${loc.name}" 🐾`);
+        return;
+      }
+      const stored = getStoredConfirmationMap();
+      const votes = getStoredPlaceVotes(id);
+      if (type === 'yes') votes.yes += 1;
+      if (type === 'no') votes.no += 1;
+      if (type === 'maybe') votes.maybe += 1;
+      stored[id] = votes;
+      userMap[id] = type;
+      saveStoredConfirmationMap(stored);
+      saveUserConfirmedMap(userMap);
+      renderHomeSections();
+      renderCards('cards-list', getFiltered());
+      showDetail(id);
+      setTimeout(() => {
+        alert(`Obrigado! Atualizaste a informação sobre "${loc.name}" 🐾`);
+      }, 50);
+    }
+
+    function createSuggestionObject(values) {
+      const emojiMap = { Restaurante: '🍽️', Café: '☕', Praia: '🏖️', Alojamento: '🏡' };
+      const colorMap = {
+        Restaurante: ['#C4A882', '#8BA67A', '#F0E6D3'],
+        Café: ['#A3B899', '#D4C5A9', '#FFFDF7'],
+        Praia: ['#7AADCF', '#E8D5B7', '#F5F0E8'],
+        Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8']
+      };
+      return {
+        id: Date.now(),
+        name: values.name,
+        city: values.city,
+        type: values.type,
+        emoji: emojiMap[values.type] || '📍',
+        desc: `Local sugerido pela comunidade em ${values.city}.`,
+        address: values.address || values.website || `Morada por confirmar em ${values.city}`,
+        notes: values.notes || 'Sugestão enviada pela comunidade. Informação detalhada ainda por confirmar.',
+        website: values.website,
+        status: 'pending',
+        dogs: true,
+        confirmations: 1,
+        createdAt: new Date().toISOString(),
+        colors: colorMap[values.type] || ['#8BA67A', '#D4C5A9', '#FFFDF7']
+      };
+    }
+
+    function runSelfTests() {
+      console.assert(Array.isArray(getRecentLocations(2)), 'getRecentLocations deve devolver array');
+      console.assert(Array.isArray(getTopConfirmedLocations(2)), 'getTopConfirmedLocations deve devolver array');
+      console.assert(typeof getConfirmationCount(1) === 'number', 'getConfirmationCount deve devolver número');
+      console.assert(getStoredPlaceVotes(1).yes >= 0, 'Votes deve devolver estrutura válida');
+      console.assert(getTrustLevel(1).label === 'Muito recomendado', 'Trust level alto deve funcionar');
+      const sample = createSuggestionObject({ name: 'Teste', city: 'Lisboa', type: 'Café', notes: '', website: '', address: '' });
+      console.assert(sample.type === 'Café', 'Suggestion object deve manter tipo');
+      console.assert(sample.emoji === '☕', 'Suggestion object deve mapear emoji');
+      console.assert(sample.status === 'pending', 'Suggestion object deve começar pendente');
+      console.assert(getTrustLevel(sample.id).label === 'Por confirmar', 'Trust level baixo deve funcionar por omissão');
+      console.assert(Array.isArray(getOpenIssueReports()), 'Issue reports deve devolver array');
+    }
+
+    const suggestForm = document.getElementById('suggest-form');
+    if (suggestForm) {
+      suggestForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('sg-name').value.trim();
+        const city = document.getElementById('sg-city').value.trim();
+        const type = document.getElementById('sg-type').value;
+        const notes = document.getElementById('sg-notes').value.trim();
+        const website = document.getElementById('sg-website').value.trim();
+        const address = document.getElementById('sg-address').value.trim();
+        const suggestions = getStoredSuggestions();
+        suggestions.unshift(createSuggestionObject({ name, city, type, notes, website, address }));
+        saveStoredSuggestions(suggestions);
+        initializeConfirmations();
+        suggestForm.reset();
+        suggestForm.classList.add('hidden');
+        const success = document.getElementById('suggest-success');
+        if (success) success.classList.remove('hidden');
+        renderHomeSections();
+        renderCards('cards-list', getFiltered());
+        renderAdminSuggestions();
+        lucide.createIcons();
+      });
+    }
+
+    window.levocaoAdmin = {
+      listPendingSuggestions() {
+        return getPendingSuggestions();
+      },
+      approveSuggestion(id) {
+        const suggestions = getStoredSuggestions();
+        const updated = suggestions.map((item) => item.id === id ? { ...item, status: 'approved' } : item);
+        saveStoredSuggestions(updated);
+        initializeConfirmations();
+        renderHomeSections();
+        renderCards('cards-list', getFiltered());
+        renderAdminSuggestions();
+        return updated.find((item) => item.id === id) || null;
+      },
+      rejectSuggestion(id) {
+        const suggestions = getStoredSuggestions();
+        const updated = suggestions.map((item) => item.id === id ? { ...item, status: 'rejected' } : item);
+        saveStoredSuggestions(updated);
+        renderHomeSections();
+        renderCards('cards-list', getFiltered());
+        renderAdminSuggestions();
+        return updated.find((item) => item.id === id) || null;
+      }
+    };
+
+    const defaultConfig = {
+      background_color: '#FFFDF7',
+      surface_color: '#FFFFFF',
+      text_color: '#3D2C1E',
+      primary_action_color: '#5B7553',
+      secondary_action_color: '#8BA67A',
+      font_family: 'Fraunces',
+      font_size: 16,
+      hero_title: 'Levo o Cão?',
+      hero_subtitle: 'Descobre locais pet-friendly perto de ti',
+      suggest_title: 'Conheces um sítio pet-friendly?',
+      footer_about: 'Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Porque o teu melhor amigo merece sair contigo.'
+    };
+
+    function applyConfig(config) {
+      const bg = config.background_color || defaultConfig.background_color;
+      const surface = config.surface_color || defaultConfig.surface_color;
+      const text = config.text_color || defaultConfig.text_color;
+      const primary = config.primary_action_color || defaultConfig.primary_action_color;
+      const font = config.font_family || defaultConfig.font_family;
+      const size = config.font_size || defaultConfig.font_size;
+      document.body.style.backgroundColor = bg;
+      document.body.style.color = text;
+      const heroTitle = document.getElementById('el-hero-title');
+      const heroSub = document.getElementById('el-hero-subtitle');
+      const suggestTitle = document.getElementById('el-suggest-title');
+      const footerAbout = document.getElementById('el-footer-about');
+      if (heroTitle) heroTitle.textContent = config.hero_title || defaultConfig.hero_title;
+      if (heroSub) heroSub.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+      if (suggestTitle) suggestTitle.textContent = config.suggest_title || defaultConfig.suggest_title;
+      if (footerAbout) footerAbout.textContent = config.footer_about || defaultConfig.footer_about;
+      const bodyStack = `${font}, DM Sans, system-ui, sans-serif`;
+      const displayStack = `${font}, Fraunces, Georgia, serif`;
+      document.body.style.fontFamily = bodyStack;
+      document.body.style.fontSize = `${size}px`;
+      document.querySelectorAll('.font-display').forEach((el) => {
+        el.style.fontFamily = displayStack;
+      });
+      document.querySelectorAll('.bg-sage').forEach((el) => {
+        el.style.backgroundColor = primary;
+      });
+      document.querySelectorAll('.text-sage').forEach((el) => {
+        el.style.color = primary;
+      });
+      document.querySelectorAll('.border-sage').forEach((el) => {
+        el.style.borderColor = primary;
+      });
+      document.querySelectorAll('.bg-cream, .bg-cream\\/90').forEach((el) => {
+        el.style.backgroundColor = bg;
+      });
+      document.querySelectorAll('.card-hover').forEach((el) => {
+        el.style.backgroundColor = surface;
+      });
+      const footer = document.querySelector('footer');
+      if (footer) footer.style.backgroundColor = text;
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange: async (config) => applyConfig(config),
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            { get: () => config.background_color || defaultConfig.background_color, set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); } },
+            { get: () => config.surface_color || defaultConfig.surface_color, set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); } },
+            { get: () => config.text_color || defaultConfig.text_color, set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); } },
+            { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (value) => { config.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); } },
+            { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (value) => { config.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); } }
+          ],
+          borderables: [],
+          fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); } },
+          fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); } }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ['hero_title', config.hero_title || defaultConfig.hero_title],
+          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+          ['suggest_title', config.suggest_title || defaultConfig.suggest_title],
+          ['footer_about', config.footer_about || defaultConfig.footer_about]
+        ])
+      });
+    }
+
+    function setMacImage() {
+      const nav = document.getElementById('mac-nav');
+      const hero = document.getElementById('mac-hero');
+      const navWrap = document.getElementById('mac-nav-wrap');
+      const heroWrap = document.getElementById('mac-hero-wrap');
+      if (nav) {
+        nav.onerror = () => {
+          if (navWrap) navWrap.textContent = '🐶';
+        };
+        nav.src = MAC_IMAGE_DATA;
+        nav.addEventListener('click', handleMacClick);
+      }
+      if (hero) {
+        hero.onerror = () => {
+          if (heroWrap) heroWrap.textContent = '🐶';
+        };
+        hero.src = MAC_IMAGE_DATA;
+        hero.addEventListener('click', handleMacClick);
+      }
+      if (navWrap) navWrap.addEventListener('click', handleMacClick);
+      if (heroWrap) heroWrap.addEventListener('click', handleMacClick);
+    }
+
+    document.getElementById('year').textContent = String(new Date().getFullYear());
+    setMacImage();
+    initializeConfirmations();
+    renderHomeSections();
+    renderAdminSuggestions();
+    runSelfTests();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
