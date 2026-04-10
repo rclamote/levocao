@@ -91,7 +91,7 @@
             </div>
           </div>
           <h1 id="el-hero-title" class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">Levo o Cão?</h1>
-          <p id="el-hero-subtitle" class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Descobre e partilha locais pet-friendly em Portugal — cafés, praias, restaurantes e alojamentos onde os cães são mesmo bem-vindos.</p>
+          <p id="el-hero-subtitle" class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Já sabes onde podes ir hoje com o teu cão? Descobre locais confirmados pela comunidade em Portugal.</p>
           <p class="text-xs text-bark/50 mt-1">Inspirado no Mac 🐾</p>
           <div class="fade-in-d2 mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
@@ -105,15 +105,15 @@
           <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
             <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
               <i data-lucide="map-pin" class="w-4 h-4"></i>
-              Explorar locais
+              Encontrar um local agora
             </button>
             <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
               Adicionar local
             </button>
           </div>
-          <p class="mt-4 text-sm text-bark/60 max-w-lg mx-auto">Este projeto cresce com a comunidade: descobre sítios bons e adiciona novos locais para outros donos de cães.</p>
-          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto">As novas sugestões são revistas antes de ficarem visíveis no site.</p>
+          <p class="mt-4 text-sm text-bark/60 max-w-lg mx-auto">Entra, explora e confirma o que é realmente pet-friendly. Sem reviews confusas — só informação útil.</p>
+          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto"><span id="hero-community-count">A comunidade já deixou várias confirmações úteis.</span> As novas sugestões são revistas antes de ficarem visíveis no site.</p>
         </div>
       </section>
 
@@ -178,7 +178,7 @@
       <section class="max-w-3xl mx-auto px-5 pb-6">
         <div class="flex items-center justify-between mb-4 gap-3">
           <h2 class="font-display text-xl font-bold">Mais confirmados pela comunidade</h2>
-          <span class="text-sm text-bark/55">Os favoritos do momento</span>
+          <span class="text-sm text-bark/55">Locais com mais confiança</span>
         </div>
         <div id="cards-top" class="grid gap-4 sm:grid-cols-2"></div>
       </section>
@@ -361,80 +361,54 @@
     const locations = [
       {
         id: 1,
-        name: 'Café da Praça',
-        city: 'Lisboa',
-        type: 'Café',
-        emoji: '☕',
-        desc: 'Café acolhedor com esplanada onde o teu cão é bem-vindo. Tigela de água sempre disponível.',
-        address: 'Praça do Comércio 12, Lisboa',
-        notes: 'Esplanada ampla, água para cães, snacks caninos disponíveis.',
+        name: 'Restaurante O Momento',
+        city: 'São Bartolomeu de Messines',
+        type: 'Restaurante',
+        emoji: '🍽️',
+        desc: 'Restaurante confirmado pelo Rui e pela Mel. Deixam entrar cães mesmo na sala de jantar.',
+        address: 'Largo José Coelho Mealha 4A, São Bartolomeu de Messines, Portugal',
+        notes: 'Confirmado pelo Rui e pela Mel. Acesso permitido no interior, incluindo sala de jantar.',
         dogs: true,
-        confirmations: 12,
-        colors: ['#8BA67A', '#C4A882', '#E8D5B7']
+        confirmations: 2,
+        colors: ['#C4A882', '#8BA67A', '#F0E6D3']
       },
       {
         id: 2,
-        name: 'Restaurante Mar Aberto',
-        city: 'Porto',
+        name: 'Pizzaria Acqua e Sale',
+        city: 'Tavira',
         type: 'Restaurante',
         emoji: '🍽️',
-        desc: 'Cozinha portuguesa com vista para o Douro. Esplanada pet-friendly com sombra.',
-        address: 'Cais da Ribeira 45, Porto',
-        notes: 'Esplanada com sombra, pratos regionais, aceita cães de todos os tamanhos.',
+        desc: 'Pizzaria confirmada pelo Rui e pela Mel. Deixam entrar cães mesmo na sala de jantar.',
+        address: 'Av. Dr. Mateus Teixeira de Azevedo 8 A, 8800-379 Tavira',
+        notes: 'Confirmado pelo Rui e pela Mel. Acesso permitido no interior, incluindo sala de jantar.',
         dogs: true,
-        confirmations: 8,
-        colors: ['#5B7553', '#D4C5A9', '#F0E6D3']
+        confirmations: 2,
+        colors: ['#C4A882', '#8BA67A', '#F0E6D3']
       },
       {
         id: 3,
-        name: 'Praia do Meco (zona canina)',
-        city: 'Sesimbra',
-        type: 'Praia',
-        emoji: '🏖️',
-        desc: 'Zona de praia onde podes levar o teu cão livremente. Mar calmo e areia limpa.',
-        address: 'Praia do Meco, Sesimbra',
-        notes: 'Zona delimitada para cães, sem trela obrigatória na área canina.',
+        name: 'Calipto Restaurante-bar',
+        city: 'Albufeira',
+        type: 'Restaurante',
+        emoji: '🍽️',
+        desc: 'Local frequentado pelo Rui com a Mel. Cães aceites na esplanada tapada, não no interior.',
+        address: 'R. Vasco da Gama F, 8200-291 Albufeira',
+        notes: 'Confirmado em várias visitas pelo Rui e pela Mel. Acesso permitido na esplanada tapada. Interior não permitido.',
         dogs: true,
-        confirmations: 15,
-        colors: ['#7AADCF', '#E8D5B7', '#F5F0E8']
+        confirmations: 3,
+        colors: ['#C4A882', '#8BA67A', '#F0E6D3']
       },
       {
         id: 4,
-        name: 'Casa do Vale',
-        city: 'Gerês',
-        type: 'Alojamento',
-        emoji: '🏡',
-        desc: 'Casa rural no Gerês que aceita cães. Perfeita para escapadelas na natureza.',
-        address: 'Lugar do Vale, Terras de Bouro',
-        notes: 'Jardim vedado, trilhos próximos, até 2 cães por reserva.',
-        dogs: true,
-        confirmations: 6,
-        colors: ['#5B7553', '#8BA67A', '#F5F0E8']
-      },
-      {
-        id: 5,
-        name: 'Botânico Café',
-        city: 'Coimbra',
-        type: 'Café',
-        emoji: '☕',
-        desc: 'Café no Jardim Botânico com ambiente tranquilo. Ideal para manhãs com o patudo.',
-        address: 'Rua do Jardim Botânico 8, Coimbra',
-        notes: 'Interior não permite cães, esplanada sim. Brunch aos domingos.',
-        dogs: true,
-        confirmations: 9,
-        colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
-      },
-      {
-        id: 6,
-        name: 'Tasca do Bairro',
-        city: 'Faro',
+        name: 'Nosolo Italia - Albufeira',
+        city: 'Albufeira',
         type: 'Restaurante',
         emoji: '🍽️',
-        desc: 'Petiscos algarvios numa tasca típica com pátio interior pet-friendly.',
-        address: 'Rua do Compromisso 3, Faro',
-        notes: 'Pátio interior com sombra, porções generosas, vinho da casa excelente.',
+        desc: 'Local frequentado pelo Rui com a Mel. Cães aceites na esplanada tapada, não no interior.',
+        address: 'Av. Sá Carneiro Nº106, 8200-362 Albufeira',
+        notes: 'Confirmado em várias visitas pelo Rui e pela Mel. Acesso permitido na esplanada tapada. Interior não permitido.',
         dogs: true,
-        confirmations: 11,
+        confirmations: 3,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
       }
     ];
@@ -614,7 +588,7 @@
             </p>
             <p class="text-bark/70 text-sm mt-2 line-clamp-2">${loc.desc}</p>
             <div class="mt-3 flex items-center justify-between gap-2 flex-wrap">
-              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} respostas</span>
+              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} confirmações</span>
               <span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>
             </div>
             <div class="mt-2">
@@ -667,6 +641,20 @@
       renderCards('cards-home', getFiltered().slice(0, 4));
       renderCards('cards-recent', getRecentLocations());
       renderCards('cards-top', getTopConfirmedLocations());
+      updateCommunityStats();
+    }
+
+    function getTotalCommunityResponses() {
+      return getApprovedLocations().reduce((total, loc) => total + getConfirmationCount(loc.id), 0);
+    }
+
+    function updateCommunityStats() {
+      const el = document.getElementById('hero-community-count');
+      if (!el) return;
+      const total = getTotalCommunityResponses();
+      el.textContent = total > 0
+        ? `${total} confirmações já foram feitas pela comunidade.`
+        : 'A comunidade já começou a confirmar locais.';
     }
 
     function getSuggestionCounts() {
@@ -845,7 +833,7 @@
               <div class="flex items-center justify-between gap-3">
                 <div>
                   <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
-                  <p class="text-sm text-bark/60">${confirmationCount} respostas · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
+                  <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
                 </div>
                 <span class="text-xs ${alreadyConfirmed ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${alreadyConfirmed ? 'Já respondeste' : 'Ainda não respondeste'}</span>
               </div>
@@ -855,9 +843,9 @@
               </div>
             </div>
             <div class="grid grid-cols-3 gap-2">
-              <button type="button" onclick="confirmPlace(${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-2 rounded-full text-sm">✅ Sim</button>
-              <button type="button" onclick="confirmPlace(${loc.id}, 'no')" class="bg-bark/70 text-cream font-semibold py-2 rounded-full text-sm">❌ Não</button>
-              <button type="button" onclick="confirmPlace(${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-2 rounded-full text-sm border border-sand">⚠️ Restr.</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">✅ Sim</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'no')" class="bg-bark/80 text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">❌ Não</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-3 rounded-full text-sm border border-bark/10 shadow-sm hover:bg-white transition">⚠️ Restr.</button>
             </div>
             <div class="grid sm:grid-cols-2 gap-3">
               <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
