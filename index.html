@@ -1112,8 +1112,7 @@
         hero.onerror = () => {
           if (heroWrap) heroWrap.textContent = '🐶';
         };
-        hero.src = MAC_IMAGE_DATA;
-        hero.addEventListener('click', handleMacClick);
+        const MAC_IMAGE_DATA = 'mac.jpg';
       }
       if (navWrap) navWrap.addEventListener('click', handleMacClick);
       if (heroWrap) heroWrap.addEventListener('click', handleMacClick);
