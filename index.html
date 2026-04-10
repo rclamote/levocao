@@ -6,7 +6,7 @@
   <title>Levo o Cão</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
   <script>
@@ -421,7 +421,7 @@
     const SUGGESTIONS_STORAGE_KEY = 'levocao_suggestions';
     const ISSUE_REPORTS_STORAGE_KEY = 'levocao_issue_reports';
     const ADMIN_ACCESS_CODE = 'mac123';
-    const MAC_IMAGE_DATA = 'data:image/webp;base64,UklGRrwIAABXRUJQVlA4ILAIAADQIgCdASpgAGAAPm0qkUWkIqGYeh9IQAbEswBgw7kH2kqW1/Ibx2V+3h6aPMA56vmQ81v0keRn/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/V/q/1f6v9X+r/UAA/v89/0d+V/y4n+Y6m1g+YJxwjo5RZ3+fPZ6p4E7+Qn1H4o2s1Q3KQ7LbgVnq2w0Af8H7k5sL0dFj4r2mC2f0Q7l1w7h+1h3uQ1QXj3F9w1mHqfVvP7vU8m1m6xgJt6m8kz7n1h4c0W5x0Yd1m1M3gkM2v0dM8P2i6rjB7g3Wqg6Y3G7iP4h6+vG5a+3y8l3fL7wL1yOe1u6y5k5zqQ8cM7m9Y4mV1o6mC5K1m6d2h6b0g3v8q1c0c5g3G8i5k1b6vY6wq8vY1n6x3F7Yz4o7d8vR2F1Z3e5o5k1W7vY7kM8x1f7YvY8i3G4a+6l5vM7g8V+1k5a5j2o6c6M4m+4vQ8d3g9f2o4h5R8i6c6g4Y+7m6h5Y6Y9m6n8mQ5p4s7n7nM6d7V8Z+4x3l7W7u6T8t9m3M5k+4vR7i8W7g8b9k6m4j6q8f7n7o9s6P7q8Z6a+8m8x8m5e4t8R7V7a+8k8P6s9q7y+X8b7s8a7w+Z8o7s7r8f6n7m+f6g8s8o7g8V7b9i8u8q6f9o6W9i7m9m7l+e8x7k6f8v6g9v6m8z8m5m8c7s9X8Z7u+Y8r7w+e8o7j7o8g7m9n7n9r6X9g7n9u7Z8o9m6e9s7v9m8o8m7x9v7b8l8s8o7i9r6h9x7b9m7b9o7c9n7Y9m6g9u7a8p9o7m9n7X9q7d9n7V8r7e9s6g9v7Y9o7l9m6h9u7W8q7f9s6f9v7V9p7k9m6i9u7U9r7g9s6e9v7T9q7j9m6j9u7S9s7h9s6d9v7R9r7i9m6k9u7Q9t7j9s6c9v7P9s7k9m6l9u7O9u7l9s6b9v7N9t7m9m6m9u7L9v7n9s6a9v7J9u7o9m6n9u7H9w7p9s6Z9v7F9v7q9m6o9u7D9x7r9s6Y9v7B9w7s9m6p9u69y7t9s6X9u59x7u9m6q9u19z7v9s6W9uA=';
+    const MAC_IMAGE_DATA = 'mac.jpg';
 
     function getStoredConfirmationMap() {
       try {
@@ -1112,7 +1112,8 @@
         hero.onerror = () => {
           if (heroWrap) heroWrap.textContent = '🐶';
         };
-        const MAC_IMAGE_DATA = 'mac.jpg';
+        hero.src = MAC_IMAGE_DATA;
+        hero.addEventListener('click', handleMacClick);
       }
       if (navWrap) navWrap.addEventListener('click', handleMacClick);
       if (heroWrap) heroWrap.addEventListener('click', handleMacClick);
