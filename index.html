@@ -91,7 +91,7 @@
             </div>
           </div>
           <h1 id="el-hero-title" class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">Levo o Cão?</h1>
-          <p id="el-hero-subtitle" class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Já sabes onde podes ir hoje com o teu cão? Descobre locais confirmados pela comunidade em Portugal.</p>
+          <p id="el-hero-subtitle" class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Descobre onde podes entrar com o teu cão — sem surpresas.</p>
           <p class="text-xs text-bark/50 mt-1">Inspirado no Mac 🐾</p>
           <div class="fade-in-d2 mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
@@ -105,7 +105,7 @@
           <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3">
             <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
               <i data-lucide="map-pin" class="w-4 h-4"></i>
-              Encontrar um local agora
+              Onde posso ir com o meu cão?
             </button>
             <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -332,11 +332,6 @@
       </div>
     </div>
 
-    <button type="button" onclick="showView('suggest')" class="sm:hidden fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-lg hover:bg-moss transition active:scale-95">
-      <i data-lucide="plus-circle" class="w-4 h-4"></i>
-      Adicionar
-    </button>
-
     <footer class="bg-bark text-cream/80 mt-auto">
       <div class="max-w-3xl mx-auto px-5 py-8">
         <div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
@@ -410,6 +405,19 @@
         dogs: true,
         confirmations: 3,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
+      },
+      {
+        id: 5,
+        name: 'Aldeamento Pedras da Rainha',
+        city: 'Cabanas de Tavira',
+        type: 'Alojamento',
+        emoji: '🏡',
+        desc: 'Alojamento onde podes ficar com o teu cão. Pode circular por quase todo o espaço, com algumas restrições.',
+        address: 'Aldeamento Turístico Pedras da Rainha, 8800-591 Cabanas de Tavira',
+        notes: 'Cães permitidos no quarto e circulação geral. Não permitido na piscina nem na zona de restauração.',
+        dogs: true,
+        confirmations: 2,
+        colors: ['#5B7553', '#8BA67A', '#F5F0E8']
       }
     ];
 
