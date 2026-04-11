@@ -287,8 +287,8 @@
         </form>
 
         <div id="suggest-success" class="hidden mt-6 p-4 bg-sage/10 rounded-2xl text-sage font-medium">
-          ✅ Obrigado pela sugestão! Vamos rever o local antes de o mostrar no site.
-          <div class="mt-2 text-sm text-bark/70">Podes acompanhar e aprovar sugestões no painel Admin.</div>
+          ✅ Obrigado pela sugestão! Adicionado pela comunidade · em revisão.
+          <div class="mt-2 text-sm text-bark/70">O local só fica visível no site depois da tua confirmação no painel Admin.</div>
           <div class="mt-4">
             <button type="button" onclick="resetSuggestForm()" class="inline-flex items-center gap-2 bg-white text-sage border border-sage font-semibold px-4 py-2 rounded-full hover:bg-sand transition">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -328,6 +328,11 @@
             <p class="text-sm text-bark/55">Rejeitados</p>
             <p id="admin-rejected-count" class="font-display text-2xl font-bold mt-1">0</p>
           </div>
+        </div>
+
+        <div class="mb-6 rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">
+          <span class="inline-flex items-center gap-2 bg-sand text-bark/70 font-medium px-3 py-1.5 rounded-full">🛡️ Adicionado pela comunidade · em revisão</span>
+          <p class="mt-3">Todos os locais sugeridos passam primeiro por revisão antes de ficarem visíveis no site.</p>
         </div>
 
         <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-4">
