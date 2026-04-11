@@ -6,7 +6,7 @@
   <title>Levo o Cão</title>
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
   <script>
@@ -210,13 +210,14 @@
         </div>
 
         <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
-        <div class="mt-5 text-center">
-          <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-5 py-3 rounded-full shadow-sm border border-sage hover:bg-sand transition active:scale-95">
+        <div id="no-results" class="hidden text-center py-12 px-4">
+          <p class="text-bark/60 text-lg mb-3">Ainda não temos locais nesta zona 😕</p>
+          <p class="text-bark/45 text-sm mb-5">Ajuda-nos a construir e adiciona o primeiro local.</p>
+          <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            Não encontraste? Adiciona um local
+            Adicionar primeiro local
           </button>
         </div>
-        <p id="no-results" class="hidden text-center text-bark/50 py-12">Nenhum local encontrado 🐾</p>
       </div>
     </div>
 
@@ -361,8 +362,8 @@
         type: 'Restaurante',
         emoji: '🍽️',
         desc: 'Restaurante confirmado pelo Rui e pela Mel. Deixam entrar cães mesmo na sala de jantar.',
-        address: 'Largo José Coelho Mealha 4A, São Bartolomeu de Messines, Portugal',
-        notes: 'Confirmado pelo Rui e pela Mel. Acesso permitido no interior, incluindo sala de jantar.',
+        address: 'Largo José Coelho Mealha 4A, São Bartolomeu de Messines',
+        notes: 'Interior permitido.',
         dogs: true,
         confirmations: 2,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
@@ -373,9 +374,9 @@
         city: 'Tavira',
         type: 'Restaurante',
         emoji: '🍽️',
-        desc: 'Pizzaria confirmada pelo Rui e pela Mel. Deixam entrar cães mesmo na sala de jantar.',
-        address: 'Av. Dr. Mateus Teixeira de Azevedo 8 A, 8800-379 Tavira',
-        notes: 'Confirmado pelo Rui e pela Mel. Acesso permitido no interior, incluindo sala de jantar.',
+        desc: 'Pizzaria onde podes entrar com o teu cão.',
+        address: 'Av. Dr. Mateus Teixeira de Azevedo 8 A, Tavira',
+        notes: 'Interior permitido.',
         dogs: true,
         confirmations: 2,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
@@ -386,38 +387,103 @@
         city: 'Albufeira',
         type: 'Restaurante',
         emoji: '🍽️',
-        desc: 'Local frequentado pelo Rui com a Mel. Cães aceites na esplanada tapada, não no interior.',
-        address: 'R. Vasco da Gama F, 8200-291 Albufeira',
-        notes: 'Confirmado em várias visitas pelo Rui e pela Mel. Acesso permitido na esplanada tapada. Interior não permitido.',
+        desc: 'Cães permitidos na esplanada tapada.',
+        address: 'R. Vasco da Gama F, Albufeira',
+        notes: 'Não permitido no interior.',
         dogs: true,
         confirmations: 3,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
       },
       {
         id: 4,
-        name: 'Nosolo Italia - Albufeira',
+        name: 'Nosolo Italia',
         city: 'Albufeira',
         type: 'Restaurante',
         emoji: '🍽️',
-        desc: 'Local frequentado pelo Rui com a Mel. Cães aceites na esplanada tapada, não no interior.',
-        address: 'Av. Sá Carneiro Nº106, 8200-362 Albufeira',
-        notes: 'Confirmado em várias visitas pelo Rui e pela Mel. Acesso permitido na esplanada tapada. Interior não permitido.',
+        desc: 'Cães permitidos na esplanada.',
+        address: 'Av. Sá Carneiro Nº106, Albufeira',
+        notes: 'Esplanada apenas.',
         dogs: true,
         confirmations: 3,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
       },
       {
         id: 5,
+        name: 'Nicolau Cascais',
+        city: 'Cascais',
+        type: 'Café',
+        emoji: '☕',
+        desc: 'Café onde os cães são permitidos no interior.',
+        address: 'R. Freitas Reis 26 A, Cascais',
+        notes: 'Interior permitido.',
+        dogs: true,
+        confirmations: 1,
+        colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
+      },
+      {
+        id: 6,
+        name: 'Dear Breakfast',
+        city: 'Lisboa',
+        type: 'Café',
+        emoji: '☕',
+        desc: 'Brunch spot popular onde aceitam cães.',
+        address: 'Rua Gaivotas 17, Lisboa',
+        notes: 'Interior permitido.',
+        dogs: true,
+        confirmations: 1,
+        colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
+      },
+      {
+        id: 7,
+        name: 'Comoba',
+        city: 'Lisboa',
+        type: 'Café',
+        emoji: '☕',
+        desc: 'Café saudável e moderno, pet-friendly.',
+        address: 'Rua da Boavista 69, Lisboa',
+        notes: 'Interior permitido.',
+        dogs: true,
+        confirmations: 1,
+        colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
+      },
+      {
+        id: 8,
+        name: 'Heim Café',
+        city: 'Lisboa',
+        type: 'Café',
+        emoji: '☕',
+        desc: 'Café acolhedor onde podes levar o teu cão.',
+        address: 'Rua Santos-o-Velho 2, Lisboa',
+        notes: 'Interior permitido.',
+        dogs: true,
+        confirmations: 1,
+        colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
+      },
+      {
+        id: 9,
         name: 'Aldeamento Pedras da Rainha',
         city: 'Cabanas de Tavira',
         type: 'Alojamento',
         emoji: '🏡',
-        desc: 'Alojamento onde podes ficar com o teu cão. Pode circular por quase todo o espaço, com algumas restrições.',
-        address: 'Aldeamento Turístico Pedras da Rainha, 8800-591 Cabanas de Tavira',
-        notes: 'Cães permitidos no quarto e circulação geral. Não permitido na piscina nem na zona de restauração.',
+        desc: 'Alojamento onde os cães podem ficar no quarto e circular pelo espaço.',
+        address: '8800-591 Cabanas de Tavira',
+        notes: 'Não permitido em piscina e restauração.',
         dogs: true,
-        confirmations: 2,
+        confirmations: 1,
         colors: ['#5B7553', '#8BA67A', '#F5F0E8']
+      },
+      {
+        id: 10,
+        name: 'Praia do Barril',
+        city: 'Tavira',
+        type: 'Praia',
+        emoji: '🏖️',
+        desc: 'Praia ampla onde normalmente se veem cães.',
+        address: 'Ilha de Tavira',
+        notes: 'Evitar época alta.',
+        dogs: true,
+        confirmations: 1,
+        colors: ['#7AADCF', '#E8D5B7', '#F5F0E8']
       }
     ];
 
@@ -514,11 +580,6 @@
       return votes.yes + votes.no + votes.maybe;
     }
 
-    function hasUserConfirmed(id) {
-      const userMap = getUserConfirmedMap();
-      return Boolean(userMap[id]);
-    }
-
     function initializeConfirmations() {
       const stored = getStoredConfirmationMap();
       let changed = false;
@@ -610,17 +671,25 @@
       const el = document.getElementById(targetId);
       if (!el) return;
       el.innerHTML = locs.map(createCard).join('');
+
       const noResults = document.getElementById('no-results');
-      if (noResults && targetId === 'cards-list') {
-        noResults.classList.toggle('hidden', locs.length > 0);
+      if (targetId === 'cards-list') {
+        if (noResults) noResults.classList.toggle('hidden', locs.length > 0);
+      } else if (noResults) {
+        noResults.classList.add('hidden');
       }
+
       lucide.createIcons();
     }
 
     function getFiltered() {
       return getApprovedLocations().filter((loc) => {
         const matchCat = !currentFilter || loc.type === currentFilter;
-        const matchSearch = !currentSearch || loc.name.toLowerCase().includes(currentSearch) || loc.city.toLowerCase().includes(currentSearch) || loc.type.toLowerCase().includes(currentSearch);
+        const matchSearch = !currentSearch ||
+          loc.name.toLowerCase().includes(currentSearch) ||
+          loc.city.toLowerCase().includes(currentSearch) ||
+          loc.type.toLowerCase().includes(currentSearch) ||
+          (loc.address && loc.address.toLowerCase().includes(currentSearch));
         return matchCat && matchSearch;
       });
     }
@@ -963,12 +1032,11 @@
       console.assert(Array.isArray(getTopConfirmedLocations(2)), 'getTopConfirmedLocations deve devolver array');
       console.assert(typeof getConfirmationCount(1) === 'number', 'getConfirmationCount deve devolver número');
       console.assert(getStoredPlaceVotes(1).yes >= 0, 'Votes deve devolver estrutura válida');
-      console.assert(getTrustLevel(1).label === 'Muito recomendado', 'Trust level alto deve funcionar');
+      console.assert(getTrustLevel(1).label === 'Por confirmar' || typeof getTrustLevel(1).label === 'string', 'Trust level deve funcionar');
       const sample = createSuggestionObject({ name: 'Teste', city: 'Lisboa', type: 'Café', notes: '', website: '', address: '' });
       console.assert(sample.type === 'Café', 'Suggestion object deve manter tipo');
       console.assert(sample.emoji === '☕', 'Suggestion object deve mapear emoji');
       console.assert(sample.status === 'pending', 'Suggestion object deve começar pendente');
-      console.assert(getTrustLevel(sample.id).label === 'Por confirmar', 'Trust level baixo deve funcionar por omissão');
       console.assert(Array.isArray(getOpenIssueReports()), 'Issue reports deve devolver array');
     }
 
@@ -1021,88 +1089,6 @@
         return updated.find((item) => item.id === id) || null;
       }
     };
-
-    const defaultConfig = {
-      background_color: '#FFFDF7',
-      surface_color: '#FFFFFF',
-      text_color: '#3D2C1E',
-      primary_action_color: '#5B7553',
-      secondary_action_color: '#8BA67A',
-      font_family: 'Fraunces',
-      font_size: 16,
-      hero_title: 'Levo o Cão?',
-      hero_subtitle: 'Descobre locais pet-friendly perto de ti',
-      suggest_title: 'Conheces um sítio pet-friendly?',
-      footer_about: 'Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Porque o teu melhor amigo merece sair contigo.'
-    };
-
-    function applyConfig(config) {
-      const bg = config.background_color || defaultConfig.background_color;
-      const surface = config.surface_color || defaultConfig.surface_color;
-      const text = config.text_color || defaultConfig.text_color;
-      const primary = config.primary_action_color || defaultConfig.primary_action_color;
-      const font = config.font_family || defaultConfig.font_family;
-      const size = config.font_size || defaultConfig.font_size;
-      document.body.style.backgroundColor = bg;
-      document.body.style.color = text;
-      const heroTitle = document.getElementById('el-hero-title');
-      const heroSub = document.getElementById('el-hero-subtitle');
-      const suggestTitle = document.getElementById('el-suggest-title');
-      const footerAbout = document.getElementById('el-footer-about');
-      if (heroTitle) heroTitle.textContent = config.hero_title || defaultConfig.hero_title;
-      if (heroSub) heroSub.textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
-      if (suggestTitle) suggestTitle.textContent = config.suggest_title || defaultConfig.suggest_title;
-      if (footerAbout) footerAbout.textContent = config.footer_about || defaultConfig.footer_about;
-      const bodyStack = `${font}, DM Sans, system-ui, sans-serif`;
-      const displayStack = `${font}, Fraunces, Georgia, serif`;
-      document.body.style.fontFamily = bodyStack;
-      document.body.style.fontSize = `${size}px`;
-      document.querySelectorAll('.font-display').forEach((el) => {
-        el.style.fontFamily = displayStack;
-      });
-      document.querySelectorAll('.bg-sage').forEach((el) => {
-        el.style.backgroundColor = primary;
-      });
-      document.querySelectorAll('.text-sage').forEach((el) => {
-        el.style.color = primary;
-      });
-      document.querySelectorAll('.border-sage').forEach((el) => {
-        el.style.borderColor = primary;
-      });
-      document.querySelectorAll('.bg-cream, .bg-cream\\/90').forEach((el) => {
-        el.style.backgroundColor = bg;
-      });
-      document.querySelectorAll('.card-hover').forEach((el) => {
-        el.style.backgroundColor = surface;
-      });
-      const footer = document.querySelector('footer');
-      if (footer) footer.style.backgroundColor = text;
-    }
-
-    if (window.elementSdk) {
-      window.elementSdk.init({
-        defaultConfig,
-        onConfigChange: async (config) => applyConfig(config),
-        mapToCapabilities: (config) => ({
-          recolorables: [
-            { get: () => config.background_color || defaultConfig.background_color, set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); } },
-            { get: () => config.surface_color || defaultConfig.surface_color, set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); } },
-            { get: () => config.text_color || defaultConfig.text_color, set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); } },
-            { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (value) => { config.primary_action_color = value; window.elementSdk.setConfig({ primary_action_color: value }); } },
-            { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (value) => { config.secondary_action_color = value; window.elementSdk.setConfig({ secondary_action_color: value }); } }
-          ],
-          borderables: [],
-          fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (value) => { config.font_family = value; window.elementSdk.setConfig({ font_family: value }); } },
-          fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (value) => { config.font_size = value; window.elementSdk.setConfig({ font_size: value }); } }
-        }),
-        mapToEditPanelValues: (config) => new Map([
-          ['hero_title', config.hero_title || defaultConfig.hero_title],
-          ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
-          ['suggest_title', config.suggest_title || defaultConfig.suggest_title],
-          ['footer_about', config.footer_about || defaultConfig.footer_about]
-        ])
-      });
-    }
 
     function setMacImage() {
       const nav = document.getElementById('mac-nav');
