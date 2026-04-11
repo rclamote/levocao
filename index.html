@@ -148,7 +148,7 @@
         </div>
 
         <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cat-grid">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="cat-grid">
           <button type="button" onclick="filterByCategory('Restaurante', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Restaurantes</span>
           </button>
@@ -257,6 +257,7 @@
               <option>Café</option>
               <option>Praia</option>
               <option>Alojamento</option>
+              <option>Soltar o cão</option>
             </select>
           </div>
           <div>
@@ -276,7 +277,7 @@
             </div>
           </div>
           <div>
-            <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label> class="block text-sm font-medium mb-1">Notas (opcional)</label>
+            <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
             <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar no interior, só esplanada à noite, deram água ao cão..."></textarea>
           </div>
           <div>
@@ -610,18 +611,19 @@
     function getStoredPlaceVotes(id) {
       const stored = getStoredConfirmationMap();
       const value = stored[id];
+      if (!value) {
+        const loc = getApprovedLocations().find((item) => item.id === id);
+        return { yes: Number(loc?.confirmations || 0), no: 0, maybe: 0, lastUpdated: null };
+      }
       if (typeof value === 'number') {
-        return { yes: value, no: 0, maybe: 0 };
+        return { yes: value, no: 0, maybe: 0, lastUpdated: null };
       }
-      if (value && typeof value === 'object') {
-        return {
-          yes: Number(value.yes || 0),
-          no: Number(value.no || 0),
-          maybe: Number(value.maybe || 0)
-        };
-      }
-      const loc = getApprovedLocations().find((item) => item.id === id);
-      return { yes: Number(loc?.confirmations || 0), no: 0, maybe: 0 };
+      return {
+        yes: Number(value.yes || 0),
+        no: Number(value.no || 0),
+        maybe: Number(value.maybe || 0),
+        lastUpdated: value.lastUpdated || null
+      };
     }
 
     function getConfirmationCount(id) {
@@ -629,15 +631,42 @@
       return votes.yes + votes.no + votes.maybe;
     }
 
+    function getLastUpdateText(id) {
+      const votes = getStoredPlaceVotes(id);
+      if (!votes.lastUpdated) return null;
+
+      const diff = Date.now() - new Date(votes.lastUpdated).getTime();
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (days <= 0) return 'Atualizado hoje';
+      if (days === 1) return 'Atualizado ontem';
+      if (days < 7) return `Atualizado há ${days} dias`;
+      if (days < 30) {
+        const weeks = Math.floor(days / 7);
+        return weeks <= 1 ? 'Atualizado há 1 semana' : `Atualizado há ${weeks} semanas`;
+      }
+      return 'Atualizado há algum tempo';
+    }
+
     function initializeConfirmations() {
       const stored = getStoredConfirmationMap();
       let changed = false;
       getApprovedLocations().forEach((loc) => {
         if (stored[loc.id] == null) {
-          stored[loc.id] = { yes: Number(loc.confirmations || 0), no: 0, maybe: 0 };
+          stored[loc.id] = {
+            yes: Number(loc.confirmations || 0),
+            no: 0,
+            maybe: 0,
+            lastUpdated: null
+          };
           changed = true;
         } else if (typeof stored[loc.id] === 'number') {
-          stored[loc.id] = { yes: Number(stored[loc.id]), no: 0, maybe: 0 };
+          stored[loc.id] = {
+            yes: Number(stored[loc.id]),
+            no: 0,
+            maybe: 0,
+            lastUpdated: null
+          };
           changed = true;
         }
       });
@@ -690,6 +719,7 @@
       const confirmationCount = getConfirmationCount(loc.id);
       const trustLevel = getTrustLevel(loc.id);
       const recentBadge = isRecentLocation(loc) ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>' : '';
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
           <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
@@ -700,17 +730,25 @@
             </div>
           </div>
           <div class="p-4">
-            <h3 class="font-display font-bold text-lg">${loc.name}</h3>
-            <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5">
-              <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.type}
-            </p>
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="font-display font-bold text-lg">${loc.name}</h3>
+                <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5">
+                  <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.type}
+                </p>
+              </div>
+              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="shrink-0 inline-flex items-center gap-1 text-xs bg-white text-sage font-medium px-2.5 py-1.5 rounded-full border border-sand hover:bg-sand transition">
+                <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Ir
+              </a>
+            </div>
             <p class="text-bark/70 text-sm mt-2 line-clamp-2">${loc.desc}</p>
             <div class="mt-3 flex items-center justify-between gap-2 flex-wrap">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} confirmações</span>
               <span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 flex items-center justify-between gap-2 flex-wrap">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">Ver detalhes →</span>
+              <span class="text-xs text-bark/45">Abrir rápido no Maps</span>
             </div>
           </div>
         </article>`;
@@ -933,6 +971,7 @@
       const confirmationCount = getConfirmationCount(loc.id);
       const trustLevel = getTrustLevel(loc.id);
       const alreadyConfirmed = getUserConfirmedMap()[loc.id];
+      const lastUpdate = getLastUpdateText(loc.id);
       const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       document.getElementById('detail-content').innerHTML = `
@@ -967,6 +1006,7 @@
                 <div>
                   <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
                   <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
+                  ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
                 </div>
                 <span class="text-xs ${alreadyConfirmed ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${alreadyConfirmed ? 'Já respondeste' : 'Ainda não respondeste'}</span>
               </div>
@@ -1041,11 +1081,17 @@
         return;
       }
       const stored = getStoredConfirmationMap();
-      const votes = getStoredPlaceVotes(id);
-      if (type === 'yes') votes.yes += 1;
-      if (type === 'no') votes.no += 1;
-      if (type === 'maybe') votes.maybe += 1;
-      stored[id] = votes;
+      const current = getStoredPlaceVotes(id);
+      const updatedVotes = {
+        yes: current.yes,
+        no: current.no,
+        maybe: current.maybe,
+        lastUpdated: new Date().toISOString()
+      };
+      if (type === 'yes') updatedVotes.yes += 1;
+      if (type === 'no') updatedVotes.no += 1;
+      if (type === 'maybe') updatedVotes.maybe += 1;
+      stored[id] = updatedVotes;
       userMap[id] = type;
       saveStoredConfirmationMap(stored);
       saveUserConfirmedMap(userMap);
@@ -1090,8 +1136,8 @@
       console.assert(Array.isArray(getTopConfirmedLocations(2)), 'getTopConfirmedLocations deve devolver array');
       console.assert(typeof getConfirmationCount(1) === 'number', 'getConfirmationCount deve devolver número');
       console.assert(getStoredPlaceVotes(1).yes >= 0, 'Votes deve devolver estrutura válida');
-      console.assert(getTrustLevel(1).label === 'Por confirmar' || typeof getTrustLevel(1).label === 'string', 'Trust level deve funcionar');
-      const sample = createSuggestionObject({ name: 'Teste', city: 'Lisboa', type: 'Café', notes: '', website: '', address: '' });
+      console.assert(typeof getTrustLevel(1).label === 'string', 'Trust level deve funcionar');
+      const sample = createSuggestionObject({ name: 'Teste', city: 'Lisboa', type: 'Café', notes: '', website: '', address: '', features: [] });
       console.assert(sample.type === 'Café', 'Suggestion object deve manter tipo');
       console.assert(sample.emoji === '☕', 'Suggestion object deve mapear emoji');
       console.assert(sample.status === 'pending', 'Suggestion object deve começar pendente');
