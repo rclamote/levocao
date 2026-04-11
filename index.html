@@ -161,6 +161,9 @@
           <button type="button" onclick="filterByCategory('Alojamento', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🏡</span><span class="text-sm font-medium">Alojamentos</span>
           </button>
+          <button type="button" onclick="filterByCategory('Soltar o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🦮</span><span class="text-sm font-medium">Soltar o cão</span>
+          </button>
         </div>
       </section>
 
@@ -207,6 +210,7 @@
           <button type="button" onclick="filterByCategory('Café')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Café">Cafés</button>
           <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
           <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
+          <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
         </div>
 
         <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
@@ -264,10 +268,15 @@
               <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="💧 Água disponível" class="accent-[#5B7553]" />💧 Água disponível</label>
               <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🐾 Muito pet-friendly" class="accent-[#5B7553]" />🐾 Muito pet-friendly</label>
               <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚫 Não no interior" class="accent-[#5B7553]" />🚫 Não no interior</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🔒 Vedado" class="accent-[#5B7553]" />🔒 Vedado</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚧 Semi-vedado" class="accent-[#5B7553]" />🚧 Semi-vedado</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🌳 Espaço aberto" class="accent-[#5B7553]" />🌳 Espaço aberto</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚪 Tem portão" class="accent-[#5B7553]" />🚪 Tem portão</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚗 Perto de estrada" class="accent-[#5B7553]" />🚗 Perto de estrada</label>
             </div>
           </div>
           <div>
-            <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
+            <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label> class="block text-sm font-medium mb-1">Notas (opcional)</label>
             <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar no interior, só esplanada à noite, deram água ao cão..."></textarea>
           </div>
           <div>
@@ -505,6 +514,20 @@
         dogs: true,
         confirmations: 1,
         colors: ['#7AADCF', '#E8D5B7', '#F5F0E8']
+      },
+      {
+        id: 11,
+        name: 'Parque vedado para cães',
+        city: 'Portimão',
+        type: 'Soltar o cão',
+        emoji: '🦮',
+        desc: 'Espaço pensado para soltar o cão com mais segurança.',
+        address: 'Portimão',
+        notes: 'Exemplo inicial para esta nova categoria. Substituir por local real confirmado.',
+        features: ['🔒 Vedado', '🚪 Tem portão'],
+        dogs: true,
+        confirmations: 1,
+        colors: ['#8BA67A', '#D4C5A9', '#FFFDF7']
       }
     ];
 
@@ -1030,12 +1053,13 @@
     }
 
     function createSuggestionObject(values) {
-      const emojiMap = { Restaurante: '🍽️', Café: '☕', Praia: '🏖️', Alojamento: '🏡' };
+      const emojiMap = { Restaurante: '🍽️', Café: '☕', Praia: '🏖️', Alojamento: '🏡', 'Soltar o cão': '🦮' };
       const colorMap = {
         Restaurante: ['#C4A882', '#8BA67A', '#F0E6D3'],
         Café: ['#A3B899', '#D4C5A9', '#FFFDF7'],
         Praia: ['#7AADCF', '#E8D5B7', '#F5F0E8'],
-        Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8']
+        Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8'],
+        'Soltar o cão': ['#8BA67A', '#D4C5A9', '#FFFDF7']
       };
       return {
         id: Date.now(),
