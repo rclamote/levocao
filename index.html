@@ -256,8 +256,19 @@
             </select>
           </div>
           <div>
+            <p class="block text-sm font-medium mb-2">Condições úteis</p>
+            <div id="sg-features" class="flex flex-wrap gap-2">
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🏠 Interior permitido" class="accent-[#5B7553]" />🏠 Interior permitido</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="☀️ Só esplanada" class="accent-[#5B7553]" />☀️ Só esplanada</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🦮 Trela obrigatória" class="accent-[#5B7553]" />🦮 Trela obrigatória</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="💧 Água disponível" class="accent-[#5B7553]" />💧 Água disponível</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🐾 Muito pet-friendly" class="accent-[#5B7553]" />🐾 Muito pet-friendly</label>
+              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚫 Não no interior" class="accent-[#5B7553]" />🚫 Não no interior</label>
+            </div>
+          </div>
+          <div>
             <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
-            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Tem esplanada, água para cães..."></textarea>
+            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar no interior, só esplanada à noite, deram água ao cão..."></textarea>
           </div>
           <div>
             <label for="sg-website" class="block text-sm font-medium mb-1">Website (opcional)</label>
@@ -364,6 +375,7 @@
         desc: 'Restaurante confirmado pelo Rui e pela Mel. Deixam entrar cães mesmo na sala de jantar.',
         address: 'Largo José Coelho Mealha 4A, São Bartolomeu de Messines',
         notes: 'Interior permitido.',
+        features: ['🏠 Interior permitido'],
         dogs: true,
         confirmations: 2,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
@@ -377,6 +389,7 @@
         desc: 'Pizzaria onde podes entrar com o teu cão.',
         address: 'Av. Dr. Mateus Teixeira de Azevedo 8 A, Tavira',
         notes: 'Interior permitido.',
+        features: ['🏠 Interior permitido'],
         dogs: true,
         confirmations: 2,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
@@ -390,6 +403,7 @@
         desc: 'Cães permitidos na esplanada tapada.',
         address: 'R. Vasco da Gama F, Albufeira',
         notes: 'Não permitido no interior.',
+        features: ['☀️ Só esplanada', '🚫 Não no interior'],
         dogs: true,
         confirmations: 3,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
@@ -403,6 +417,7 @@
         desc: 'Cães permitidos na esplanada.',
         address: 'Av. Sá Carneiro Nº106, Albufeira',
         notes: 'Esplanada apenas.',
+        features: ['☀️ Só esplanada', '🚫 Não no interior'],
         dogs: true,
         confirmations: 3,
         colors: ['#C4A882', '#8BA67A', '#F0E6D3']
@@ -416,6 +431,7 @@
         desc: 'Café onde os cães são permitidos no interior.',
         address: 'R. Freitas Reis 26 A, Cascais',
         notes: 'Interior permitido.',
+        features: ['🏠 Interior permitido'],
         dogs: true,
         confirmations: 1,
         colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
@@ -429,6 +445,7 @@
         desc: 'Brunch spot popular onde aceitam cães.',
         address: 'Rua Gaivotas 17, Lisboa',
         notes: 'Interior permitido.',
+        features: ['🏠 Interior permitido'],
         dogs: true,
         confirmations: 1,
         colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
@@ -442,6 +459,7 @@
         desc: 'Café saudável e moderno, pet-friendly.',
         address: 'Rua da Boavista 69, Lisboa',
         notes: 'Interior permitido.',
+        features: ['🏠 Interior permitido'],
         dogs: true,
         confirmations: 1,
         colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
@@ -455,6 +473,7 @@
         desc: 'Café acolhedor onde podes levar o teu cão.',
         address: 'Rua Santos-o-Velho 2, Lisboa',
         notes: 'Interior permitido.',
+        features: ['🏠 Interior permitido'],
         dogs: true,
         confirmations: 1,
         colors: ['#A3B899', '#D4C5A9', '#FFFDF7']
@@ -468,6 +487,7 @@
         desc: 'Alojamento onde os cães podem ficar no quarto e circular pelo espaço.',
         address: '8800-591 Cabanas de Tavira',
         notes: 'Não permitido em piscina e restauração.',
+        features: ['🏠 Interior permitido', '🚫 Piscina', '🚫 Restauração'],
         dogs: true,
         confirmations: 1,
         colors: ['#5B7553', '#8BA67A', '#F5F0E8']
@@ -481,6 +501,7 @@
         desc: 'Praia ampla onde normalmente se veem cães.',
         address: 'Ilha de Tavira',
         notes: 'Evitar época alta.',
+        features: ['🏖️ Praia'],
         dogs: true,
         confirmations: 1,
         colors: ['#7AADCF', '#E8D5B7', '#F5F0E8']
@@ -906,6 +927,13 @@
               <p class="text-sm text-bark/70">${loc.address}</p>
               ${loc.website ? `<a href="${loc.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm text-sage font-medium hover:underline mt-2"><i data-lucide="external-link" class="w-4 h-4"></i> Ver website</a>` : ''}
             </div>
+            ${Array.isArray(loc.features) && loc.features.length ? `
+            <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
+              <p class="font-medium text-sm text-bark">Condições úteis</p>
+              <div class="flex flex-wrap gap-2">
+                ${loc.features.map((feature) => `<span class="text-xs bg-sage/10 text-sage font-medium px-3 py-1.5 rounded-full">${feature}</span>`).join('')}
+              </div>
+            </div>` : ''}
             <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
                 <div>
@@ -1019,6 +1047,7 @@
         address: values.address || values.website || `Morada por confirmar em ${values.city}`,
         notes: values.notes || 'Sugestão enviada pela comunidade. Informação detalhada ainda por confirmar.',
         website: values.website,
+        features: values.features || [],
         status: 'pending',
         dogs: true,
         confirmations: 1,
@@ -1050,8 +1079,9 @@
         const notes = document.getElementById('sg-notes').value.trim();
         const website = document.getElementById('sg-website').value.trim();
         const address = document.getElementById('sg-address').value.trim();
+        const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
         const suggestions = getStoredSuggestions();
-        suggestions.unshift(createSuggestionObject({ name, city, type, notes, website, address }));
+        suggestions.unshift(createSuggestionObject({ name, city, type, notes, website, address, features }));
         saveStoredSuggestions(suggestions);
         initializeConfirmations();
         suggestForm.reset();
