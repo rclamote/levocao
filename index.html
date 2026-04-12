@@ -695,8 +695,8 @@
                 <h3 class="font-display font-bold text-lg">${loc.name}</h3>
                 <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.type}</p>
               </div>
-              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="shrink-0 inline-flex items-center gap-1 text-xs bg-white text-sage font-medium px-2.5 py-1.5 rounded-full border border-sand hover:bg-sand transition">
-                <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Ir
+              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="shrink-0 inline-flex items-center gap-1 text-xs bg-white text-sage font-medium px-3 py-1.5 rounded-full border border-sand hover:bg-sand transition">
+                <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Abrir no Maps
               </a>
             </div>
             <p class="text-bark/70 text-sm mt-2 line-clamp-2">${loc.desc}</p>
@@ -704,9 +704,8 @@
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} confirmações</span>
               <span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>
             </div>
-            <div class="mt-2 flex items-center justify-between gap-2 flex-wrap">
+            <div class="mt-2">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">Ver detalhes →</span>
-              <span class="text-xs text-bark/45">Abrir rápido no Maps</span>
             </div>
           </div>
         </article>`;
