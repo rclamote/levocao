@@ -623,7 +623,13 @@
         };
 
         const { error: insertError } = await supabaseClient.from('places').insert([payload]);
-        if (insertError) throw insertError;
+        if (insertError) {
+          if (insertError.code === '23505') {
+            alert('Este local já existe nos locais ativos.');
+            return;
+          }
+          throw insertError;
+        }
 
         const { error: deleteError } = await supabaseClient.from('suggestions').delete().eq('id', id);
         if (deleteError) throw deleteError;
@@ -922,6 +928,43 @@
       }, 50);
     }
 
+    async function checkDuplicateSuggestion(name, city, type) {
+      const cleanName = name.trim();
+      const cleanCity = city.trim();
+
+      const [placesResult, suggestionsResult] = await Promise.all([
+        supabaseClient
+          .from('places')
+          .select('id')
+          .eq('type', type)
+          .eq('is_active', true)
+          .ilike('name', cleanName)
+          .ilike('city', cleanCity)
+          .limit(1),
+
+        supabaseClient
+          .from('suggestions')
+          .select('id')
+          .eq('type', type)
+          .eq('status', 'pending')
+          .ilike('name', cleanName)
+          .ilike('city', cleanCity)
+          .limit(1)
+      ]);
+
+      if (placesResult.error) throw placesResult.error;
+      if (suggestionsResult.error) throw suggestionsResult.error;
+
+      const existsInPlaces = Array.isArray(placesResult.data) && placesResult.data.length > 0;
+      const existsInSuggestions = Array.isArray(suggestionsResult.data) && suggestionsResult.data.length > 0;
+
+      return {
+        exists: existsInPlaces || existsInSuggestions,
+        existsInPlaces,
+        existsInSuggestions
+      };
+    }
+
     async function submitSuggestion() {
       const name = document.getElementById('sg-name').value.trim();
       const city = document.getElementById('sg-city').value.trim();
@@ -931,6 +974,19 @@
       const address = document.getElementById('sg-address').value.trim();
       const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
       const emojiMap = { Restaurante: '🍽️', Café: '☕', Praia: '🏖️', Alojamento: '🏡', 'Soltar o cão': '🦮' };
+
+      const duplicateCheck = await checkDuplicateSuggestion(name, city, type);
+
+      if (duplicateCheck.exists) {
+        if (duplicateCheck.existsInPlaces) {
+          alert('Este local já existe nos locais ativos.');
+        } else if (duplicateCheck.existsInSuggestions) {
+          alert('Este local já foi sugerido e está pendente de revisão.');
+        } else {
+          alert('Este local já existe.');
+        }
+        return;
+      }
 
       const payload = {
         name,
@@ -948,7 +1004,13 @@
       };
 
       const { error } = await supabaseClient.from('suggestions').insert([payload]);
-      if (error) throw error;
+      if (error) {
+        if (error.code === '23505') {
+          alert('Este local já existe ou já foi sugerido.');
+          return;
+        }
+        throw error;
+      }
     }
 
     function resetSuggestForm() {
