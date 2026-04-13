@@ -7,10 +7,9 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-0GW8S5DEE2');
   </script>
-  <!-- resto do teu código -->
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Levo o Cão</title>
@@ -150,7 +149,7 @@
           <div>
             <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
             <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor mapa pet-friendly</h2>
-            <p class="text-bark/65 text-sm mt-1">Se conheces um café, praia, restaurante, alojamento ou espaço seguro para soltar o cão, adiciona-o.</p>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um local para comer, praia, alojamento, passeio, experiência ou espaço seguro para soltar o cão, adiciona-o.</p>
           </div>
           <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -159,12 +158,9 @@
         </div>
 
         <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3" id="cat-grid">
-          <button type="button" onclick="filterByCategory('Restaurante', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
-            <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Restaurantes</span>
-          </button>
-          <button type="button" onclick="filterByCategory('Café', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
-            <span class="text-2xl">☕</span><span class="text-sm font-medium">Cafés</span>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="cat-grid">
+          <button type="button" onclick="filterByCategory('Comer & Beber', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Comer & Beber</span>
           </button>
           <button type="button" onclick="filterByCategory('Praia', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🏖️</span><span class="text-sm font-medium">Praias</span>
@@ -174,6 +170,12 @@
           </button>
           <button type="button" onclick="filterByCategory('Soltar o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🦮</span><span class="text-sm font-medium">Soltar o cão</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Passear com o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🚶</span><span class="text-sm font-medium">Passear com o cão</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Experiências', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🎯</span><span class="text-sm font-medium">Experiências</span>
           </button>
         </div>
       </section>
@@ -217,11 +219,12 @@
 
         <div class="flex gap-2 flex-wrap mb-5" id="filter-bar">
           <button type="button" onclick="filterByCategory(null)" class="cat-btn active text-sm px-4 py-2 rounded-full bg-sage text-cream border border-sage font-medium" data-cat="all">Todos</button>
-          <button type="button" onclick="filterByCategory('Restaurante')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Restaurante">Restaurantes</button>
-          <button type="button" onclick="filterByCategory('Café')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Café">Cafés</button>
+          <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
           <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
           <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
           <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
+          <button type="button" onclick="filterByCategory('Passear com o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Passear com o cão">Passear com o cão</button>
+          <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
         </div>
 
         <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
@@ -265,11 +268,12 @@
           <div>
             <label for="sg-type" class="block text-sm font-medium mb-1">Tipo de local</label>
             <select id="sg-type" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
-              <option>Restaurante</option>
-              <option>Café</option>
+              <option>Comer & Beber</option>
               <option>Praia</option>
               <option>Alojamento</option>
               <option>Soltar o cão</option>
+              <option>Passear com o cão</option>
+              <option>Experiências</option>
             </select>
           </div>
           <div>
@@ -398,6 +402,16 @@
     let macClickCount = 0;
     let macClickTimer = null;
 
+    function mapDisplayType(type) {
+      if (type === 'Restaurante' || type === 'Café') return 'Comer & Beber';
+      return type;
+    }
+
+    function getTypeAliases(type) {
+      if (type === 'Comer & Beber') return ['Comer & Beber', 'Restaurante', 'Café'];
+      return [type];
+    }
+
     function setupSupabase() {
       if (!SUPABASE_URL) return false;
       if (!SUPABASE_ANON_KEY) return false;
@@ -498,6 +512,7 @@
         name: row.name,
         city: row.city,
         type: row.type,
+        displayType: mapDisplayType(row.type),
         emoji: row.emoji || '📍',
         desc: row.description || 'Local pet-friendly.',
         address: row.address || row.city,
@@ -507,17 +522,18 @@
         dogs: row.dogs !== false,
         confirmations: Number(row.confirmations || 0),
         createdAt: row.created_at || null,
-        colors: getColorByType(row.type)
+        colors: getColorByType(mapDisplayType(row.type))
       };
     }
 
     function getColorByType(type) {
       const map = {
-        Restaurante: ['#C4A882', '#8BA67A', '#F0E6D3'],
-        Café: ['#A3B899', '#D4C5A9', '#FFFDF7'],
+        'Comer & Beber': ['#C4A882', '#8BA67A', '#F0E6D3'],
         Praia: ['#7AADCF', '#E8D5B7', '#F5F0E8'],
         Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8'],
-        'Soltar o cão': ['#8BA67A', '#D4C5A9', '#FFFDF7']
+        'Soltar o cão': ['#8BA67A', '#D4C5A9', '#FFFDF7'],
+        'Passear com o cão': ['#A3B899', '#D4C5A9', '#FFFDF7'],
+        'Experiências': ['#C4A882', '#D4C5A9', '#FFFDF7']
       };
       return map[type] || ['#8BA67A', '#D4C5A9', '#FFFDF7'];
     }
@@ -574,7 +590,7 @@
             <div class="flex items-start justify-between gap-3 mb-3">
               <div>
                 <h4 class="font-display text-lg font-bold">${item.name}</h4>
-                <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.type}</p>
+                <p class="text-sm text-bark/55 mt-1">${item.city} · ${mapDisplayType(item.type)}</p>
               </div>
               <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Pendente</span>
             </div>
@@ -709,7 +725,7 @@
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="font-display font-bold text-lg">${loc.name}</h3>
-                <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.type}</p>
+                <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.displayType}</p>
               </div>
               <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="shrink-0 inline-flex items-center gap-1 text-xs bg-white text-sage font-medium px-3 py-1.5 rounded-full border border-sand hover:bg-sand transition">
                 <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Abrir no Maps
@@ -742,11 +758,11 @@
 
     function getFiltered() {
       return locations.filter((loc) => {
-        const matchCat = !currentFilter || loc.type === currentFilter;
+        const matchCat = !currentFilter || loc.displayType === currentFilter;
         const matchSearch = !currentSearch ||
           loc.name.toLowerCase().includes(currentSearch) ||
           loc.city.toLowerCase().includes(currentSearch) ||
-          loc.type.toLowerCase().includes(currentSearch) ||
+          loc.displayType.toLowerCase().includes(currentSearch) ||
           (loc.address && loc.address.toLowerCase().includes(currentSearch));
         return matchCat && matchSearch;
       });
@@ -862,7 +878,7 @@
           <div class="p-5 space-y-4">
             <div>
               <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
-              <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.type}</p>
+              <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.displayType}</p>
             </div>
             <p class="text-bark/80 leading-relaxed">${loc.desc}</p>
             <div class="bg-sand/60 rounded-xl p-4 space-y-2">
@@ -941,12 +957,13 @@
     async function checkDuplicateSuggestion(name, city, type) {
       const cleanName = name.trim();
       const cleanCity = city.trim();
+      const typeAliases = getTypeAliases(type);
 
       const [placesResult, suggestionsResult] = await Promise.all([
         supabaseClient
           .from('places')
-          .select('id')
-          .eq('type', type)
+          .select('id,type')
+          .in('type', typeAliases)
           .eq('is_active', true)
           .ilike('name', cleanName)
           .ilike('city', cleanCity)
@@ -954,8 +971,8 @@
 
         supabaseClient
           .from('suggestions')
-          .select('id')
-          .eq('type', type)
+          .select('id,type')
+          .in('type', typeAliases)
           .eq('status', 'pending')
           .ilike('name', cleanName)
           .ilike('city', cleanCity)
@@ -983,7 +1000,14 @@
       const website = document.getElementById('sg-website').value.trim();
       const address = document.getElementById('sg-address').value.trim();
       const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
-      const emojiMap = { Restaurante: '🍽️', Café: '☕', Praia: '🏖️', Alojamento: '🏡', 'Soltar o cão': '🦮' };
+      const emojiMap = {
+        'Comer & Beber': '🍽️',
+        Praia: '🏖️',
+        Alojamento: '🏡',
+        'Soltar o cão': '🦮',
+        'Passear com o cão': '🚶',
+        'Experiências': '🎯'
+      };
 
       const duplicateCheck = await checkDuplicateSuggestion(name, city, type);
 
