@@ -277,20 +277,16 @@
             </select>
           </div>
           <div>
+            <label for="sg-dog-status" class="block text-sm font-medium mb-1">Estado do local</label>
+            <select id="sg-dog-status" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option value="yes">✅ Aceita cães</option>
+              <option value="maybe">⚠️ Com restrições</option>
+              <option value="no">❌ Não aceita cães</option>
+            </select>
+          </div>
+          <div>
             <p class="block text-sm font-medium mb-2">Condições úteis</p>
-            <div id="sg-features" class="flex flex-wrap gap-2">
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🏠 Interior permitido" class="accent-[#5B7553]" />🏠 Interior permitido</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="☀️ Só esplanada" class="accent-[#5B7553]" />☀️ Só esplanada</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🦮 Trela obrigatória" class="accent-[#5B7553]" />🦮 Trela obrigatória</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="💧 Água disponível" class="accent-[#5B7553]" />💧 Água disponível</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🐾 Muito pet-friendly" class="accent-[#5B7553]" />🐾 Muito pet-friendly</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚫 Não no interior" class="accent-[#5B7553]" />🚫 Não no interior</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🔒 Vedado" class="accent-[#5B7553]" />🔒 Vedado</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚧 Semi-vedado" class="accent-[#5B7553]" />🚧 Semi-vedado</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🌳 Espaço aberto" class="accent-[#5B7553]" />🌳 Espaço aberto</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚪 Tem portão" class="accent-[#5B7553]" />🚪 Tem portão</label>
-              <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition"><input type="checkbox" value="🚗 Perto de estrada" class="accent-[#5B7553]" />🚗 Perto de estrada</label>
-            </div>
+            <div id="sg-features" class="flex flex-wrap gap-2"></div>
           </div>
           <div>
             <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
@@ -325,7 +321,7 @@
         <div class="flex items-center justify-between mb-4">
           <div>
             <h2 class="font-display text-xl font-bold">Painel Admin</h2>
-            <p class="text-sm text-bark/55 mt-1">Revê, aprova ou rejeita sugestões da comunidade.</p>
+            <p class="text-sm text-bark/55 mt-1">Revê, aprova, edita ou desativa locais.</p>
           </div>
           <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
             <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
@@ -349,10 +345,10 @@
 
         <div class="mb-6 rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">
           <span class="inline-flex items-center gap-2 bg-sand text-bark/70 font-medium px-3 py-1.5 rounded-full">🛡️ Admin protegido por password</span>
-          <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Rejeitar remove a sugestão pendente.</p>
+          <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Editar altera diretamente o local. Desativar tira-o do site sem apagar dados.</p>
         </div>
 
-        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
           <div class="flex items-center justify-between gap-3 mb-3">
             <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
             <button type="button" onclick="loadAdminSuggestions()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
@@ -363,6 +359,106 @@
           <div id="admin-suggestions" class="space-y-3"></div>
           <p id="admin-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há sugestões pendentes neste momento.</p>
         </div>
+
+        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <h3 class="font-display text-lg font-bold">Locais ativos</h3>
+            <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              Atualizar
+            </button>
+          </div>
+          <div id="admin-places" class="space-y-3"></div>
+          <p id="admin-places-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há locais ativos.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="edit-place-modal" class="hidden fixed inset-0 z-[80] bg-black/40 p-4">
+      <div class="max-w-2xl mx-auto bg-cream rounded-3xl border border-sand shadow-xl mt-8 max-h-[90vh] overflow-y-auto">
+        <div class="p-5 border-b border-sand flex items-center justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold">Editar local</h3>
+            <p class="text-sm text-bark/55">Atualiza a informação do local ativo.</p>
+          </div>
+          <button type="button" onclick="closeEditPlaceModal()" class="p-2 rounded-full hover:bg-sand transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <form id="edit-place-form" class="p-5 space-y-4">
+          <input type="hidden" id="edit-place-id" />
+
+          <div>
+            <label for="edit-name" class="block text-sm font-medium mb-1">Nome do local</label>
+            <input id="edit-name" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-city" class="block text-sm font-medium mb-1">Cidade</label>
+            <input id="edit-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-address" class="block text-sm font-medium mb-1">Morada ou zona</label>
+            <input id="edit-address" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-type" class="block text-sm font-medium mb-1">Categoria</label>
+            <select id="edit-type" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option>Comer & Beber</option>
+              <option>Praia</option>
+              <option>Alojamento</option>
+              <option>Soltar o cão</option>
+              <option>Passear com o cão</option>
+              <option>Experiências</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="edit-dog-status" class="block text-sm font-medium mb-1">Estado do local</label>
+            <select id="edit-dog-status" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option value="yes">✅ Aceita cães</option>
+              <option value="maybe">⚠️ Com restrições</option>
+              <option value="no">❌ Não aceita cães</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="edit-description" class="block text-sm font-medium mb-1">Descrição</label>
+            <textarea id="edit-description" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label for="edit-notes" class="block text-sm font-medium mb-1">Notas</label>
+            <textarea id="edit-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label for="edit-website" class="block text-sm font-medium mb-1">Website</label>
+            <input id="edit-website" type="url" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-emoji" class="block text-sm font-medium mb-1">Emoji</label>
+            <input id="edit-emoji" type="text" maxlength="4" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <p class="block text-sm font-medium mb-2">Condições úteis</p>
+            <div id="edit-features" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 pt-2">
+            <button type="submit" class="flex-1 bg-sage text-cream font-semibold py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              Guardar alterações
+            </button>
+            <button type="button" onclick="closeEditPlaceModal()" class="flex-1 bg-white text-sage font-semibold py-3 rounded-full border border-sage hover:bg-sand transition">
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
@@ -395,6 +491,20 @@
     const CONFIRM_STORAGE_KEY = 'levocao_confirmations';
     const USER_CONFIRM_STORAGE_KEY = 'levocao_user_confirmations';
 
+    const FEATURE_OPTIONS = [
+      '🏠 Interior permitido',
+      '☀️ Só esplanada',
+      '🦮 Trela obrigatória',
+      '💧 Água disponível',
+      '🐾 Muito pet-friendly',
+      '🚫 Não no interior',
+      '🔒 Vedado',
+      '🚧 Semi-vedado',
+      '🌳 Espaço aberto',
+      '🚪 Tem portão',
+      '🚗 Perto de estrada'
+    ];
+
     let supabaseClient = null;
     let locations = [];
     let currentFilter = null;
@@ -410,6 +520,39 @@
     function getTypeAliases(type) {
       if (type === 'Comer & Beber') return ['Comer & Beber', 'Restaurante', 'Café'];
       return [type];
+    }
+
+    function buildFeaturesCheckboxes(targetId, inputName) {
+      const container = document.getElementById(targetId);
+      if (!container) return;
+      container.innerHTML = FEATURE_OPTIONS.map((feature) => `
+        <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition">
+          <input type="checkbox" name="${inputName}" value="${feature}" class="accent-[#5B7553]" />
+          ${feature}
+        </label>
+      `).join('');
+    }
+
+    function getDogStatusMeta(status) {
+      if (status === 'no') {
+        return {
+          text: '❌ Não aceita cães',
+          short: '❌ Não aceita',
+          className: 'bg-bark text-cream'
+        };
+      }
+      if (status === 'maybe') {
+        return {
+          text: '⚠️ Com restrições',
+          short: '⚠️ Restrições',
+          className: 'bg-sand text-bark/80 border border-bark/10'
+        };
+      }
+      return {
+        text: '🐕 Aceita cães',
+        short: '🐕 Aceita cães',
+        className: 'bg-sage/90 text-cream'
+      };
     }
 
     function setupSupabase() {
@@ -520,6 +663,7 @@
         website: row.website || '',
         features: Array.isArray(row.features) ? row.features : [],
         dogs: row.dogs !== false,
+        dog_status: row.dog_status || 'yes',
         confirmations: Number(row.confirmations || 0),
         createdAt: row.created_at || null,
         colors: getColorByType(mapDisplayType(row.type))
@@ -547,7 +691,9 @@
           .select('*')
           .eq('is_active', true)
           .order('id', { ascending: false });
+
         if (error) throw error;
+
         locations = (data || []).map(normalizePlace);
         initializeConfirmations();
         renderHomeSections();
@@ -573,10 +719,12 @@
           .select('*')
           .eq('status', 'pending')
           .order('id', { ascending: false });
+
         if (error) throw error;
 
         const rows = data || [];
         document.getElementById('admin-pending-count').textContent = String(rows.length);
+
         if (!rows.length) {
           container.innerHTML = '';
           empty.classList.remove('hidden');
@@ -585,36 +733,107 @@
         }
 
         empty.classList.add('hidden');
-        container.innerHTML = rows.map((item) => `
-          <article class="border border-sand rounded-2xl p-4 bg-sand/30">
-            <div class="flex items-start justify-between gap-3 mb-3">
-              <div>
-                <h4 class="font-display text-lg font-bold">${item.name}</h4>
-                <p class="text-sm text-bark/55 mt-1">${item.city} · ${mapDisplayType(item.type)}</p>
+
+        container.innerHTML = rows.map((item) => {
+          const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
+          return `
+            <article class="border border-sand rounded-2xl p-4 bg-sand/30">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <h4 class="font-display text-lg font-bold">${item.name}</h4>
+                  <p class="text-sm text-bark/55 mt-1">${item.city} · ${mapDisplayType(item.type)}</p>
+                </div>
+                <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Pendente</span>
               </div>
-              <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Pendente</span>
-            </div>
-            <div class="space-y-2 text-sm text-bark/70 mb-4">
-              <p><strong>Morada:</strong> ${item.address || '—'}</p>
-              <p><strong>Notas:</strong> ${item.notes || '—'}</p>
-              <p><strong>Website:</strong> ${item.website || '—'}</p>
-              ${Array.isArray(item.features) && item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
-            </div>
-            <div class="flex flex-wrap gap-2">
-              <button type="button" onclick="approveSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
-                <i data-lucide="check" class="w-4 h-4"></i>
-                Aprovar
-              </button>
-              <button type="button" onclick="rejectSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
-                <i data-lucide="x" class="w-4 h-4"></i>
-                Rejeitar
-              </button>
-            </div>
-          </article>`).join('');
+              <div class="space-y-2 text-sm text-bark/70 mb-4">
+                <p><strong>Estado:</strong> ${dogMeta.text}</p>
+                <p><strong>Morada:</strong> ${item.address || '—'}</p>
+                <p><strong>Notas:</strong> ${item.notes || '—'}</p>
+                <p><strong>Website:</strong> ${item.website || '—'}</p>
+                ${Array.isArray(item.features) && item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="approveSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  Aprovar
+                </button>
+                <button type="button" onclick="rejectSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+                  <i data-lucide="x" class="w-4 h-4"></i>
+                  Rejeitar
+                </button>
+              </div>
+            </article>
+          `;
+        }).join('');
+
         lucide.createIcons();
       } catch (error) {
         console.error('Erro ao carregar sugestões:', error);
         container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar sugestões.</p>';
+      }
+    }
+
+    async function loadAdminPlaces() {
+      const container = document.getElementById('admin-places');
+      const empty = document.getElementById('admin-places-empty');
+      if (!container || !empty) return;
+
+      container.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('places')
+          .select('*')
+          .eq('is_active', true)
+          .order('name', { ascending: true });
+
+        if (error) throw error;
+
+        const rows = (data || []).map(normalizePlace);
+
+        if (!rows.length) {
+          container.innerHTML = '';
+          empty.classList.remove('hidden');
+          lucide.createIcons();
+          return;
+        }
+
+        empty.classList.add('hidden');
+
+        container.innerHTML = rows.map((item) => {
+          const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
+          return `
+            <article class="border border-sand rounded-2xl p-4 bg-white">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <h4 class="font-display text-lg font-bold">${item.name}</h4>
+                  <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.displayType}</p>
+                </div>
+                <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+              </div>
+              <div class="space-y-2 text-sm text-bark/70 mb-4">
+                <p><strong>Morada:</strong> ${item.address || '—'}</p>
+                <p><strong>Website:</strong> ${item.website || '—'}</p>
+                ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                  <i data-lucide="pencil" class="w-4 h-4"></i>
+                  Editar
+                </button>
+                <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+                  <i data-lucide="eye-off" class="w-4 h-4"></i>
+                  Desativar
+                </button>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+      } catch (error) {
+        console.error('Erro ao carregar locais ativos:', error);
+        container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar locais.</p>';
       }
     }
 
@@ -630,6 +849,7 @@
           .select('*')
           .eq('id', id)
           .single();
+
         if (error) throw error;
         if (!data) return;
 
@@ -644,6 +864,7 @@
           website: data.website,
           features: data.features || [],
           dogs: data.dogs !== false,
+          dog_status: data.dog_status || 'yes',
           confirmations: Number(data.confirmations || 1),
           is_active: true
         };
@@ -662,6 +883,7 @@
 
         await loadPlacesFromSupabase();
         await loadAdminSuggestions();
+        await loadAdminPlaces();
       } catch (error) {
         console.error('Erro ao aprovar sugestão:', error);
         alert('Não foi possível aprovar a sugestão.');
@@ -676,6 +898,29 @@
       } catch (error) {
         console.error('Erro ao rejeitar sugestão:', error);
         alert('Não foi possível rejeitar a sugestão.');
+      }
+    }
+
+    async function deactivatePlace(id) {
+      const place = locations.find((item) => item.id === id);
+      if (!place) return;
+
+      const confirmed = confirm(`Desativar "${place.name}"?`);
+      if (!confirmed) return;
+
+      try {
+        const { error } = await supabaseClient
+          .from('places')
+          .update({ is_active: false })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        await loadPlacesFromSupabase();
+        await loadAdminPlaces();
+      } catch (error) {
+        console.error('Erro ao desativar local:', error);
+        alert('Não foi possível desativar o local.');
       }
     }
 
@@ -712,13 +957,15 @@
       const trustLevel = getTrustLevel(loc.id);
       const recentBadge = isRecentLocation(loc) ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>' : '';
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
+      const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
+
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
           <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
             <span class="text-5xl">${loc.emoji}</span>
             <div class="absolute top-3 right-3 flex items-center gap-2 flex-wrap justify-end">
               ${recentBadge}
-              <span class="bg-sage/90 text-cream text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">🐕 Aceita cães</span>
+              <span class="${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">${dogMeta.short}</span>
             </div>
           </div>
           <div class="p-4">
@@ -831,7 +1078,10 @@
       if (wrapper) wrapper.scrollTop = 0;
       if (view === 'list') renderCards('cards-list', getFiltered());
       if (view === 'home') renderHomeSections();
-      if (view === 'admin') loadAdminSuggestions();
+      if (view === 'admin') {
+        loadAdminSuggestions();
+        loadAdminPlaces();
+      }
       lucide.createIcons();
     }
 
@@ -859,6 +1109,7 @@
     function showDetail(id) {
       const loc = locations.find((item) => item.id === id);
       if (!loc) return;
+
       const votes = getStoredPlaceVotes(loc.id);
       const confirmationCount = getConfirmationCount(loc.id);
       const trustLevel = getTrustLevel(loc.id);
@@ -866,6 +1117,8 @@
       const lastUpdate = getLastUpdateText(loc.id);
       const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
+      const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
+
       document.getElementById('detail-content').innerHTML = `
         <button type="button" onclick="showView('list')" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
           <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
@@ -873,7 +1126,7 @@
         <div class="rounded-2xl overflow-hidden border border-sand shadow-sm bg-white">
           <div class="h-48 flex items-center justify-center relative" style="background:${grad}">
             <span class="text-6xl">${loc.emoji}</span>
-            <span class="absolute top-4 right-4 bg-sage text-cream text-sm font-medium px-3 py-1.5 rounded-full">🐕 Aceita cães</span>
+            <span class="absolute top-4 right-4 ${dogMeta.className} text-sm font-medium px-3 py-1.5 rounded-full">${dogMeta.text}</span>
           </div>
           <div class="p-5 space-y-4">
             <div>
@@ -918,7 +1171,8 @@
               </a>
             </div>
           </div>
-        </div>`;
+        </div>
+      `;
       showView('detail');
       lucide.createIcons();
     }
@@ -926,11 +1180,13 @@
     function confirmPlace(id, type = 'yes') {
       const loc = locations.find((item) => item.id === id);
       if (!loc) return;
+
       const userMap = getUserConfirmedMap();
       if (userMap[id]) {
         alert(`Já respondeste sobre "${loc.name}" 🐾`);
         return;
       }
+
       const stored = getStoredConfirmationMap();
       const current = getStoredPlaceVotes(id);
       const updatedVotes = {
@@ -939,16 +1195,21 @@
         maybe: current.maybe,
         lastUpdated: new Date().toISOString()
       };
+
       if (type === 'yes') updatedVotes.yes += 1;
       if (type === 'no') updatedVotes.no += 1;
       if (type === 'maybe') updatedVotes.maybe += 1;
+
       stored[id] = updatedVotes;
       userMap[id] = type;
+
       saveStoredConfirmationMap(stored);
       saveUserConfirmedMap(userMap);
+
       renderHomeSections();
       renderCards('cards-list', getFiltered());
       showDetail(id);
+
       setTimeout(() => {
         alert(`Obrigado! Atualizaste a informação sobre "${loc.name}" 🐾`);
       }, 50);
@@ -996,10 +1257,12 @@
       const name = document.getElementById('sg-name').value.trim();
       const city = document.getElementById('sg-city').value.trim();
       const type = document.getElementById('sg-type').value;
+      const dog_status = document.getElementById('sg-dog-status').value;
       const notes = document.getElementById('sg-notes').value.trim();
       const website = document.getElementById('sg-website').value.trim();
       const address = document.getElementById('sg-address').value.trim();
       const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
+
       const emojiMap = {
         'Comer & Beber': '🍽️',
         Praia: '🏖️',
@@ -1032,7 +1295,8 @@
         notes: notes || null,
         website: website || null,
         features,
-        dogs: true,
+        dogs: dog_status !== 'no',
+        dog_status,
         confirmations: 1,
         status: 'pending'
       };
@@ -1059,6 +1323,77 @@
       lucide.createIcons();
     }
 
+    function openEditPlaceModal(id) {
+      const place = locations.find((item) => item.id === id);
+      if (!place) return;
+
+      document.getElementById('edit-place-id').value = place.id;
+      document.getElementById('edit-name').value = place.name || '';
+      document.getElementById('edit-city').value = place.city || '';
+      document.getElementById('edit-address').value = place.address || '';
+      document.getElementById('edit-type').value = place.displayType || 'Comer & Beber';
+      document.getElementById('edit-dog-status').value = place.dog_status || 'yes';
+      document.getElementById('edit-description').value = place.desc || '';
+      document.getElementById('edit-notes').value = place.notes || '';
+      document.getElementById('edit-website').value = place.website || '';
+      document.getElementById('edit-emoji').value = place.emoji || '';
+
+      document.querySelectorAll('#edit-features input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.checked = place.features.includes(checkbox.value);
+      });
+
+      document.getElementById('edit-place-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeEditPlaceModal() {
+      document.getElementById('edit-place-modal').classList.add('hidden');
+    }
+
+    async function saveEditPlace(event) {
+      event.preventDefault();
+
+      const id = Number(document.getElementById('edit-place-id').value);
+      const name = document.getElementById('edit-name').value.trim();
+      const city = document.getElementById('edit-city').value.trim();
+      const address = document.getElementById('edit-address').value.trim();
+      const type = document.getElementById('edit-type').value;
+      const dog_status = document.getElementById('edit-dog-status').value;
+      const description = document.getElementById('edit-description').value.trim();
+      const notes = document.getElementById('edit-notes').value.trim();
+      const website = document.getElementById('edit-website').value.trim();
+      const emoji = document.getElementById('edit-emoji').value.trim() || '📍';
+      const features = Array.from(document.querySelectorAll('#edit-features input:checked')).map((input) => input.value);
+
+      try {
+        const { error } = await supabaseClient
+          .from('places')
+          .update({
+            name,
+            city,
+            address: address || city,
+            type,
+            dog_status,
+            dogs: dog_status !== 'no',
+            description: description || 'Local pet-friendly.',
+            notes: notes || null,
+            website: website || null,
+            emoji,
+            features
+          })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        closeEditPlaceModal();
+        await loadPlacesFromSupabase();
+        await loadAdminPlaces();
+      } catch (error) {
+        console.error('Erro ao guardar local:', error);
+        alert('Não foi possível guardar as alterações.');
+      }
+    }
+
     const suggestForm = document.getElementById('suggest-form');
     if (suggestForm) {
       suggestForm.addEventListener('submit', async function (e) {
@@ -1077,34 +1412,48 @@
       });
     }
 
+    const editPlaceForm = document.getElementById('edit-place-form');
+    if (editPlaceForm) {
+      editPlaceForm.addEventListener('submit', saveEditPlace);
+    }
+
     function setMacImage() {
       const nav = document.getElementById('mac-nav');
       const hero = document.getElementById('mac-hero');
       const navWrap = document.getElementById('mac-nav-wrap');
       const heroWrap = document.getElementById('mac-hero-wrap');
+
       if (nav) {
         nav.onerror = () => { if (navWrap) navWrap.textContent = '🐶'; };
         nav.src = MAC_IMAGE_DATA;
         nav.addEventListener('click', handleMacClick);
       }
+
       if (hero) {
         hero.onerror = () => { if (heroWrap) heroWrap.textContent = '🐶'; };
         hero.src = MAC_IMAGE_DATA;
         hero.addEventListener('click', handleMacClick);
       }
+
       if (navWrap) navWrap.addEventListener('click', handleMacClick);
       if (heroWrap) heroWrap.addEventListener('click', handleMacClick);
     }
 
     async function initApp() {
       document.getElementById('year').textContent = String(new Date().getFullYear());
+
+      buildFeaturesCheckboxes('sg-features', 'sg-feature');
+      buildFeaturesCheckboxes('edit-features', 'edit-feature');
+
       setMacImage();
       lucide.createIcons();
+
       const ok = setupSupabase();
       if (!ok) {
         alert('Falta configurar o Supabase.');
         return;
       }
+
       await loadPlacesFromSupabase();
     }
 
