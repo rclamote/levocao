@@ -555,6 +555,18 @@
       };
     }
 
+    function formatExactDate(isoDate) {
+      if (!isoDate) return null;
+      try {
+        return new Intl.DateTimeFormat('pt-PT', {
+          dateStyle: 'short',
+          timeStyle: 'short'
+        }).format(new Date(isoDate));
+      } catch {
+        return null;
+      }
+    }
+
     function setupSupabase() {
       if (!SUPABASE_URL) return false;
       if (!SUPABASE_ANON_KEY) return false;
@@ -622,6 +634,11 @@
         return weeks <= 1 ? 'Atualizado há 1 semana' : `Atualizado há ${weeks} semanas`;
       }
       return 'Atualizado há algum tempo';
+    }
+
+    function getLastUpdateExactText(id) {
+      const votes = getStoredPlaceVotes(id);
+      return formatExactDate(votes.lastUpdated);
     }
 
     function initializeConfirmations() {
@@ -958,6 +975,7 @@
       const recentBadge = isRecentLocation(loc) ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>' : '';
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
+      const lastUpdate = getLastUpdateText(loc.id);
 
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
@@ -983,8 +1001,9 @@
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} confirmações</span>
               <span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>
             </div>
-            <div class="mt-2">
+            <div class="mt-2 flex items-center justify-between gap-2 flex-wrap">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">Ver detalhes →</span>
+              ${lastUpdate ? `<span class="text-xs text-bark/45">🕒 ${lastUpdate}</span>` : ''}
             </div>
           </div>
         </article>`;
@@ -1115,6 +1134,7 @@
       const trustLevel = getTrustLevel(loc.id);
       const alreadyConfirmed = getUserConfirmedMap()[loc.id];
       const lastUpdate = getLastUpdateText(loc.id);
+      const lastUpdateExact = getLastUpdateExactText(loc.id);
       const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
@@ -1152,6 +1172,7 @@
                   <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
                   <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
                   ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
+                  ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
                 </div>
                 <span class="text-xs ${alreadyConfirmed ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${alreadyConfirmed ? 'Já respondeste' : 'Ainda não respondeste'}</span>
               </div>
