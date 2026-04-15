@@ -497,11 +497,16 @@
       '🚗 Perto de estrada'
     ];
 
-    const USER_CONFIRM_STORAGE_KEY = 'levocao_user_confirmations_v2';
+    const VISITOR_ID_STORAGE_KEY = 'levocao_visitor_id';
+    const CONFIRM_RULES = {
+      correctionMinutes: 10,
+      reconfirmDays: 30
+    };
 
     let supabaseClient = null;
     let locations = [];
     let confirmationSummaryMap = {};
+    let userVoteMap = {};
     let currentFilter = null;
     let currentSearch = '';
     let macClickCount = 0;
@@ -526,6 +531,15 @@
           ${feature}
         </label>
       `).join('');
+    }
+
+    function getVisitorId() {
+      let id = localStorage.getItem(VISITOR_ID_STORAGE_KEY);
+      if (!id) {
+        id = crypto.randomUUID ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        localStorage.setItem(VISITOR_ID_STORAGE_KEY, id);
+      }
+      return id;
     }
 
     function getDogStatusMeta(status) {
@@ -562,22 +576,67 @@
       }
     }
 
+    function getVoteLabel(type) {
+      if (type === 'yes') return '✅ Sim';
+      if (type === 'no') return '❌ Não';
+      if (type === 'maybe') return '⚠️ Restrições';
+      return '—';
+    }
+
+    function getMinutesSince(dateString) {
+      if (!dateString) return Infinity;
+      return (Date.now() - new Date(dateString).getTime()) / (1000 * 60);
+    }
+
+    function getDaysSince(dateString) {
+      if (!dateString) return Infinity;
+      return (Date.now() - new Date(dateString).getTime()) / (1000 * 60 * 60 * 24);
+    }
+
+    function getUserVoteState(placeId) {
+      const record = userVoteMap[placeId];
+      if (!record) {
+        return {
+          hasVote: false,
+          canCorrect: false,
+          canReconfirm: true,
+          voteType: null,
+          dateText: null,
+          helpText: 'Ainda não respondeste'
+        };
+      }
+
+      const referenceDate = record.updated_at || record.created_at;
+      const minutesSince = getMinutesSince(referenceDate);
+      const daysSince = getDaysSince(referenceDate);
+
+      const canCorrect = minutesSince <= CONFIRM_RULES.correctionMinutes;
+      const canReconfirm = daysSince >= CONFIRM_RULES.reconfirmDays;
+
+      let helpText = `O teu voto: ${getVoteLabel(record.vote_type)}`;
+      if (canCorrect) {
+        helpText += ` · Podes corrigir durante ${CONFIRM_RULES.correctionMinutes} minutos`;
+      } else if (!canReconfirm) {
+        const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
+        helpText += ` · Podes reconfirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}`;
+      } else {
+        helpText += ' · Já podes reconfirmar';
+      }
+
+      return {
+        hasVote: true,
+        canCorrect,
+        canReconfirm,
+        voteType: record.vote_type,
+        dateText: formatExactDate(referenceDate),
+        helpText
+      };
+    }
+
     function setupSupabase() {
       if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return false;
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       return true;
-    }
-
-    function getUserConfirmedMap() {
-      try {
-        return JSON.parse(localStorage.getItem(USER_CONFIRM_STORAGE_KEY)) || {};
-      } catch {
-        return {};
-      }
-    }
-
-    function saveUserConfirmedMap(map) {
-      localStorage.setItem(USER_CONFIRM_STORAGE_KEY, JSON.stringify(map));
     }
 
     function normalizePlace(row) {
@@ -627,7 +686,11 @@
         if (error) throw error;
 
         locations = (data || []).map(normalizePlace);
-        await loadConfirmationSummary();
+        await Promise.all([
+          loadConfirmationSummary(),
+          loadUserVotes()
+        ]);
+
         renderHomeSections();
         renderCards('cards-list', getFiltered());
         updateAdminCounts();
@@ -648,9 +711,8 @@
 
         const { data, error } = await supabaseClient
           .from('place_confirmations')
-          .select('place_id, vote_type, created_at')
-          .in('place_id', placeIds)
-          .order('created_at', { ascending: false });
+          .select('place_id, vote_type, created_at, updated_at')
+          .in('place_id', placeIds);
 
         if (error) throw error;
 
@@ -670,8 +732,9 @@
           if (row.vote_type === 'no') grouped[row.place_id].no += 1;
           if (row.vote_type === 'maybe') grouped[row.place_id].maybe += 1;
 
-          if (!grouped[row.place_id].lastUpdated) {
-            grouped[row.place_id].lastUpdated = row.created_at;
+          const rowDate = row.updated_at || row.created_at;
+          if (!grouped[row.place_id].lastUpdated || new Date(rowDate) > new Date(grouped[row.place_id].lastUpdated)) {
+            grouped[row.place_id].lastUpdated = rowDate;
           }
         });
 
@@ -695,6 +758,30 @@
             lastUpdated: null
           };
         });
+      }
+    }
+
+    async function loadUserVotes() {
+      userVoteMap = {};
+      if (!locations.length) return;
+
+      try {
+        const visitorId = getVisitorId();
+        const placeIds = locations.map(loc => loc.id);
+
+        const { data, error } = await supabaseClient
+          .from('place_confirmations')
+          .select('id, place_id, vote_type, created_at, updated_at, visitor_id')
+          .eq('visitor_id', visitorId)
+          .in('place_id', placeIds);
+
+        if (error) throw error;
+
+        (data || []).forEach((row) => {
+          userVoteMap[row.place_id] = row;
+        });
+      } catch (error) {
+        console.error('Erro ao carregar votos do utilizador:', error);
       }
     }
 
@@ -1150,12 +1237,12 @@
       const votes = getStoredPlaceVotes(loc.id);
       const confirmationCount = getConfirmationCount(loc.id);
       const trustLevel = getTrustLevel(loc.id);
-      const alreadyConfirmed = getUserConfirmedMap()[loc.id];
       const lastUpdate = getLastUpdateText(loc.id);
       const lastUpdateExact = getLastUpdateExactText(loc.id);
       const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
+      const userState = getUserVoteState(loc.id);
 
       document.getElementById('detail-content').innerHTML = `
         <button type="button" onclick="showView('list')" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
@@ -1192,11 +1279,15 @@
                   ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
                   ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
                 </div>
-                <span class="text-xs ${alreadyConfirmed ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${alreadyConfirmed ? 'Já respondeste' : 'Ainda não respondeste'}</span>
+                <span class="text-xs ${userState.hasVote ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${userState.hasVote ? 'Já respondeste' : 'Ainda não respondeste'}</span>
               </div>
               <div class="flex items-center justify-between gap-3 flex-wrap">
                 ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
                 <p class="text-xs text-bark/55">Sem reviews. Só respostas práticas: sim, não ou com restrições.</p>
+              </div>
+              <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
+                ${userState.helpText}
+                ${userState.dateText ? ` · ${userState.dateText}` : ''}
               </div>
             </div>
             <div class="grid grid-cols-3 gap-2">
@@ -1221,30 +1312,74 @@
       const loc = locations.find((item) => item.id === id);
       if (!loc) return;
 
-      const userMap = getUserConfirmedMap();
-      if (userMap[id]) {
-        alert(`Já respondeste sobre "${loc.name}" 🐾`);
-        return;
-      }
+      const visitorId = getVisitorId();
+      const existing = userVoteMap[id];
+      const nowIso = new Date().toISOString();
 
       try {
-        const { error } = await supabaseClient
-          .from('place_confirmations')
-          .insert([{ place_id: id, vote_type: type }]);
+        if (!existing) {
+          const { error } = await supabaseClient
+            .from('place_confirmations')
+            .insert([{
+              place_id: id,
+              vote_type: type,
+              visitor_id: visitorId,
+              updated_at: nowIso
+            }]);
 
-        if (error) throw error;
+          if (error) throw error;
 
-        userMap[id] = type;
-        saveUserConfirmedMap(userMap);
+          alert(`Obrigado! Confirmaste "${loc.name}" 🐾`);
+        } else {
+          const referenceDate = existing.updated_at || existing.created_at;
+          const minutesSince = getMinutesSince(referenceDate);
+          const daysSince = getDaysSince(referenceDate);
 
-        await loadConfirmationSummary();
+          if (type === existing.vote_type && minutesSince > CONFIRM_RULES.correctionMinutes && daysSince < CONFIRM_RULES.reconfirmDays) {
+            const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
+            alert(`Já confirmaste "${loc.name}" com esse voto. Podes alterar durante ${CONFIRM_RULES.correctionMinutes} minutos ou reconfirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}.`);
+            return;
+          }
+
+          if (minutesSince <= CONFIRM_RULES.correctionMinutes) {
+            const { error } = await supabaseClient
+              .from('place_confirmations')
+              .update({
+                vote_type: type,
+                updated_at: nowIso
+              })
+              .eq('id', existing.id);
+
+            if (error) throw error;
+
+            alert(`Voto corrigido em "${loc.name}" 🐾`);
+          } else if (daysSince >= CONFIRM_RULES.reconfirmDays) {
+            const { error } = await supabaseClient
+              .from('place_confirmations')
+              .update({
+                vote_type: type,
+                updated_at: nowIso
+              })
+              .eq('id', existing.id);
+
+            if (error) throw error;
+
+            alert(`Confirmação atualizada em "${loc.name}" 🐾`);
+          } else {
+            const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
+            alert(`Já confirmaste este local. Podes corrigir durante ${CONFIRM_RULES.correctionMinutes} minutos após o voto ou voltar a confirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}.`);
+            return;
+          }
+        }
+
+        await Promise.all([
+          loadConfirmationSummary(),
+          loadUserVotes()
+        ]);
+
         renderHomeSections();
         renderCards('cards-list', getFiltered());
         showDetail(id);
-
-        setTimeout(() => {
-          alert(`Obrigado! Atualizaste a informação sobre "${loc.name}" 🐾`);
-        }, 50);
       } catch (error) {
         console.error('Erro ao guardar confirmação:', error);
         alert('Não foi possível guardar a confirmação.');
@@ -1481,6 +1616,7 @@
       buildFeaturesCheckboxes('sg-features', 'sg-feature');
       buildFeaturesCheckboxes('edit-features', 'edit-feature');
 
+      getVisitorId();
       setMacImage();
       lucide.createIcons();
 
