@@ -481,10 +481,7 @@
     const SUPABASE_URL = 'https://mezeuxfoblyodjfaooan.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lemV1eGZvYmx5b2RqZmFvb2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjcxNDEsImV4cCI6MjA5MTUwMzE0MX0.UCzhiqF1dSKLou-Ma9RUkYepn0tc1LK_OsfS_80f-94';
     const ADMIN_PASSWORD = 'mac123';
-
     const MAC_IMAGE_DATA = 'mac.jpg';
-    const CONFIRM_STORAGE_KEY = 'levocao_confirmations';
-    const USER_CONFIRM_STORAGE_KEY = 'levocao_user_confirmations';
 
     const FEATURE_OPTIONS = [
       '🏠 Interior permitido',
@@ -500,8 +497,11 @@
       '🚗 Perto de estrada'
     ];
 
+    const USER_CONFIRM_STORAGE_KEY = 'levocao_user_confirmations_v2';
+
     let supabaseClient = null;
     let locations = [];
+    let confirmationSummaryMap = {};
     let currentFilter = null;
     let currentSearch = '';
     let macClickCount = 0;
@@ -563,18 +563,9 @@
     }
 
     function setupSupabase() {
-      if (!SUPABASE_URL) return false;
-      if (!SUPABASE_ANON_KEY) return false;
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return false;
       supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       return true;
-    }
-
-    function getStoredConfirmationMap() {
-      try {
-        return JSON.parse(localStorage.getItem(CONFIRM_STORAGE_KEY)) || {};
-      } catch {
-        return {};
-      }
     }
 
     function getUserConfirmedMap() {
@@ -585,86 +576,8 @@
       }
     }
 
-    function saveStoredConfirmationMap(map) {
-      localStorage.setItem(CONFIRM_STORAGE_KEY, JSON.stringify(map));
-    }
-
     function saveUserConfirmedMap(map) {
       localStorage.setItem(USER_CONFIRM_STORAGE_KEY, JSON.stringify(map));
-    }
-
-    function getStoredPlaceVotes(id) {
-      const stored = getStoredConfirmationMap();
-      const value = stored[id];
-      if (!value) {
-        const loc = locations.find((item) => item.id === id);
-        return { yes: Number(loc?.confirmations || 0), no: 0, maybe: 0, lastUpdated: null };
-      }
-      if (typeof value === 'number') {
-        return { yes: value, no: 0, maybe: 0, lastUpdated: null };
-      }
-      return {
-        yes: Number(value.yes || 0),
-        no: Number(value.no || 0),
-        maybe: Number(value.maybe || 0),
-        lastUpdated: value.lastUpdated || null
-      };
-    }
-
-    function getConfirmationCount(id) {
-      const votes = getStoredPlaceVotes(id);
-      return votes.yes + votes.no + votes.maybe;
-    }
-
-    function getLastUpdateText(id) {
-      const votes = getStoredPlaceVotes(id);
-      if (!votes.lastUpdated) return null;
-
-      const diff = Date.now() - new Date(votes.lastUpdated).getTime();
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-      if (days <= 0) return 'Última confirmação: hoje';
-      if (days === 1) return 'Última confirmação: ontem';
-      if (days < 7) return `Última confirmação: há ${days} dias`;
-
-      if (days < 30) {
-        const weeks = Math.floor(days / 7);
-        return weeks <= 1
-          ? 'Última confirmação: há 1 semana'
-          : `Última confirmação: há ${weeks} semanas`;
-      }
-
-      return 'Última confirmação: há algum tempo';
-    }
-
-    function getLastUpdateExactText(id) {
-      const votes = getStoredPlaceVotes(id);
-      return formatExactDate(votes.lastUpdated);
-    }
-
-    function initializeConfirmations() {
-      const stored = getStoredConfirmationMap();
-      let changed = false;
-      locations.forEach((loc) => {
-        if (stored[loc.id] == null) {
-          stored[loc.id] = {
-            yes: Number(loc.confirmations || 0),
-            no: 0,
-            maybe: 0,
-            lastUpdated: null
-          };
-          changed = true;
-        } else if (typeof stored[loc.id] === 'number') {
-          stored[loc.id] = {
-            yes: Number(stored[loc.id]),
-            no: 0,
-            maybe: 0,
-            lastUpdated: null
-          };
-          changed = true;
-        }
-      });
-      if (changed) saveStoredConfirmationMap(stored);
     }
 
     function normalizePlace(row) {
@@ -703,6 +616,7 @@
     async function loadPlacesFromSupabase() {
       const loading = document.getElementById('loading-places');
       if (loading) loading.classList.remove('hidden');
+
       try {
         const { data, error } = await supabaseClient
           .from('places')
@@ -713,7 +627,7 @@
         if (error) throw error;
 
         locations = (data || []).map(normalizePlace);
-        initializeConfirmations();
+        await loadConfirmationSummary();
         renderHomeSections();
         renderCards('cards-list', getFiltered());
         updateAdminCounts();
@@ -723,6 +637,100 @@
       } finally {
         if (loading) loading.classList.add('hidden');
       }
+    }
+
+    async function loadConfirmationSummary() {
+      confirmationSummaryMap = {};
+      if (!locations.length) return;
+
+      try {
+        const placeIds = locations.map(loc => loc.id);
+
+        const { data, error } = await supabaseClient
+          .from('place_confirmations')
+          .select('place_id, vote_type, created_at')
+          .in('place_id', placeIds)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        const grouped = {};
+
+        (data || []).forEach((row) => {
+          if (!grouped[row.place_id]) {
+            grouped[row.place_id] = {
+              yes: 0,
+              no: 0,
+              maybe: 0,
+              lastUpdated: null
+            };
+          }
+
+          if (row.vote_type === 'yes') grouped[row.place_id].yes += 1;
+          if (row.vote_type === 'no') grouped[row.place_id].no += 1;
+          if (row.vote_type === 'maybe') grouped[row.place_id].maybe += 1;
+
+          if (!grouped[row.place_id].lastUpdated) {
+            grouped[row.place_id].lastUpdated = row.created_at;
+          }
+        });
+
+        locations.forEach((loc) => {
+          const fallbackYes = Number(loc.confirmations || 0);
+          confirmationSummaryMap[loc.id] = grouped[loc.id] || {
+            yes: fallbackYes,
+            no: 0,
+            maybe: 0,
+            lastUpdated: null
+          };
+        });
+      } catch (error) {
+        console.error('Erro ao carregar confirmações:', error);
+
+        locations.forEach((loc) => {
+          confirmationSummaryMap[loc.id] = {
+            yes: Number(loc.confirmations || 0),
+            no: 0,
+            maybe: 0,
+            lastUpdated: null
+          };
+        });
+      }
+    }
+
+    function getStoredPlaceVotes(id) {
+      return confirmationSummaryMap[id] || { yes: 0, no: 0, maybe: 0, lastUpdated: null };
+    }
+
+    function getConfirmationCount(id) {
+      const votes = getStoredPlaceVotes(id);
+      return votes.yes + votes.no + votes.maybe;
+    }
+
+    function getLastUpdateText(id) {
+      const votes = getStoredPlaceVotes(id);
+      if (!votes.lastUpdated) return null;
+
+      const diff = Date.now() - new Date(votes.lastUpdated).getTime();
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (days <= 0) return 'Última confirmação: hoje';
+      if (days === 1) return 'Última confirmação: ontem';
+      if (days < 7) return `Última confirmação: há ${days} dias`;
+
+      if (days < 30) {
+        const weeks = Math.floor(days / 7);
+        return weeks <= 1
+          ? 'Última confirmação: há 1 semana'
+          : `Última confirmação: há ${weeks} semanas`;
+      }
+
+      return 'Última confirmação: há algum tempo';
+    }
+
+    function getLastUpdateExactText(id) {
+      const votes = getStoredPlaceVotes(id);
+      return formatExactDate(votes.lastUpdated);
     }
 
     async function loadAdminSuggestions() {
@@ -1099,14 +1107,17 @@
         const el = document.getElementById(`view-${section}`);
         if (el) el.classList.toggle('hidden', section !== view);
       });
+
       const wrapper = document.querySelector('.app-wrapper');
       if (wrapper) wrapper.scrollTop = 0;
+
       if (view === 'list') renderCards('cards-list', getFiltered());
       if (view === 'home') renderHomeSections();
       if (view === 'admin') {
         loadAdminSuggestions();
         loadAdminPlaces();
       }
+
       lucide.createIcons();
     }
 
@@ -1120,6 +1131,7 @@
       macClickTimer = setTimeout(() => {
         macClickCount = 0;
       }, 1200);
+
       if (macClickCount >= 5) {
         macClickCount = 0;
         const pass = prompt('Password admin:');
@@ -1200,11 +1212,12 @@
           </div>
         </div>
       `;
+
       showView('detail');
       lucide.createIcons();
     }
 
-    function confirmPlace(id, type = 'yes') {
+    async function confirmPlace(id, type = 'yes') {
       const loc = locations.find((item) => item.id === id);
       if (!loc) return;
 
@@ -1214,32 +1227,28 @@
         return;
       }
 
-      const stored = getStoredConfirmationMap();
-      const current = getStoredPlaceVotes(id);
-      const updatedVotes = {
-        yes: current.yes,
-        no: current.no,
-        maybe: current.maybe,
-        lastUpdated: new Date().toISOString()
-      };
+      try {
+        const { error } = await supabaseClient
+          .from('place_confirmations')
+          .insert([{ place_id: id, vote_type: type }]);
 
-      if (type === 'yes') updatedVotes.yes += 1;
-      if (type === 'no') updatedVotes.no += 1;
-      if (type === 'maybe') updatedVotes.maybe += 1;
+        if (error) throw error;
 
-      stored[id] = updatedVotes;
-      userMap[id] = type;
+        userMap[id] = type;
+        saveUserConfirmedMap(userMap);
 
-      saveStoredConfirmationMap(stored);
-      saveUserConfirmedMap(userMap);
+        await loadConfirmationSummary();
+        renderHomeSections();
+        renderCards('cards-list', getFiltered());
+        showDetail(id);
 
-      renderHomeSections();
-      renderCards('cards-list', getFiltered());
-      showDetail(id);
-
-      setTimeout(() => {
-        alert(`Obrigado! Atualizaste a informação sobre "${loc.name}" 🐾`);
-      }, 50);
+        setTimeout(() => {
+          alert(`Obrigado! Atualizaste a informação sobre "${loc.name}" 🐾`);
+        }, 50);
+      } catch (error) {
+        console.error('Erro ao guardar confirmação:', error);
+        alert('Não foi possível guardar a confirmação.');
+      }
     }
 
     async function checkDuplicateSuggestion(name, city, type) {
