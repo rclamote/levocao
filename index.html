@@ -1448,6 +1448,12 @@
               ${loc.website ? `<a href="${loc.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm text-sage font-medium hover:underline mt-2"><i data-lucide="external-link" class="w-4 h-4"></i> Ver website</a>` : ''}
             </div>
 
+            ${loc.notes ? `
+              <div class="bg-white border border-sand rounded-xl p-4 space-y-2">
+                <p class="font-medium text-sm text-bark">Notas da comunidade</p>
+                <p class="text-sm text-bark/70 leading-relaxed">${loc.notes}</p>
+              </div>` : ''}
+
             ${Array.isArray(loc.features) && loc.features.length ? `
               <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
                 <p class="font-medium text-sm text-bark">Condições úteis</p>
