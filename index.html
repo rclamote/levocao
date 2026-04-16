@@ -1392,16 +1392,10 @@
 
       if (event.key === 'Enter') {
         event.preventDefault();
-
-        if (suggestions.length) {
-          const selected = activeSuggestionIndex >= 0 ? suggestions[activeSuggestionIndex] : suggestions[0];
-          selectSuggestion(selected.loc.id);
-        } else {
-          currentSearch = input.value.toLowerCase().trim();
-          hideSuggestions();
-          showView('list');
-          filterLocations();
-        }
+        currentSearch = input.value.toLowerCase().trim();
+        hideSuggestions();
+        showView('list');
+        filterLocations();
       }
     }
 
