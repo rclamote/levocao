@@ -347,23 +347,8 @@
           </div>
 
           <div>
-            <label for="sg-district" class="block text-sm font-medium mb-1">Distrito</label>
-            <input id="sg-district" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Faro" />
-          </div>
-
-          <div>
-            <label for="sg-municipality" class="block text-sm font-medium mb-1">Concelho</label>
-            <input id="sg-municipality" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Portimão" />
-          </div>
-
-          <div>
-            <label for="sg-locality" class="block text-sm font-medium mb-1">Localidade (opcional)</label>
-            <input id="sg-locality" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Praia da Rocha" />
-          </div>
-
-          <div>
             <label for="sg-city" class="block text-sm font-medium mb-1">Cidade</label>
-            <input id="sg-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Lisboa" />
+            <input id="sg-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Portimão" />
           </div>
 
           <div>
@@ -1745,9 +1730,9 @@
       }
     }
 
-    async function checkDuplicateSuggestion(name, municipality, type) {
+    async function checkDuplicateSuggestion(name, city, type) {
       const cleanName = name.trim();
-      const cleanMunicipality = municipality.trim();
+      const cleanCity = city.trim();
       const typeAliases = getTypeAliases(type);
 
       const [placesResult, suggestionsResult] = await Promise.all([
@@ -1757,7 +1742,7 @@
           .in('type', typeAliases)
           .eq('is_active', true)
           .ilike('name', cleanName)
-          .ilike('municipality', cleanMunicipality)
+          .ilike('city', cleanCity)
           .limit(1),
 
         supabaseClient
@@ -1766,7 +1751,7 @@
           .in('type', typeAliases)
           .eq('status', 'pending')
           .ilike('name', cleanName)
-          .ilike('municipality', cleanMunicipality)
+          .ilike('city', cleanCity)
           .limit(1)
       ]);
 
@@ -1785,9 +1770,6 @@
 
     async function submitSuggestion() {
       const name = document.getElementById('sg-name').value.trim();
-      const district = document.getElementById('sg-district').value.trim();
-      const municipality = document.getElementById('sg-municipality').value.trim();
-      const locality = document.getElementById('sg-locality').value.trim();
       const city = document.getElementById('sg-city').value.trim();
       const type = document.getElementById('sg-type').value;
       const dog_status = document.getElementById('sg-dog-status').value;
@@ -1805,7 +1787,7 @@
         'Experiências': '🎯'
       };
 
-      const duplicateCheck = await checkDuplicateSuggestion(name, municipality, type);
+      const duplicateCheck = await checkDuplicateSuggestion(name, city, type);
 
       if (duplicateCheck.exists) {
         if (duplicateCheck.existsInPlaces) {
@@ -1821,9 +1803,9 @@
       const payload = {
         name,
         city,
-        district: district || null,
-        municipality: municipality || null,
-        locality: locality || null,
+        district: null,
+        municipality: null,
+        locality: null,
         type,
         emoji: emojiMap[type] || '📍',
         description: `Local sugerido pela comunidade em ${city}.`,
