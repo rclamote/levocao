@@ -13,6 +13,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Levo o Cão</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -102,11 +103,8 @@
     }
 
     .suggestion-item:last-child { border-bottom: none; }
-
     .suggestion-item:hover,
-    .suggestion-item.active {
-      background: #F5F0E8;
-    }
+    .suggestion-item.active { background: #F5F0E8; }
 
     @media (max-width: 640px) {
       .suggestion-box {
@@ -114,9 +112,7 @@
         border-radius: 16px;
         max-height: 220px;
       }
-      .suggestion-item {
-        padding: 11px 14px;
-      }
+      .suggestion-item { padding: 11px 14px; }
     }
   </style>
 </head>
@@ -289,6 +285,35 @@
           <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
         </div>
 
+        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-5">
+          <div class="grid sm:grid-cols-4 gap-3">
+            <div>
+              <label for="filter-district" class="block text-sm font-medium mb-1">Distrito</label>
+              <select id="filter-district" onchange="handleDistrictFilterChange()" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div>
+              <label for="filter-municipality" class="block text-sm font-medium mb-1">Concelho</label>
+              <select id="filter-municipality" onchange="handleMunicipalityFilterChange()" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div>
+              <label for="filter-locality" class="block text-sm font-medium mb-1">Localidade</label>
+              <select id="filter-locality" onchange="handleLocalityFilterChange()" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+                <option value="">Todas</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button type="button" onclick="clearZoneFilters()" class="w-full inline-flex items-center justify-center gap-2 bg-sand text-bark font-semibold px-4 py-3 rounded-xl border border-sand hover:bg-white transition">
+                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                Limpar filtros
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
         <div id="loading-places" class="hidden text-center text-bark/50 py-8">A carregar locais...</div>
         <div id="no-results" class="hidden text-center py-12 px-4">
@@ -319,6 +344,21 @@
           <div>
             <label for="sg-name" class="block text-sm font-medium mb-1">Nome do local</label>
             <input id="sg-name" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Café do Parque" />
+          </div>
+
+          <div>
+            <label for="sg-district" class="block text-sm font-medium mb-1">Distrito</label>
+            <input id="sg-district" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Faro" />
+          </div>
+
+          <div>
+            <label for="sg-municipality" class="block text-sm font-medium mb-1">Concelho</label>
+            <input id="sg-municipality" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Portimão" />
+          </div>
+
+          <div>
+            <label for="sg-locality" class="block text-sm font-medium mb-1">Localidade (opcional)</label>
+            <input id="sg-locality" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Praia da Rocha" />
           </div>
 
           <div>
@@ -466,6 +506,21 @@
           </div>
 
           <div>
+            <label for="edit-district" class="block text-sm font-medium mb-1">Distrito</label>
+            <input id="edit-district" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-municipality" class="block text-sm font-medium mb-1">Concelho</label>
+            <input id="edit-municipality" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-locality" class="block text-sm font-medium mb-1">Localidade</label>
+            <input id="edit-locality" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
             <label for="edit-city" class="block text-sm font-medium mb-1">Cidade</label>
             <input id="edit-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
           </div>
@@ -585,9 +640,16 @@
     let userVoteMap = {};
     let currentFilter = null;
     let currentSearch = '';
+    let currentDistrictFilter = '';
+    let currentMunicipalityFilter = '';
+    let currentLocalityFilter = '';
     let macClickCount = 0;
     let macClickTimer = null;
     let activeSuggestionIndex = -1;
+
+    function normalizeText(value) {
+      return (value || '').trim();
+    }
 
     function mapDisplayType(type) {
       if (type === 'Restaurante' || type === 'Café') return 'Comer & Beber';
@@ -721,6 +783,9 @@
         id: row.id,
         name: row.name,
         city: row.city,
+        district: normalizeText(row.district),
+        municipality: normalizeText(row.municipality),
+        locality: normalizeText(row.locality),
         type: row.type,
         displayType: mapDisplayType(row.type),
         emoji: row.emoji || '📍',
@@ -769,6 +834,7 @@
           loadUserVotes()
         ]);
 
+        renderZoneFilters();
         renderHomeSections();
         renderCards('cards-list', getFiltered());
         updateAdminCounts();
@@ -896,6 +962,74 @@
       return formatExactDate(votes.lastUpdated);
     }
 
+    function uniqueSorted(values) {
+      return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt'));
+    }
+
+    function getDistrictOptions() {
+      return uniqueSorted(locations.map(loc => loc.district));
+    }
+
+    function getMunicipalityOptions(district = '') {
+      return uniqueSorted(
+        locations
+          .filter(loc => !district || loc.district === district)
+          .map(loc => loc.municipality)
+      );
+    }
+
+    function getLocalityOptions(district = '', municipality = '') {
+      return uniqueSorted(
+        locations
+          .filter(loc => (!district || loc.district === district) && (!municipality || loc.municipality === municipality))
+          .map(loc => loc.locality)
+      );
+    }
+
+    function populateSelect(selectId, options, placeholder, selectedValue = '') {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      select.innerHTML = `<option value="">${placeholder}</option>` + options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+      select.value = selectedValue || '';
+    }
+
+    function renderZoneFilters() {
+      populateSelect('filter-district', getDistrictOptions(), 'Todos', currentDistrictFilter);
+      populateSelect('filter-municipality', getMunicipalityOptions(currentDistrictFilter), 'Todos', currentMunicipalityFilter);
+      populateSelect('filter-locality', getLocalityOptions(currentDistrictFilter, currentMunicipalityFilter), 'Todas', currentLocalityFilter);
+    }
+
+    function handleDistrictFilterChange() {
+      const districtSelect = document.getElementById('filter-district');
+      currentDistrictFilter = districtSelect ? districtSelect.value : '';
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+      renderZoneFilters();
+      renderCards('cards-list', getFiltered());
+    }
+
+    function handleMunicipalityFilterChange() {
+      const municipalitySelect = document.getElementById('filter-municipality');
+      currentMunicipalityFilter = municipalitySelect ? municipalitySelect.value : '';
+      currentLocalityFilter = '';
+      renderZoneFilters();
+      renderCards('cards-list', getFiltered());
+    }
+
+    function handleLocalityFilterChange() {
+      const localitySelect = document.getElementById('filter-locality');
+      currentLocalityFilter = localitySelect ? localitySelect.value : '';
+      renderCards('cards-list', getFiltered());
+    }
+
+    function clearZoneFilters() {
+      currentDistrictFilter = '';
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+      renderZoneFilters();
+      renderCards('cards-list', getFiltered());
+    }
+
     async function loadAdminSuggestions() {
       const container = document.getElementById('admin-suggestions');
       const empty = document.getElementById('admin-empty');
@@ -936,6 +1070,9 @@
               </div>
               <div class="space-y-2 text-sm text-bark/70 mb-4">
                 <p><strong>Estado:</strong> ${dogMeta.text}</p>
+                <p><strong>Distrito:</strong> ${item.district || '—'}</p>
+                <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
+                <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
                 <p><strong>Morada:</strong> ${item.address || '—'}</p>
                 <p><strong>Notas:</strong> ${item.notes || '—'}</p>
                 <p><strong>Website:</strong> ${item.website || '—'}</p>
@@ -1001,6 +1138,9 @@
                 <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
               </div>
               <div class="space-y-2 text-sm text-bark/70 mb-4">
+                <p><strong>Distrito:</strong> ${item.district || '—'}</p>
+                <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
+                <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
                 <p><strong>Morada:</strong> ${item.address || '—'}</p>
                 <p><strong>Website:</strong> ${item.website || '—'}</p>
                 ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
@@ -1045,6 +1185,9 @@
         const payload = {
           name: data.name,
           city: data.city,
+          district: data.district || null,
+          municipality: data.municipality || null,
+          locality: data.locality || null,
           type: data.type,
           emoji: data.emoji,
           description: data.description,
@@ -1177,6 +1320,9 @@
               </a>
             </div>
             <p class="text-bark/70 text-sm mt-2 line-clamp-2">${loc.desc}</p>
+            <div class="mt-2 text-xs text-bark/50">
+              ${loc.district ? `${loc.district}` : ''}${loc.municipality ? ` · ${loc.municipality}` : ''}${loc.locality ? ` · ${loc.locality}` : ''}
+            </div>
             <div class="mt-3 flex items-center justify-between gap-2 flex-wrap">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} confirmações</span>
               ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>` : ''}
@@ -1209,8 +1355,14 @@
           loc.name.toLowerCase().includes(currentSearch) ||
           loc.city.toLowerCase().includes(currentSearch) ||
           loc.displayType.toLowerCase().includes(currentSearch) ||
-          (loc.address && loc.address.toLowerCase().includes(currentSearch));
-        return matchCat && matchSearch;
+          (loc.address && loc.address.toLowerCase().includes(currentSearch)) ||
+          (loc.district && loc.district.toLowerCase().includes(currentSearch)) ||
+          (loc.municipality && loc.municipality.toLowerCase().includes(currentSearch)) ||
+          (loc.locality && loc.locality.toLowerCase().includes(currentSearch));
+        const matchDistrict = !currentDistrictFilter || loc.district === currentDistrictFilter;
+        const matchMunicipality = !currentMunicipalityFilter || loc.municipality === currentMunicipalityFilter;
+        const matchLocality = !currentLocalityFilter || loc.locality === currentLocalityFilter;
+        return matchCat && matchSearch && matchDistrict && matchMunicipality && matchLocality;
       });
     }
 
@@ -1273,7 +1425,10 @@
       const wrapper = document.querySelector('.app-wrapper');
       if (wrapper) wrapper.scrollTop = 0;
 
-      if (view === 'list') renderCards('cards-list', getFiltered());
+      if (view === 'list') {
+        renderZoneFilters();
+        renderCards('cards-list', getFiltered());
+      }
       if (view === 'home') renderHomeSections();
       if (view === 'admin') {
         loadAdminSuggestions();
@@ -1319,6 +1474,15 @@
           if (loc.city.toLowerCase().startsWith(q)) score += 6;
           else if (loc.city.toLowerCase().includes(q)) score += 4;
 
+          if (loc.municipality.toLowerCase().startsWith(q)) score += 6;
+          else if (loc.municipality.toLowerCase().includes(q)) score += 4;
+
+          if (loc.locality.toLowerCase().startsWith(q)) score += 5;
+          else if (loc.locality.toLowerCase().includes(q)) score += 3;
+
+          if (loc.district.toLowerCase().startsWith(q)) score += 4;
+          else if (loc.district.toLowerCase().includes(q)) score += 2;
+
           if (loc.displayType.toLowerCase().startsWith(q)) score += 3;
           else if (loc.displayType.toLowerCase().includes(q)) score += 2;
 
@@ -1349,7 +1513,7 @@
       box.innerHTML = items.map((item, index) => `
         <div class="suggestion-item ${index === activeSuggestionIndex ? 'active' : ''}" onclick="selectSuggestion(${item.loc.id})">
           <p class="font-medium">${item.loc.name}</p>
-          <p class="text-xs text-bark/50">${item.loc.city} · ${item.loc.displayType}</p>
+          <p class="text-xs text-bark/50">${item.loc.district || ''}${item.loc.municipality ? ' · ' + item.loc.municipality : ''}${item.loc.locality ? ' · ' + item.loc.locality : ''}</p>
         </div>
       `).join('');
 
@@ -1438,6 +1602,7 @@
             <div>
               <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
               <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.displayType}</p>
+              <p class="text-sm text-bark/55 mt-2">${loc.district ? `${loc.district}` : ''}${loc.municipality ? ` · ${loc.municipality}` : ''}${loc.locality ? ` · ${loc.locality}` : ''}</p>
             </div>
 
             <p class="text-bark/80 leading-relaxed">${loc.desc}</p>
@@ -1580,9 +1745,9 @@
       }
     }
 
-    async function checkDuplicateSuggestion(name, city, type) {
+    async function checkDuplicateSuggestion(name, municipality, type) {
       const cleanName = name.trim();
-      const cleanCity = city.trim();
+      const cleanMunicipality = municipality.trim();
       const typeAliases = getTypeAliases(type);
 
       const [placesResult, suggestionsResult] = await Promise.all([
@@ -1592,7 +1757,7 @@
           .in('type', typeAliases)
           .eq('is_active', true)
           .ilike('name', cleanName)
-          .ilike('city', cleanCity)
+          .ilike('municipality', cleanMunicipality)
           .limit(1),
 
         supabaseClient
@@ -1601,7 +1766,7 @@
           .in('type', typeAliases)
           .eq('status', 'pending')
           .ilike('name', cleanName)
-          .ilike('city', cleanCity)
+          .ilike('municipality', cleanMunicipality)
           .limit(1)
       ]);
 
@@ -1620,6 +1785,9 @@
 
     async function submitSuggestion() {
       const name = document.getElementById('sg-name').value.trim();
+      const district = document.getElementById('sg-district').value.trim();
+      const municipality = document.getElementById('sg-municipality').value.trim();
+      const locality = document.getElementById('sg-locality').value.trim();
       const city = document.getElementById('sg-city').value.trim();
       const type = document.getElementById('sg-type').value;
       const dog_status = document.getElementById('sg-dog-status').value;
@@ -1637,7 +1805,7 @@
         'Experiências': '🎯'
       };
 
-      const duplicateCheck = await checkDuplicateSuggestion(name, city, type);
+      const duplicateCheck = await checkDuplicateSuggestion(name, municipality, type);
 
       if (duplicateCheck.exists) {
         if (duplicateCheck.existsInPlaces) {
@@ -1653,6 +1821,9 @@
       const payload = {
         name,
         city,
+        district: district || null,
+        municipality: municipality || null,
+        locality: locality || null,
         type,
         emoji: emojiMap[type] || '📍',
         description: `Local sugerido pela comunidade em ${city}.`,
@@ -1694,6 +1865,9 @@
 
       document.getElementById('edit-place-id').value = place.id;
       document.getElementById('edit-name').value = place.name || '';
+      document.getElementById('edit-district').value = place.district || '';
+      document.getElementById('edit-municipality').value = place.municipality || '';
+      document.getElementById('edit-locality').value = place.locality || '';
       document.getElementById('edit-city').value = place.city || '';
       document.getElementById('edit-address').value = place.address || '';
       document.getElementById('edit-type').value = place.displayType || 'Comer & Beber';
@@ -1720,6 +1894,9 @@
 
       const id = Number(document.getElementById('edit-place-id').value);
       const name = document.getElementById('edit-name').value.trim();
+      const district = document.getElementById('edit-district').value.trim();
+      const municipality = document.getElementById('edit-municipality').value.trim();
+      const locality = document.getElementById('edit-locality').value.trim();
       const city = document.getElementById('edit-city').value.trim();
       const address = document.getElementById('edit-address').value.trim();
       const type = document.getElementById('edit-type').value;
@@ -1736,6 +1913,9 @@
           .update({
             name,
             city,
+            district: district || null,
+            municipality: municipality || null,
+            locality: locality || null,
             address: address || city,
             type,
             dog_status,
