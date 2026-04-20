@@ -323,6 +323,11 @@
           </button>
         </div>
 
+        <div id="results-header" class="hidden mb-4 rounded-2xl bg-white border border-sand px-4 py-3 shadow-sm">
+          <p id="results-location" class="text-sm font-medium text-bark/80"></p>
+          <p id="results-count" class="text-xs text-bark/50 mt-1"></p>
+        </div>
+
         <div class="flex gap-2 flex-wrap mb-5" id="filter-bar">
           <button type="button" onclick="filterByCategory(null)" class="cat-btn active text-sm px-4 py-2 rounded-full bg-sage text-cream border border-sage font-medium" data-cat="all">Todos</button>
           <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
@@ -1221,16 +1226,86 @@
         </article>`;
     }
 
+    function getResultsZone(locs) {
+      if (!locs.length) return '';
+
+      const localities = [...new Set(locs.map(l => l.locality).filter(Boolean))];
+      const municipalities = [...new Set(locs.map(l => l.municipality).filter(Boolean))];
+      const districts = [...new Set(locs.map(l => l.district).filter(Boolean))];
+      const cities = [...new Set(locs.map(l => l.city).filter(Boolean))];
+
+      if (currentLocalityFilter && currentMunicipalityFilter && currentDistrictFilter) {
+        return `${currentLocalityFilter} · ${currentMunicipalityFilter} · ${currentDistrictFilter}`;
+      }
+
+      if (currentMunicipalityFilter && currentDistrictFilter) {
+        return `${currentMunicipalityFilter} · ${currentDistrictFilter}`;
+      }
+
+      if (currentDistrictFilter) {
+        return currentDistrictFilter;
+      }
+
+      if (localities.length === 1 && municipalities.length === 1 && districts.length === 1) {
+        return `${localities[0]} · ${municipalities[0]} · ${districts[0]}`;
+      }
+
+      if (municipalities.length === 1 && districts.length === 1) {
+        return `${municipalities[0]} · ${districts[0]}`;
+      }
+
+      if (districts.length === 1) {
+        return districts[0];
+      }
+
+      if (cities.length === 1) {
+        return cities[0];
+      }
+
+      return 'várias zonas';
+    }
+
     function renderCards(targetId, locs) {
       const el = document.getElementById(targetId);
       if (!el) return;
+
       el.innerHTML = locs.map(createCard).join('');
+
       const noResults = document.getElementById('no-results');
+      const resultsHeader = document.getElementById('results-header');
+      const resultsLocation = document.getElementById('results-location');
+      const resultsCount = document.getElementById('results-count');
+
       if (targetId === 'cards-list') {
         if (noResults) noResults.classList.toggle('hidden', locs.length > 0);
-      } else if (noResults) {
-        noResults.classList.add('hidden');
+
+        const hasActiveFilters = !!(
+          currentSearch ||
+          currentFilter ||
+          currentDistrictFilter ||
+          currentMunicipalityFilter ||
+          currentLocalityFilter
+        );
+
+        if (resultsHeader && resultsLocation && resultsCount) {
+          if (hasActiveFilters && locs.length > 0) {
+            resultsHeader.classList.remove('hidden');
+            resultsLocation.textContent = `Resultados em ${getResultsZone(locs)}`;
+            resultsCount.textContent = `${locs.length} local${locs.length === 1 ? '' : 'ais'} encontrados`;
+          } else if (hasActiveFilters && locs.length === 0) {
+            resultsHeader.classList.remove('hidden');
+            resultsLocation.textContent = 'Nenhum resultado encontrado 😕';
+            resultsCount.textContent = 'Tenta outra pesquisa ou adiciona um local';
+          } else {
+            resultsHeader.classList.add('hidden');
+            resultsLocation.textContent = '';
+            resultsCount.textContent = '';
+          }
+        }
+      } else {
+        if (noResults) noResults.classList.add('hidden');
       }
+
       lucide.createIcons();
     }
 
