@@ -492,6 +492,16 @@
           <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Editar altera diretamente o local. Desativar tira-o do site sem apagar dados.</p>
         </div>
 
+        <div class="mb-6">
+          <input
+            id="admin-search"
+            type="text"
+            placeholder="Procurar por nome ou cidade..."
+            class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm"
+            oninput="handleAdminSearch()"
+          />
+        </div>
+
         <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
           <div class="flex items-center justify-between gap-3 mb-3">
             <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
@@ -621,7 +631,6 @@
       </div>
     </div>
 
-    <!-- LOGIN MODAL -->
     <div id="login-modal" class="hidden fixed inset-0 z-[100] bg-black/40 p-4">
       <div class="max-w-md mx-auto bg-white rounded-3xl border border-sand shadow-xl mt-12">
         <div class="p-5 border-b border-sand flex items-center justify-between">
@@ -714,6 +723,7 @@
     let currentLocalityFilter = '';
     let activeSuggestionIndex = -1;
     let currentUser = null;
+    let adminSearch = '';
 
     function normalizeText(value) {
       return (value || '').trim();
@@ -1250,34 +1260,6 @@
       showView('list');
     }
 
-    function showView(view) {
-      ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
-        const el = document.getElementById(`view-${section}`);
-        if (el) el.classList.toggle('hidden', section !== view);
-      });
-
-      const wrapper = document.querySelector('.app-wrapper');
-      if (wrapper) wrapper.scrollTop = 0;
-
-      if (view === 'list') {
-        renderZoneFilters();
-        renderCards('cards-list', getFiltered());
-      }
-      if (view === 'home') renderHomeSections();
-      if (view === 'admin') {
-        if (!currentUser) {
-          alert('Precisas de entrar para aceder ao admin.');
-          openLoginModal();
-          showView('home');
-          return;
-        }
-        loadAdminSuggestions();
-        loadAdminPlaces();
-      }
-
-      lucide.createIcons();
-    }
-
     function getSuggestions(query) {
       const q = query.trim().toLowerCase();
       if (!q) return [];
@@ -1672,6 +1654,23 @@
       lucide.createIcons();
     }
 
+    function filterAdminItems(items) {
+      if (!adminSearch) return items;
+
+      return items.filter(item => {
+        const name = (item.name || '').toLowerCase();
+        const city = (item.city || '').toLowerCase();
+        return name.includes(adminSearch) || city.includes(adminSearch);
+      });
+    }
+
+    function handleAdminSearch() {
+      const input = document.getElementById('admin-search');
+      adminSearch = input ? input.value.toLowerCase().trim() : '';
+      loadAdminSuggestions();
+      loadAdminPlaces();
+    }
+
     async function loadAdminSuggestions() {
       if (!currentUser) return;
 
@@ -1689,7 +1688,9 @@
 
         if (error) throw error;
 
-        const rows = data || [];
+        let rows = data || [];
+        rows = filterAdminItems(rows);
+
         document.getElementById('admin-pending-count').textContent = String(rows.length);
 
         if (!rows.length) {
@@ -1761,7 +1762,8 @@
 
         if (error) throw error;
 
-        const rows = (data || []).map(normalizePlace);
+        let rows = (data || []).map(normalizePlace);
+        rows = filterAdminItems(rows);
 
         if (!rows.length) {
           container.innerHTML = '';
@@ -2096,6 +2098,37 @@
         hero.onerror = () => { if (heroWrap) heroWrap.textContent = '🐶'; };
         hero.src = MAC_IMAGE_DATA;
       }
+    }
+
+    function showView(view) {
+      ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
+        const el = document.getElementById(`view-${section}`);
+        if (el) el.classList.toggle('hidden', section !== view);
+      });
+
+      const wrapper = document.querySelector('.app-wrapper');
+      if (wrapper) wrapper.scrollTop = 0;
+
+      if (view === 'list') {
+        renderZoneFilters();
+        renderCards('cards-list', getFiltered());
+      }
+
+      if (view === 'home') renderHomeSections();
+
+      if (view === 'admin') {
+        if (!currentUser) {
+          alert('Precisas de entrar para aceder ao admin.');
+          openLoginModal();
+          document.getElementById('view-admin').classList.add('hidden');
+          document.getElementById('view-home').classList.remove('hidden');
+          return;
+        }
+        loadAdminSuggestions();
+        loadAdminPlaces();
+      }
+
+      lucide.createIcons();
     }
 
     document.addEventListener('click', function(e) {
