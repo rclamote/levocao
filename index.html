@@ -141,14 +141,15 @@
       border-color: #8BA67A;
     }
 
-    .sticky-list-controls {
+    .list-sticky-shell {
       position: sticky;
-      top: 60px;
-      z-index: 40;
-      background: rgba(255, 253, 247, 0.96);
+      top: 61px;
+      z-index: 45;
+      background: rgba(255, 253, 247, 0.97);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      padding-bottom: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
     }
 
     @media (max-width: 640px) {
@@ -162,8 +163,8 @@
         padding: 0.45rem 0.75rem;
         font-size: 0.8rem;
       }
-      .sticky-list-controls {
-        top: 58px;
+      .list-sticky-shell {
+        top: 57px;
       }
     }
   </style>
@@ -341,10 +342,10 @@
           </button>
         </div>
 
-        <div class="sticky-list-controls -mx-1 px-1 mb-4">
-          <div id="results-header" class="hidden mb-3 rounded-2xl bg-white border border-sand px-4 py-3 shadow-sm">
-            <p id="results-region" class="text-sm font-medium text-bark/80"></p>
-            <p id="results-count" class="text-xs text-bark/50 mt-1"></p>
+        <div class="list-sticky-shell">
+          <div id="results-header" class="mb-3 rounded-2xl bg-white border border-sand px-4 py-3 shadow-sm">
+            <p id="results-region" class="text-sm font-medium text-bark/80">Resultados</p>
+            <p id="results-count" class="text-xs text-bark/50 mt-1">0 locais encontrados</p>
           </div>
 
           <div class="flex gap-2 flex-wrap" id="filter-bar">
@@ -1247,7 +1248,7 @@
     }
 
     function getResultsZone(locs) {
-      if (!locs.length) return '';
+      if (!locs.length) return 'nenhuma zona';
 
       if (currentLocalityFilter && currentMunicipalityFilter && currentDistrictFilter) {
         return `${currentLocalityFilter} · ${currentMunicipalityFilter} · ${currentDistrictFilter}`;
@@ -1286,35 +1287,22 @@
       el.innerHTML = locs.map(createCard).join('');
 
       const noResults = document.getElementById('no-results');
-      const resultsHeader = document.getElementById('results-header');
       const resultsRegion = document.getElementById('results-region');
       const resultsCount = document.getElementById('results-count');
 
       if (targetId === 'cards-list') {
         if (noResults) noResults.classList.toggle('hidden', locs.length > 0);
 
-        const hasFiltersOrSearch = !!(
-          currentSearch ||
-          currentFilter ||
-          currentDistrictFilter ||
-          currentMunicipalityFilter ||
-          currentLocalityFilter
-        );
-
-        if (resultsHeader && resultsRegion && resultsCount) {
-          if (hasFiltersOrSearch && locs.length > 0) {
-            resultsHeader.classList.remove('hidden');
+        if (resultsRegion) {
+          if (locs.length > 0) {
             resultsRegion.textContent = `Resultados em ${getResultsZone(locs)}`;
-            resultsCount.textContent = `${locs.length} ${locs.length === 1 ? 'local encontrado' : 'locais encontrados'}`;
-          } else if (hasFiltersOrSearch && locs.length === 0) {
-            resultsHeader.classList.remove('hidden');
-            resultsRegion.textContent = 'Nenhum resultado encontrado 😕';
-            resultsCount.textContent = 'Tenta outra pesquisa ou ajusta os filtros';
           } else {
-            resultsHeader.classList.add('hidden');
-            resultsRegion.textContent = '';
-            resultsCount.textContent = '';
+            resultsRegion.textContent = 'Nenhum resultado encontrado';
           }
+        }
+
+        if (resultsCount) {
+          resultsCount.textContent = `${locs.length} ${locs.length === 1 ? 'local encontrado' : 'locais encontrados'}`;
         }
       } else if (noResults) {
         noResults.classList.add('hidden');
