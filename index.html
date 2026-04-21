@@ -42,12 +42,7 @@
   <style>
     html, body { height: 100%; margin: 0; }
     * { box-sizing: border-box; }
-
-    .app-wrapper {
-      min-height: 100%;
-      overflow-x: hidden;
-    }
-
+    .app-wrapper { min-height: 100%; overflow-x: hidden; }
     .fade-in { animation: fadeIn 0.6s ease both; }
     .fade-in-d1 { animation: fadeIn 0.6s 0.1s ease both; }
     .fade-in-d2 { animation: fadeIn 0.6s 0.2s ease both; }
@@ -141,15 +136,33 @@
       border-color: #8BA67A;
     }
 
-    .list-sticky-shell {
-      position: sticky;
+    .results-fixed-bar {
+      position: fixed;
       top: 61px;
+      left: 0;
+      right: 0;
       z-index: 45;
-      background: rgba(255, 253, 247, 0.97);
+      pointer-events: none;
+    }
+
+    .results-fixed-inner {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .results-fixed-card {
+      pointer-events: auto;
+      background: rgba(255, 253, 247, 0.96);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      margin-bottom: 16px;
-      padding-bottom: 10px;
+      border: 1px solid #F5F0E8;
+      box-shadow: 0 8px 24px rgba(61, 44, 30, 0.08);
+    }
+
+    .list-top-spacer {
+      height: 86px;
     }
 
     @media (max-width: 640px) {
@@ -163,8 +176,15 @@
         padding: 0.45rem 0.75rem;
         font-size: 0.8rem;
       }
-      .list-sticky-shell {
+      .results-fixed-bar {
         top: 57px;
+      }
+      .results-fixed-inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .list-top-spacer {
+        height: 82px;
       }
     }
   </style>
@@ -331,6 +351,15 @@
     </div>
 
     <div id="view-list" class="hidden">
+      <div id="results-fixed-bar" class="results-fixed-bar hidden">
+        <div class="results-fixed-inner">
+          <div class="results-fixed-card rounded-2xl px-4 py-3">
+            <p id="results-region" class="text-sm font-medium text-bark/80">Resultados</p>
+            <p id="results-count" class="text-xs text-bark/50 mt-1">0 locais encontrados</p>
+          </div>
+        </div>
+      </div>
+
       <div class="max-w-3xl mx-auto px-5 py-6">
         <div class="flex items-center justify-between mb-4">
           <div>
@@ -342,21 +371,16 @@
           </button>
         </div>
 
-        <div class="list-sticky-shell">
-          <div id="results-header" class="mb-3 rounded-2xl bg-white border border-sand px-4 py-3 shadow-sm">
-            <p id="results-region" class="text-sm font-medium text-bark/80">Resultados</p>
-            <p id="results-count" class="text-xs text-bark/50 mt-1">0 locais encontrados</p>
-          </div>
+        <div class="list-top-spacer"></div>
 
-          <div class="flex gap-2 flex-wrap" id="filter-bar">
-            <button type="button" onclick="filterByCategory(null)" class="cat-btn active text-sm px-4 py-2 rounded-full bg-sage text-cream border border-sage font-medium" data-cat="all">Todos</button>
-            <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
-            <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
-            <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
-            <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
-            <button type="button" onclick="filterByCategory('Passear com o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Passear com o cão">Passear com o cão</button>
-            <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
-          </div>
+        <div class="flex gap-2 flex-wrap mb-5" id="filter-bar">
+          <button type="button" onclick="filterByCategory(null)" class="cat-btn active text-sm px-4 py-2 rounded-full bg-sage text-cream border border-sage font-medium" data-cat="all">Todos</button>
+          <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
+          <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
+          <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
+          <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
+          <button type="button" onclick="filterByCategory('Passear com o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Passear com o cão">Passear com o cão</button>
+          <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
         </div>
 
         <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-5">
@@ -2177,12 +2201,19 @@
       }
     }
 
+    function updateResultsBarVisibility(view) {
+      const bar = document.getElementById('results-fixed-bar');
+      if (!bar) return;
+      bar.classList.toggle('hidden', view !== 'list');
+    }
+
     function showView(view) {
       ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
         const el = document.getElementById(`view-${section}`);
         if (el) el.classList.toggle('hidden', section !== view);
       });
 
+      updateResultsBarVisibility(view);
       window.scrollTo({ top: 0, behavior: 'auto' });
 
       if (view === 'list') {
@@ -2198,6 +2229,7 @@
           openLoginModal();
           document.getElementById('view-admin').classList.add('hidden');
           document.getElementById('view-home').classList.remove('hidden');
+          updateResultsBarVisibility('home');
           return;
         }
         loadAdminSuggestions();
@@ -2236,6 +2268,7 @@
 
       getVisitorId();
       setMacImage();
+      updateResultsBarVisibility('home');
       lucide.createIcons();
 
       const ok = setupSupabase();
