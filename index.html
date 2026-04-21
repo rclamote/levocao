@@ -1010,6 +1010,75 @@
       return map[type] || ['#8BA67A', '#D4C5A9', '#FFFDF7'];
     }
 
+    function getSmartShortDescription(loc) {
+      const cleanNotes = (loc.notes || '').replace(/\s+/g, ' ').trim();
+      if (cleanNotes && cleanNotes.length <= 90) {
+        return cleanNotes;
+      }
+
+      const features = Array.isArray(loc.features) ? loc.features : [];
+      const hasInterior = features.includes('🏠 Interior permitido');
+      const hasTerrace = features.includes('☀️ Só esplanada');
+      const hasWater = features.includes('💧 Água disponível');
+      const leash = features.includes('🦮 Trela obrigatória');
+      const fenced = features.includes('🔒 Vedado');
+      const semiFenced = features.includes('🚧 Semi-vedado');
+      const openSpace = features.includes('🌳 Espaço aberto');
+      const noInterior = features.includes('🚫 Não no interior');
+      const veryFriendly = features.includes('🐾 Muito pet-friendly');
+      const hasGate = features.includes('🚪 Tem portão');
+      const nearRoad = features.includes('🚗 Perto de estrada');
+
+      if (loc.displayType === 'Comer & Beber') {
+        if (hasInterior && hasWater) return 'Aceitam cães no interior e costumam ter água disponível.';
+        if (hasInterior) return 'Aceitam cães no interior.';
+        if (hasTerrace && hasWater) return 'Aceitam cães na esplanada e costumam ter água disponível.';
+        if (hasTerrace) return 'Aceitam cães na esplanada.';
+        if (noInterior) return 'Aceitam cães, mas não no interior.';
+        if (veryFriendly) return 'Espaço muito acolhedor para quem vai com o cão.';
+        if (loc.dog_status === 'maybe') return 'Aceitam cães, mas pode haver restrições.';
+        if (loc.dog_status === 'yes') return 'Local onde podes ir com o teu cão.';
+      }
+
+      if (loc.displayType === 'Praia') {
+        if (leash) return 'Praia onde podes ir com o teu cão, com trela obrigatória.';
+        if (veryFriendly) return 'Praia bem vista para quem vai com o cão.';
+        if (loc.dog_status === 'maybe') return 'Praia onde os cães podem ser aceites, com algumas restrições.';
+        return 'Praia pet-friendly para passear com o teu cão.';
+      }
+
+      if (loc.displayType === 'Alojamento') {
+        if (veryFriendly) return 'Alojamento muito receptivo para quem viaja com o cão.';
+        if (loc.dog_status === 'maybe') return 'Alojamento que aceita cães, mas pode ter restrições.';
+        return 'Alojamento onde os cães são bem-vindos.';
+      }
+
+      if (loc.displayType === 'Soltar o cão') {
+        if (fenced && hasGate) return 'Espaço vedado com portão, bom para soltar o cão com mais segurança.';
+        if (fenced) return 'Espaço vedado, bom para soltar o cão com mais segurança.';
+        if (semiFenced) return 'Espaço semi-vedado para o cão correr com mais liberdade.';
+        if (openSpace && nearRoad) return 'Espaço aberto para o cão correr, perto de estrada.';
+        if (openSpace) return 'Espaço aberto para o cão correr e explorar.';
+        return 'Local pensado para o cão correr mais à vontade.';
+      }
+
+      if (loc.displayType === 'Passear com o cão') {
+        if (openSpace) return 'Bom local para passear com o cão com mais espaço.';
+        if (leash) return 'Bom para passeio com o cão, com trela recomendada.';
+        return 'Sítio agradável para passear com o teu cão.';
+      }
+
+      if (loc.displayType === 'Experiências') {
+        if (veryFriendly) return 'Experiência muito pet-friendly para fazer com o teu cão.';
+        if (loc.dog_status === 'maybe') return 'Experiência onde os cães podem ser aceites, com algumas condições.';
+        return 'Experiência pet-friendly para fazer com o teu cão.';
+      }
+
+      if (loc.dog_status === 'maybe') return 'Local que pode aceitar cães, com algumas restrições.';
+      if (loc.dog_status === 'yes') return 'Local pet-friendly.';
+      return 'Convém confirmar antes de ir com o cão.';
+    }
+
     async function loadPlacesFromSupabase() {
       const loading = document.getElementById('loading-places');
       if (loading) loading.classList.remove('hidden');
@@ -1314,6 +1383,7 @@
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const lastUpdate = getLastUpdateText(loc.id);
       const locationLine = getCardLocationLine(loc);
+      const smartDesc = getSmartShortDescription(loc);
 
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
@@ -1337,7 +1407,7 @@
               </p>
             </div>
 
-            <p class="text-bark/72 text-sm line-clamp-2">${loc.desc}</p>
+            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
 
             <div class="mt-4 flex flex-wrap gap-2">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">
