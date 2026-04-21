@@ -73,6 +73,7 @@
       }
     };
   </script>
+
   <style>
     html, body { height: 100%; margin: 0; }
     * { box-sizing: border-box; }
@@ -235,6 +236,7 @@
     }
   </style>
 </head>
+
 <body class="h-full bg-cream font-body text-bark">
   <div class="app-wrapper" id="app">
     <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand">
@@ -295,8 +297,6 @@
           <p class="fade-in-d2 text-xs text-bark/50 max-w-md mx-auto">
             Informação real de quem já lá esteve com o cão.
           </p>
-
-          <p class="text-xs text-bark/50 mt-2">Inspirado pelo Mac 🐾</p>
 
           <div class="fade-in-d2 mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
@@ -797,6 +797,7 @@
           </div>
         </div>
         <p class="text-xs text-cream/30 mt-6 border-t border-cream/10 pt-4">© <span id="year"></span> Levo o Cão — Feito com ❤️ em Portugal</p>
+        <p class="text-xs text-cream/40 mt-2">Inspirado pelo Mac 🐾</p>
       </div>
     </footer>
   </div>
@@ -841,6 +842,10 @@
 
     function normalizeText(value) {
       return (value || '').trim();
+    }
+
+    function normalizedLower(value) {
+      return normalizeText(value).toLowerCase();
     }
 
     function mapDisplayType(type) {
@@ -1075,6 +1080,41 @@
       return 'Convém confirmar antes de ir com o cão.';
     }
 
+    function clearSearchState() {
+      currentSearch = '';
+      const input = document.getElementById('search-input');
+      if (input) input.value = '';
+      hideSuggestions();
+    }
+
+    function findLocationByQuery(query) {
+      const q = normalizedLower(query);
+      if (!q) return null;
+
+      const exactLocality = locations.find(loc => normalizedLower(loc.locality) === q);
+      if (exactLocality) return exactLocality;
+
+      const exactMunicipality = locations.find(loc => normalizedLower(loc.municipality) === q);
+      if (exactMunicipality) return exactMunicipality;
+
+      const exactCity = locations.find(loc => normalizedLower(loc.city) === q);
+      if (exactCity) return exactCity;
+
+      const exactDistrict = locations.find(loc => normalizedLower(loc.district) === q);
+      if (exactDistrict) return exactDistrict;
+
+      return null;
+    }
+
+    function applyZoneFiltersFromLocation(loc) {
+      if (!loc) return;
+
+      currentDistrictFilter = loc.district || '';
+      currentMunicipalityFilter = loc.municipality || '';
+      currentLocalityFilter = loc.locality || '';
+      renderZoneFilters();
+    }
+
     async function loadPlacesFromSupabase() {
       const loading = document.getElementById('loading-places');
       if (loading) loading.classList.remove('hidden');
@@ -1263,8 +1303,12 @@
     function handleDistrictFilterChange() {
       const districtSelect = document.getElementById('filter-district');
       currentDistrictFilter = districtSelect ? districtSelect.value : '';
+
+      clearSearchState();
+
       currentMunicipalityFilter = '';
       currentLocalityFilter = '';
+
       renderZoneFilters();
       renderCards('cards-list', getFiltered());
     }
@@ -1272,7 +1316,11 @@
     function handleMunicipalityFilterChange() {
       const municipalitySelect = document.getElementById('filter-municipality');
       currentMunicipalityFilter = municipalitySelect ? municipalitySelect.value : '';
+
+      clearSearchState();
+
       currentLocalityFilter = '';
+
       renderZoneFilters();
       renderCards('cards-list', getFiltered());
     }
@@ -1280,6 +1328,9 @@
     function handleLocalityFilterChange() {
       const localitySelect = document.getElementById('filter-locality');
       currentLocalityFilter = localitySelect ? localitySelect.value : '';
+
+      clearSearchState();
+
       renderCards('cards-list', getFiltered());
     }
 
@@ -1287,6 +1338,7 @@
       currentDistrictFilter = '';
       currentMunicipalityFilter = '';
       currentLocalityFilter = '';
+      clearSearchState();
       renderZoneFilters();
       renderCards('cards-list', getFiltered());
     }
@@ -1295,13 +1347,13 @@
       return locations.filter((loc) => {
         const matchCat = !currentFilter || loc.displayType === currentFilter;
         const matchSearch = !currentSearch ||
-          loc.name.toLowerCase().includes(currentSearch) ||
-          loc.city.toLowerCase().includes(currentSearch) ||
-          loc.displayType.toLowerCase().includes(currentSearch) ||
-          (loc.address && loc.address.toLowerCase().includes(currentSearch)) ||
-          (loc.district && loc.district.toLowerCase().includes(currentSearch)) ||
-          (loc.municipality && loc.municipality.toLowerCase().includes(currentSearch)) ||
-          (loc.locality && loc.locality.toLowerCase().includes(currentSearch));
+          normalizedLower(loc.name).includes(currentSearch) ||
+          normalizedLower(loc.city).includes(currentSearch) ||
+          normalizedLower(loc.displayType).includes(currentSearch) ||
+          normalizedLower(loc.address).includes(currentSearch) ||
+          normalizedLower(loc.district).includes(currentSearch) ||
+          normalizedLower(loc.municipality).includes(currentSearch) ||
+          normalizedLower(loc.locality).includes(currentSearch);
         const matchDistrict = !currentDistrictFilter || loc.district === currentDistrictFilter;
         const matchMunicipality = !currentMunicipalityFilter || loc.municipality === currentMunicipalityFilter;
         const matchLocality = !currentLocalityFilter || loc.locality === currentLocalityFilter;
@@ -1525,23 +1577,23 @@
         .map(loc => {
           let score = 0;
 
-          if (loc.name.toLowerCase().startsWith(q)) score += 10;
-          else if (loc.name.toLowerCase().includes(q)) score += 7;
+          if (normalizedLower(loc.name).startsWith(q)) score += 10;
+          else if (normalizedLower(loc.name).includes(q)) score += 7;
 
-          if (loc.city.toLowerCase().startsWith(q)) score += 6;
-          else if (loc.city.toLowerCase().includes(q)) score += 4;
+          if (normalizedLower(loc.city).startsWith(q)) score += 6;
+          else if (normalizedLower(loc.city).includes(q)) score += 4;
 
-          if (loc.municipality.toLowerCase().startsWith(q)) score += 6;
-          else if (loc.municipality.toLowerCase().includes(q)) score += 4;
+          if (normalizedLower(loc.municipality).startsWith(q)) score += 6;
+          else if (normalizedLower(loc.municipality).includes(q)) score += 4;
 
-          if (loc.locality.toLowerCase().startsWith(q)) score += 5;
-          else if (loc.locality.toLowerCase().includes(q)) score += 3;
+          if (normalizedLower(loc.locality).startsWith(q)) score += 5;
+          else if (normalizedLower(loc.locality).includes(q)) score += 3;
 
-          if (loc.district.toLowerCase().startsWith(q)) score += 4;
-          else if (loc.district.toLowerCase().includes(q)) score += 2;
+          if (normalizedLower(loc.district).startsWith(q)) score += 4;
+          else if (normalizedLower(loc.district).includes(q)) score += 2;
 
-          if (loc.displayType.toLowerCase().startsWith(q)) score += 3;
-          else if (loc.displayType.toLowerCase().includes(q)) score += 2;
+          if (normalizedLower(loc.displayType).startsWith(q)) score += 3;
+          else if (normalizedLower(loc.displayType).includes(q)) score += 2;
 
           return { loc, score };
         })
@@ -1579,9 +1631,22 @@
 
     function handleSearchInput() {
       const input = document.getElementById('search-input');
-      currentSearch = input ? input.value.toLowerCase().trim() : '';
+      const value = input ? input.value.trim() : '';
+
+      currentSearch = value.toLowerCase();
       activeSuggestionIndex = -1;
-      renderSuggestions(getSuggestions(input.value));
+
+      const matchedZone = findLocationByQuery(value);
+      if (matchedZone) {
+        applyZoneFiltersFromLocation(matchedZone);
+      } else if (!value) {
+        currentDistrictFilter = '';
+        currentMunicipalityFilter = '';
+        currentLocalityFilter = '';
+        renderZoneFilters();
+      }
+
+      renderSuggestions(getSuggestions(value));
     }
 
     function handleSearchKey(event) {
@@ -1611,7 +1676,14 @@
 
       if (event.key === 'Enter') {
         event.preventDefault();
-        currentSearch = input.value.toLowerCase().trim();
+
+        const matchedZone = findLocationByQuery(input.value);
+        if (matchedZone) {
+          currentSearch = '';
+          if (input) input.value = '';
+          applyZoneFiltersFromLocation(matchedZone);
+        }
+
         hideSuggestions();
         showView('list');
         renderCards('cards-list', getFiltered());
@@ -1622,12 +1694,10 @@
       const loc = locations.find(item => item.id === id);
       if (!loc) return;
 
-      const input = document.getElementById('search-input');
-      if (input) input.value = loc.name;
-
-      currentSearch = loc.name.toLowerCase();
-      hideSuggestions();
-      showDetail(id);
+      clearSearchState();
+      applyZoneFiltersFromLocation(loc);
+      showView('list');
+      renderCards('cards-list', getFiltered());
     }
 
     function showDetail(id) {
