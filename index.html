@@ -14,7 +14,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Levo o Cão | Locais pet-friendly em Portugal</title>
-  <meta name="description" content="Descobre restaurantes, praias, alojamentos e passeios pet-friendly em Portugal. Simples, útil e feito por quem tem um cão." />
+  <meta name="description" content="Descobre restaurantes, praias, alojamentos e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
   <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão" />
   <meta name="author" content="Levo o Cão" />
   <meta name="robots" content="index, follow" />
@@ -32,7 +32,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
-  <meta name="twitter:description" content="Descobre onde podes ir com o teu cão em Portugal. Simples, útil e feito por quem tem um cão." />
+  <meta name="twitter:description" content="Descobre onde podes ir com o teu cão em Portugal." />
   <meta name="twitter:image" content="https://levocao.pt/mac.jpg" />
 
   <link rel="icon" type="image/png" href="favicon.png" />
@@ -281,15 +281,19 @@
           </div>
 
           <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">
-            Onde posso ir com o meu cão em Portugal?
+            Levo o cão?
           </h1>
 
-          <p class="fade-in-d2 text-bark/75 text-lg mb-3 max-w-2xl mx-auto">
-            Descobre restaurantes, praias, alojamentos e passeios pet-friendly, sem surpresas.
+          <p class="fade-in-d2 text-bark/75 text-lg mb-3 max-w-xl mx-auto">
+            Descobre onde podes ir com o teu cão — antes de sair de casa.
           </p>
 
-          <p class="fade-in-d2 text-sm text-bark/55 max-w-xl mx-auto">
-            Simples, útil e feito por quem tem um cão.
+          <p id="hero-community-count" class="fade-in-d2 text-sm text-sage font-medium mb-1">
+            🐾 A comunidade já começou a confirmar locais
+          </p>
+
+          <p class="fade-in-d2 text-xs text-bark/50 max-w-md mx-auto">
+            Informação real de quem já lá esteve com o cão.
           </p>
 
           <p class="text-xs text-bark/50 mt-2">Inspirado pelo Mac 🐾</p>
@@ -320,22 +324,25 @@
           <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
             <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
               <i data-lucide="map-pin" class="w-4 h-4"></i>
-              Ver locais pet-friendly
+              Onde posso ir com o meu cão?
             </button>
             <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
               Adicionar local
             </button>
           </div>
-
-          <p class="mt-4 text-sm text-bark/60 max-w-2xl mx-auto">
-            Informação prática para quem quer sair com o cão sem perder tempo com dúvidas, reviews confusas ou surpresas à porta.
-          </p>
-
-          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto">
-            <span id="hero-community-count">A comunidade já deixou várias confirmações úteis.</span> As novas sugestões são revistas antes de ficarem visíveis no site.
-          </p>
         </div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 py-6">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">📍 Locais adicionados pela comunidade</h2>
+          <button type="button" onclick="showView('suggest')" class="text-sage text-sm font-medium inline-flex items-center gap-1">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar o teu
+          </button>
+        </div>
+        <div id="cards-recent" class="grid gap-4 sm:grid-cols-2"></div>
       </section>
 
       <section class="max-w-3xl mx-auto px-5 py-8">
@@ -396,17 +403,6 @@
             <span class="text-2xl">🎯</span><span class="text-sm font-medium">Experiências</span>
           </button>
         </div>
-      </section>
-
-      <section class="max-w-3xl mx-auto px-5 pb-6">
-        <div class="flex items-center justify-between mb-4 gap-3">
-          <h2 class="font-display text-xl font-bold">Adicionados recentemente</h2>
-          <button type="button" onclick="showView('suggest')" class="text-sage text-sm font-medium inline-flex items-center gap-1">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            Adicionar o teu
-          </button>
-        </div>
-        <div id="cards-recent" class="grid gap-4 sm:grid-cols-2"></div>
       </section>
 
       <section class="max-w-3xl mx-auto px-5 pb-12">
@@ -790,7 +786,7 @@
         <div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
           <div class="flex-1">
             <p class="font-display font-bold text-lg text-cream mb-2">🐾 Levo o Cão</p>
-            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Simples, útil e feito por quem tem um cão.</p>
+            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal.</p>
           </div>
           <div class="flex flex-col gap-2 text-sm">
             <a href="#" onclick="event.preventDefault(); showView('suggest')" class="hover:text-cream transition">Sugerir local</a>
@@ -1504,7 +1500,12 @@
       const el = document.getElementById('hero-community-count');
       if (!el) return;
       const total = getTotalCommunityResponses();
-      el.textContent = total > 0 ? `${total} confirmações já foram feitas pela comunidade.` : 'A comunidade já começou a confirmar locais.';
+
+      if (total > 0) {
+        el.textContent = `🐾 ${total} ${total === 1 ? 'confirmação' : 'confirmações'} da comunidade`;
+      } else {
+        el.textContent = '🐾 A comunidade já começou a confirmar locais';
+      }
     }
 
     function filterByCategory(cat, btn = null) {
