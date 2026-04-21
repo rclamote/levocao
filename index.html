@@ -12,14 +12,48 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Levo o Cão</title>
-  <link rel="icon" href="favicon.png" />
+
+  <title>Levo o Cão | Locais pet-friendly em Portugal</title>
+  <meta name="description" content="Descobre restaurantes, praias, alojamentos e passeios pet-friendly em Portugal. Simples, útil e feito por quem tem um cão." />
+  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão" />
+  <meta name="author" content="Levo o Cão" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://levocao.pt/" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="pt_PT" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Levo o Cão" />
+  <meta property="og:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
+  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos e passeios pet-friendly." />
+  <meta property="og:url" content="https://levocao.pt/" />
+  <meta property="og:image" content="https://levocao.pt/mac.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
+  <meta name="twitter:description" content="Descobre onde podes ir com o teu cão em Portugal. Simples, útil e feito por quem tem um cão." />
+  <meta name="twitter:image" content="https://levocao.pt/mac.jpg" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Levo o Cão",
+      "url": "https://levocao.pt/",
+      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos e passeios onde podes levar o teu cão.",
+      "inLanguage": "pt-PT"
+    }
+  </script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -72,6 +106,18 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .sr-only-seo {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
     }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -234,11 +280,21 @@
             </div>
           </div>
 
-          <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">Levo o Cão?</h1>
-          <p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Descobre onde podes entrar com o teu cão, sem surpresas.</p>
-          <p class="text-xs text-bark/50 mt-1">Inspirado pelo Mac 🐾</p>
+          <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">
+            Onde posso ir com o meu cão em Portugal?
+          </h1>
 
-          <div class="fade-in-d2 mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
+          <p class="fade-in-d2 text-bark/75 text-lg mb-3 max-w-2xl mx-auto">
+            Descobre restaurantes, praias, alojamentos e passeios pet-friendly, sem surpresas.
+          </p>
+
+          <p class="fade-in-d2 text-sm text-bark/55 max-w-xl mx-auto">
+            Simples, útil e feito por quem tem um cão.
+          </p>
+
+          <p class="text-xs text-bark/50 mt-2">Inspirado pelo Mac 🐾</p>
+
+          <div class="fade-in-d2 mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">📍 Descobre novos locais</span>
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">✅ Confirma o que é mesmo pet-friendly</span>
@@ -250,7 +306,7 @@
               <input
                 id="search-input"
                 type="text"
-                placeholder="Onde queres ir?"
+                placeholder="Procura por local, cidade ou categoria"
                 class="flex-1 py-3.5 px-3 bg-transparent outline-none text-bark placeholder:text-bark/40"
                 autocomplete="off"
                 oninput="handleSearchInput()"
@@ -264,7 +320,7 @@
           <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
             <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
               <i data-lucide="map-pin" class="w-4 h-4"></i>
-              Onde posso ir com o meu cão?
+              Ver locais pet-friendly
             </button>
             <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -272,8 +328,13 @@
             </button>
           </div>
 
-          <p class="mt-4 text-sm text-bark/60 max-w-lg mx-auto">Entra, explora e confirma o que é realmente pet-friendly. Sem reviews confusas — só informação útil.</p>
-          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto"><span id="hero-community-count">A comunidade já deixou várias confirmações úteis.</span> As novas sugestões são revistas antes de ficarem visíveis no site.</p>
+          <p class="mt-4 text-sm text-bark/60 max-w-2xl mx-auto">
+            Informação prática para quem quer sair com o cão sem perder tempo com dúvidas, reviews confusas ou surpresas à porta.
+          </p>
+
+          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto">
+            <span id="hero-community-count">A comunidade já deixou várias confirmações úteis.</span> As novas sugestões são revistas antes de ficarem visíveis no site.
+          </p>
         </div>
       </section>
 
@@ -282,7 +343,7 @@
           <div class="grid sm:grid-cols-3 gap-4 text-left">
             <div class="bg-white rounded-2xl p-4 border border-sand">
               <p class="text-sm font-semibold text-sage mb-1">1. Descobre</p>
-              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, categoria ou sugestões recentes.</p>
+              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, zona ou categoria.</p>
             </div>
             <div class="bg-white rounded-2xl p-4 border border-sand">
               <p class="text-sm font-semibold text-sage mb-1">2. Confirma</p>
@@ -298,13 +359,20 @@
         <div class="mb-6 rounded-3xl bg-white border border-sand shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
-            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor mapa pet-friendly</h2>
-            <p class="text-bark/65 text-sm mt-1">Se conheces um local para comer, praia, alojamento, passeio, experiência ou espaço seguro para soltar o cão, adiciona-o.</p>
+            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência ou um espaço seguro para soltar o cão, adiciona-o.</p>
           </div>
           <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             Adicionar local
           </button>
+        </div>
+
+        <div class="sr-only-seo" aria-hidden="true">
+          <h2>Locais pet-friendly em Portugal</h2>
+          <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
+          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos e sítios para passear com o cão.</p>
+          <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
         </div>
 
         <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
@@ -722,7 +790,7 @@
         <div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
           <div class="flex-1">
             <p class="font-display font-bold text-lg text-cream mb-2">🐾 Levo o Cão</p>
-            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Porque o teu melhor amigo merece sair contigo.</p>
+            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Simples, útil e feito por quem tem um cão.</p>
           </div>
           <div class="flex flex-col gap-2 text-sm">
             <a href="#" onclick="event.preventDefault(); showView('suggest')" class="hover:text-cream transition">Sugerir local</a>
