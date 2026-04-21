@@ -12,14 +12,48 @@
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Levo o Cão</title>
-  <link rel="icon" href="favicon.png" />
+
+  <title>Levo o Cão | Locais pet-friendly em Portugal</title>
+  <meta name="description" content="Descobre restaurantes, praias, alojamentos e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
+  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão" />
+  <meta name="author" content="Levo o Cão" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://levocao.pt/" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="pt_PT" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Levo o Cão" />
+  <meta property="og:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
+  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos e passeios pet-friendly." />
+  <meta property="og:url" content="https://levocao.pt/" />
+  <meta property="og:image" content="https://levocao.pt/mac.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
+  <meta name="twitter:description" content="Descobre onde podes ir com o teu cão em Portugal." />
+  <meta name="twitter:image" content="https://levocao.pt/mac.jpg" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Levo o Cão",
+      "url": "https://levocao.pt/",
+      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos e passeios onde podes levar o teu cão.",
+      "inLanguage": "pt-PT"
+    }
+  </script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -39,6 +73,7 @@
       }
     };
   </script>
+
   <style>
     html, body { height: 100%; margin: 0; }
     * { box-sizing: border-box; }
@@ -72,6 +107,18 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+    }
+
+    .sr-only-seo {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
     }
 
     ::-webkit-scrollbar { width: 6px; }
@@ -189,6 +236,7 @@
     }
   </style>
 </head>
+
 <body class="h-full bg-cream font-body text-bark">
   <div class="app-wrapper" id="app">
     <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand">
@@ -234,11 +282,28 @@
             </div>
           </div>
 
-          <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">Levo o Cão?</h1>
-          <p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">Descobre onde podes entrar com o teu cão, sem surpresas.</p>
-          <p class="text-xs text-bark/50 mt-1">Inspirado pelo Mac 🐾</p>
+    <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-1">
+  Levo o cão?
+</h1>
 
-          <div class="fade-in-d2 mt-2 flex flex-wrap items-center justify-center gap-2 text-sm">
+<p class="text-xs text-bark/50 italic mb-2">
+  Inspirado pelo Mac 🐾
+</p>
+
+<p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">
+  Descobre onde podes ir com o teu cão — antes de sair de casa.
+</p>
+        
+
+          <p id="hero-community-count" class="fade-in-d2 text-sm text-sage font-medium mb-1">
+            🐾 A comunidade já começou a confirmar locais
+          </p>
+
+          <p class="fade-in-d2 text-xs text-bark/50 max-w-md mx-auto">
+            Informação real de quem já lá esteve com o cão.
+          </p>
+
+          <div class="fade-in-d2 mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">📍 Descobre novos locais</span>
             <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">✅ Confirma o que é mesmo pet-friendly</span>
@@ -250,7 +315,7 @@
               <input
                 id="search-input"
                 type="text"
-                placeholder="Onde queres ir?"
+                placeholder="Procura por local, cidade ou categoria"
                 class="flex-1 py-3.5 px-3 bg-transparent outline-none text-bark placeholder:text-bark/40"
                 autocomplete="off"
                 oninput="handleSearchInput()"
@@ -271,10 +336,18 @@
               Adicionar local
             </button>
           </div>
-
-          <p class="mt-4 text-sm text-bark/60 max-w-lg mx-auto">Entra, explora e confirma o que é realmente pet-friendly. Sem reviews confusas — só informação útil.</p>
-          <p class="mt-2 text-xs text-bark/45 max-w-lg mx-auto"><span id="hero-community-count">A comunidade já deixou várias confirmações úteis.</span> As novas sugestões são revistas antes de ficarem visíveis no site.</p>
         </div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 py-6">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">📍 Locais adicionados pela comunidade</h2>
+          <button type="button" onclick="showView('suggest')" class="text-sage text-sm font-medium inline-flex items-center gap-1">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar o teu
+          </button>
+        </div>
+        <div id="cards-recent" class="grid gap-4 sm:grid-cols-2"></div>
       </section>
 
       <section class="max-w-3xl mx-auto px-5 py-8">
@@ -282,7 +355,7 @@
           <div class="grid sm:grid-cols-3 gap-4 text-left">
             <div class="bg-white rounded-2xl p-4 border border-sand">
               <p class="text-sm font-semibold text-sage mb-1">1. Descobre</p>
-              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, categoria ou sugestões recentes.</p>
+              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, zona ou categoria.</p>
             </div>
             <div class="bg-white rounded-2xl p-4 border border-sand">
               <p class="text-sm font-semibold text-sage mb-1">2. Confirma</p>
@@ -298,13 +371,20 @@
         <div class="mb-6 rounded-3xl bg-white border border-sand shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
-            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor mapa pet-friendly</h2>
-            <p class="text-bark/65 text-sm mt-1">Se conheces um local para comer, praia, alojamento, passeio, experiência ou espaço seguro para soltar o cão, adiciona-o.</p>
+            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência ou um espaço seguro para soltar o cão, adiciona-o.</p>
           </div>
           <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
             Adicionar local
           </button>
+        </div>
+
+        <div class="sr-only-seo" aria-hidden="true">
+          <h2>Locais pet-friendly em Portugal</h2>
+          <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
+          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos e sítios para passear com o cão.</p>
+          <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
         </div>
 
         <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
@@ -328,17 +408,6 @@
             <span class="text-2xl">🎯</span><span class="text-sm font-medium">Experiências</span>
           </button>
         </div>
-      </section>
-
-      <section class="max-w-3xl mx-auto px-5 pb-6">
-        <div class="flex items-center justify-between mb-4 gap-3">
-          <h2 class="font-display text-xl font-bold">Adicionados recentemente</h2>
-          <button type="button" onclick="showView('suggest')" class="text-sage text-sm font-medium inline-flex items-center gap-1">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            Adicionar o teu
-          </button>
-        </div>
-        <div id="cards-recent" class="grid gap-4 sm:grid-cols-2"></div>
       </section>
 
       <section class="max-w-3xl mx-auto px-5 pb-12">
@@ -722,7 +791,7 @@
         <div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
           <div class="flex-1">
             <p class="font-display font-bold text-lg text-cream mb-2">🐾 Levo o Cão</p>
-            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal. Porque o teu melhor amigo merece sair contigo.</p>
+            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal.</p>
           </div>
           <div class="flex flex-col gap-2 text-sm">
             <a href="#" onclick="event.preventDefault(); showView('suggest')" class="hover:text-cream transition">Sugerir local</a>
@@ -733,6 +802,7 @@
           </div>
         </div>
         <p class="text-xs text-cream/30 mt-6 border-t border-cream/10 pt-4">© <span id="year"></span> Levo o Cão — Feito com ❤️ em Portugal</p>
+        <p class="text-xs text-cream/40 mt-2">Inspirado pelo Mac 🐾</p>
       </div>
     </footer>
   </div>
@@ -777,6 +847,10 @@
 
     function normalizeText(value) {
       return (value || '').trim();
+    }
+
+    function normalizedLower(value) {
+      return normalizeText(value).toLowerCase();
     }
 
     function mapDisplayType(type) {
@@ -942,6 +1016,110 @@
       return map[type] || ['#8BA67A', '#D4C5A9', '#FFFDF7'];
     }
 
+    function getSmartShortDescription(loc) {
+      const cleanNotes = (loc.notes || '').replace(/\s+/g, ' ').trim();
+      if (cleanNotes && cleanNotes.length <= 90) {
+        return cleanNotes;
+      }
+
+      const features = Array.isArray(loc.features) ? loc.features : [];
+      const hasInterior = features.includes('🏠 Interior permitido');
+      const hasTerrace = features.includes('☀️ Só esplanada');
+      const hasWater = features.includes('💧 Água disponível');
+      const leash = features.includes('🦮 Trela obrigatória');
+      const fenced = features.includes('🔒 Vedado');
+      const semiFenced = features.includes('🚧 Semi-vedado');
+      const openSpace = features.includes('🌳 Espaço aberto');
+      const noInterior = features.includes('🚫 Não no interior');
+      const veryFriendly = features.includes('🐾 Muito pet-friendly');
+      const hasGate = features.includes('🚪 Tem portão');
+      const nearRoad = features.includes('🚗 Perto de estrada');
+
+      if (loc.displayType === 'Comer & Beber') {
+        if (hasInterior && hasWater) return 'Aceitam cães no interior e costumam ter água disponível.';
+        if (hasInterior) return 'Aceitam cães no interior.';
+        if (hasTerrace && hasWater) return 'Aceitam cães na esplanada e costumam ter água disponível.';
+        if (hasTerrace) return 'Aceitam cães na esplanada.';
+        if (noInterior) return 'Aceitam cães, mas não no interior.';
+        if (veryFriendly) return 'Espaço muito acolhedor para quem vai com o cão.';
+        if (loc.dog_status === 'maybe') return 'Aceitam cães, mas pode haver restrições.';
+        if (loc.dog_status === 'yes') return 'Local onde podes ir com o teu cão.';
+      }
+
+      if (loc.displayType === 'Praia') {
+        if (leash) return 'Praia onde podes ir com o teu cão, com trela obrigatória.';
+        if (veryFriendly) return 'Praia bem vista para quem vai com o cão.';
+        if (loc.dog_status === 'maybe') return 'Praia onde os cães podem ser aceites, com algumas restrições.';
+        return 'Praia pet-friendly para passear com o teu cão.';
+      }
+
+      if (loc.displayType === 'Alojamento') {
+        if (veryFriendly) return 'Alojamento muito receptivo para quem viaja com o cão.';
+        if (loc.dog_status === 'maybe') return 'Alojamento que aceita cães, mas pode ter restrições.';
+        return 'Alojamento onde os cães são bem-vindos.';
+      }
+
+      if (loc.displayType === 'Soltar o cão') {
+        if (fenced && hasGate) return 'Espaço vedado com portão, bom para soltar o cão com mais segurança.';
+        if (fenced) return 'Espaço vedado, bom para soltar o cão com mais segurança.';
+        if (semiFenced) return 'Espaço semi-vedado para o cão correr com mais liberdade.';
+        if (openSpace && nearRoad) return 'Espaço aberto para o cão correr, perto de estrada.';
+        if (openSpace) return 'Espaço aberto para o cão correr e explorar.';
+        return 'Local pensado para o cão correr mais à vontade.';
+      }
+
+      if (loc.displayType === 'Passear com o cão') {
+        if (openSpace) return 'Bom local para passear com o cão com mais espaço.';
+        if (leash) return 'Bom para passeio com o cão, com trela recomendada.';
+        return 'Sítio agradável para passear com o teu cão.';
+      }
+
+      if (loc.displayType === 'Experiências') {
+        if (veryFriendly) return 'Experiência muito pet-friendly para fazer com o teu cão.';
+        if (loc.dog_status === 'maybe') return 'Experiência onde os cães podem ser aceites, com algumas condições.';
+        return 'Experiência pet-friendly para fazer com o teu cão.';
+      }
+
+      if (loc.dog_status === 'maybe') return 'Local que pode aceitar cães, com algumas restrições.';
+      if (loc.dog_status === 'yes') return 'Local pet-friendly.';
+      return 'Convém confirmar antes de ir com o cão.';
+    }
+
+    function clearSearchState() {
+      currentSearch = '';
+      const input = document.getElementById('search-input');
+      if (input) input.value = '';
+      hideSuggestions();
+    }
+
+    function findLocationByQuery(query) {
+      const q = normalizedLower(query);
+      if (!q) return null;
+
+      const exactLocality = locations.find(loc => normalizedLower(loc.locality) === q);
+      if (exactLocality) return exactLocality;
+
+      const exactMunicipality = locations.find(loc => normalizedLower(loc.municipality) === q);
+      if (exactMunicipality) return exactMunicipality;
+
+      const exactCity = locations.find(loc => normalizedLower(loc.city) === q);
+      if (exactCity) return exactCity;
+
+      const exactDistrict = locations.find(loc => normalizedLower(loc.district) === q);
+      if (exactDistrict) return exactDistrict;
+
+      return null;
+    }
+
+    function applyZoneFiltersFromLocation(loc) {
+      if (!loc) return;
+
+      currentDistrictFilter = loc.district || '';
+      currentMunicipalityFilter = loc.municipality || '';
+      currentLocalityFilter = loc.locality || '';
+      renderZoneFilters();
+    }
+
     async function loadPlacesFromSupabase() {
       const loading = document.getElementById('loading-places');
       if (loading) loading.classList.remove('hidden');
@@ -1073,16 +1251,16 @@
       const diff = Date.now() - new Date(votes.lastUpdated).getTime();
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-      if (days <= 0) return 'Última confirmação: hoje';
-      if (days === 1) return 'Última confirmação: ontem';
-      if (days < 7) return `Última confirmação: há ${days} dias`;
+      if (days <= 0) return 'Confirmado hoje';
+      if (days === 1) return 'Confirmado ontem';
+      if (days < 7) return `Confirmado há ${days} dias`;
 
       if (days < 30) {
         const weeks = Math.floor(days / 7);
-        return weeks <= 1 ? 'Última confirmação: há 1 semana' : `Última confirmação: há ${weeks} semanas`;
+        return weeks <= 1 ? 'Confirmado há 1 semana' : `Confirmado há ${weeks} semanas`;
       }
 
-      return 'Última confirmação: há algum tempo';
+      return 'Confirmado há algum tempo';
     }
 
     function getLastUpdateExactText(id) {
@@ -1130,8 +1308,12 @@
     function handleDistrictFilterChange() {
       const districtSelect = document.getElementById('filter-district');
       currentDistrictFilter = districtSelect ? districtSelect.value : '';
+
+      clearSearchState();
+
       currentMunicipalityFilter = '';
       currentLocalityFilter = '';
+
       renderZoneFilters();
       renderCards('cards-list', getFiltered());
     }
@@ -1139,7 +1321,11 @@
     function handleMunicipalityFilterChange() {
       const municipalitySelect = document.getElementById('filter-municipality');
       currentMunicipalityFilter = municipalitySelect ? municipalitySelect.value : '';
+
+      clearSearchState();
+
       currentLocalityFilter = '';
+
       renderZoneFilters();
       renderCards('cards-list', getFiltered());
     }
@@ -1147,6 +1333,9 @@
     function handleLocalityFilterChange() {
       const localitySelect = document.getElementById('filter-locality');
       currentLocalityFilter = localitySelect ? localitySelect.value : '';
+
+      clearSearchState();
+
       renderCards('cards-list', getFiltered());
     }
 
@@ -1154,6 +1343,7 @@
       currentDistrictFilter = '';
       currentMunicipalityFilter = '';
       currentLocalityFilter = '';
+      clearSearchState();
       renderZoneFilters();
       renderCards('cards-list', getFiltered());
     }
@@ -1162,13 +1352,13 @@
       return locations.filter((loc) => {
         const matchCat = !currentFilter || loc.displayType === currentFilter;
         const matchSearch = !currentSearch ||
-          loc.name.toLowerCase().includes(currentSearch) ||
-          loc.city.toLowerCase().includes(currentSearch) ||
-          loc.displayType.toLowerCase().includes(currentSearch) ||
-          (loc.address && loc.address.toLowerCase().includes(currentSearch)) ||
-          (loc.district && loc.district.toLowerCase().includes(currentSearch)) ||
-          (loc.municipality && loc.municipality.toLowerCase().includes(currentSearch)) ||
-          (loc.locality && loc.locality.toLowerCase().includes(currentSearch));
+          normalizedLower(loc.name).includes(currentSearch) ||
+          normalizedLower(loc.city).includes(currentSearch) ||
+          normalizedLower(loc.displayType).includes(currentSearch) ||
+          normalizedLower(loc.address).includes(currentSearch) ||
+          normalizedLower(loc.district).includes(currentSearch) ||
+          normalizedLower(loc.municipality).includes(currentSearch) ||
+          normalizedLower(loc.locality).includes(currentSearch);
         const matchDistrict = !currentDistrictFilter || loc.district === currentDistrictFilter;
         const matchMunicipality = !currentMunicipalityFilter || loc.municipality === currentMunicipalityFilter;
         const matchLocality = !currentLocalityFilter || loc.locality === currentLocalityFilter;
@@ -1225,6 +1415,17 @@
       return null;
     }
 
+    function getCardLocationLine(loc) {
+      const parts = [];
+      if (loc.locality) parts.push(loc.locality);
+      else if (loc.city) parts.push(loc.city);
+
+      if (loc.municipality && loc.municipality !== loc.locality && loc.municipality !== loc.city) parts.push(loc.municipality);
+      if (loc.district && loc.district !== loc.municipality && loc.district !== loc.city) parts.push(loc.district);
+
+      return parts.join(' · ') || loc.city || 'Portugal';
+    }
+
     function createCard(loc) {
       const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
       const confirmationCount = getConfirmationCount(loc.id);
@@ -1232,40 +1433,47 @@
       const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
         ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>'
         : '';
-      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const lastUpdate = getLastUpdateText(loc.id);
+      const locationLine = getCardLocationLine(loc);
+      const smartDesc = getSmartShortDescription(loc);
 
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
           <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
             <span class="text-5xl">${loc.emoji}</span>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs bg-white/90 text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${loc.displayType}</span>
+            </div>
             <div class="absolute top-3 right-3 flex items-center gap-2 flex-wrap justify-end">
               ${recentBadge}
-              <span class="${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">${dogMeta.short}</span>
+              <span class="${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
             </div>
           </div>
+
           <div class="p-4">
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <h3 class="font-display font-bold text-lg">${loc.name}</h3>
-                <p class="text-bark/50 text-sm flex items-center gap-1 mt-0.5"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>${loc.city} · ${loc.displayType}</p>
-              </div>
-              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="shrink-0 inline-flex items-center gap-1 text-xs bg-white text-sage font-medium px-3 py-1.5 rounded-full border border-sand hover:bg-sand transition">
-                <i data-lucide="navigation" class="w-3.5 h-3.5"></i> Abrir no Maps
-              </a>
+            <div class="mb-2">
+              <h3 class="font-display font-bold text-xl leading-tight">${loc.name}</h3>
+              <p class="text-bark/55 text-sm flex items-center gap-1 mt-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                ${locationLine}
+              </p>
             </div>
-            <p class="text-bark/70 text-sm mt-2 line-clamp-2">${loc.desc}</p>
-            <div class="mt-2 text-xs text-bark/50">
-              ${loc.district ? `${loc.district}` : ''}${loc.municipality ? ` · ${loc.municipality}` : ''}${loc.locality ? ` · ${loc.locality}` : ''}
-            </div>
-            <div class="mt-3 flex items-center justify-between gap-2 flex-wrap">
-              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">${confirmationCount} confirmações</span>
+
+            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">
+                ${confirmationCount} ${confirmationCount === 1 ? 'confirmação' : 'confirmações'}
+              </span>
               ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>` : ''}
             </div>
-            <div class="mt-2 flex items-center justify-between gap-2 flex-wrap">
-              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">Ver detalhes →</span>
-              ${lastUpdate ? `<span class="text-xs text-bark/45">🕒 ${lastUpdate}</span>` : ''}
+
+            <div class="mt-3 flex items-center justify-between gap-3">
+              <div class="text-xs text-bark/50">
+                ${lastUpdate ? `🕒 ${lastUpdate}` : 'Sem confirmações recentes'}
+              </div>
+              <span class="text-sm text-sage font-semibold">Ver local →</span>
             </div>
           </div>
         </article>`;
@@ -1349,7 +1557,12 @@
       const el = document.getElementById('hero-community-count');
       if (!el) return;
       const total = getTotalCommunityResponses();
-      el.textContent = total > 0 ? `${total} confirmações já foram feitas pela comunidade.` : 'A comunidade já começou a confirmar locais.';
+
+      if (total > 0) {
+        el.textContent = `🐾 ${total} ${total === 1 ? 'confirmação' : 'confirmações'} da comunidade`;
+      } else {
+        el.textContent = '🐾 A comunidade já começou a confirmar locais';
+      }
     }
 
     function filterByCategory(cat, btn = null) {
@@ -1369,23 +1582,23 @@
         .map(loc => {
           let score = 0;
 
-          if (loc.name.toLowerCase().startsWith(q)) score += 10;
-          else if (loc.name.toLowerCase().includes(q)) score += 7;
+          if (normalizedLower(loc.name).startsWith(q)) score += 10;
+          else if (normalizedLower(loc.name).includes(q)) score += 7;
 
-          if (loc.city.toLowerCase().startsWith(q)) score += 6;
-          else if (loc.city.toLowerCase().includes(q)) score += 4;
+          if (normalizedLower(loc.city).startsWith(q)) score += 6;
+          else if (normalizedLower(loc.city).includes(q)) score += 4;
 
-          if (loc.municipality.toLowerCase().startsWith(q)) score += 6;
-          else if (loc.municipality.toLowerCase().includes(q)) score += 4;
+          if (normalizedLower(loc.municipality).startsWith(q)) score += 6;
+          else if (normalizedLower(loc.municipality).includes(q)) score += 4;
 
-          if (loc.locality.toLowerCase().startsWith(q)) score += 5;
-          else if (loc.locality.toLowerCase().includes(q)) score += 3;
+          if (normalizedLower(loc.locality).startsWith(q)) score += 5;
+          else if (normalizedLower(loc.locality).includes(q)) score += 3;
 
-          if (loc.district.toLowerCase().startsWith(q)) score += 4;
-          else if (loc.district.toLowerCase().includes(q)) score += 2;
+          if (normalizedLower(loc.district).startsWith(q)) score += 4;
+          else if (normalizedLower(loc.district).includes(q)) score += 2;
 
-          if (loc.displayType.toLowerCase().startsWith(q)) score += 3;
-          else if (loc.displayType.toLowerCase().includes(q)) score += 2;
+          if (normalizedLower(loc.displayType).startsWith(q)) score += 3;
+          else if (normalizedLower(loc.displayType).includes(q)) score += 2;
 
           return { loc, score };
         })
@@ -1423,9 +1636,22 @@
 
     function handleSearchInput() {
       const input = document.getElementById('search-input');
-      currentSearch = input ? input.value.toLowerCase().trim() : '';
+      const value = input ? input.value.trim() : '';
+
+      currentSearch = value.toLowerCase();
       activeSuggestionIndex = -1;
-      renderSuggestions(getSuggestions(input.value));
+
+      const matchedZone = findLocationByQuery(value);
+      if (matchedZone) {
+        applyZoneFiltersFromLocation(matchedZone);
+      } else if (!value) {
+        currentDistrictFilter = '';
+        currentMunicipalityFilter = '';
+        currentLocalityFilter = '';
+        renderZoneFilters();
+      }
+
+      renderSuggestions(getSuggestions(value));
     }
 
     function handleSearchKey(event) {
@@ -1455,7 +1681,14 @@
 
       if (event.key === 'Enter') {
         event.preventDefault();
-        currentSearch = input.value.toLowerCase().trim();
+
+        const matchedZone = findLocationByQuery(input.value);
+        if (matchedZone) {
+          currentSearch = '';
+          if (input) input.value = '';
+          applyZoneFiltersFromLocation(matchedZone);
+        }
+
         hideSuggestions();
         showView('list');
         renderCards('cards-list', getFiltered());
@@ -1466,12 +1699,10 @@
       const loc = locations.find(item => item.id === id);
       if (!loc) return;
 
-      const input = document.getElementById('search-input');
-      if (input) input.value = loc.name;
-
-      currentSearch = loc.name.toLowerCase();
-      hideSuggestions();
-      showDetail(id);
+      clearSearchState();
+      applyZoneFiltersFromLocation(loc);
+      showView('list');
+      renderCards('cards-list', getFiltered());
     }
 
     function showDetail(id) {
