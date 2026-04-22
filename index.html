@@ -14,8 +14,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Levo o Cão | Locais pet-friendly em Portugal</title>
-  <meta name="description" content="Descobre restaurantes, praias, alojamentos e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
-  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão" />
+  <meta name="description" content="Descobre restaurantes, praias, alojamentos, centros comerciais e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
+  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão, centros comerciais que aceitam cães" />
   <meta name="author" content="Levo o Cão" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://levocao.pt/" />
@@ -25,7 +25,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Levo o Cão" />
   <meta property="og:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
-  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos e passeios pet-friendly." />
+  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos, centros comerciais e passeios pet-friendly." />
   <meta property="og:url" content="https://levocao.pt/" />
   <meta property="og:image" content="https://levocao.pt/mac.jpg" />
 
@@ -49,7 +49,7 @@
       "@type": "WebSite",
       "name": "Levo o Cão",
       "url": "https://levocao.pt/",
-      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos e passeios onde podes levar o teu cão.",
+      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos, centros comerciais e passeios onde podes levar o teu cão.",
       "inLanguage": "pt-PT"
     }
   </script>
@@ -282,18 +282,17 @@
             </div>
           </div>
 
-    <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-1">
-  Levo o cão?
-</h1>
+          <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-1">
+            Levo o cão?
+          </h1>
 
-<p class="text-xs text-bark/50 italic mb-2">
-  Inspirado pelo Mac 🐾
-</p>
+          <p class="text-xs text-bark/50 italic mb-2">
+            Inspirado pelo Mac 🐾
+          </p>
 
-<p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">
-  Descobre onde podes ir com o teu cão — antes de sair de casa.
-</p>
-        
+          <p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">
+            Descobre onde podes ir com o teu cão — antes de sair de casa.
+          </p>
 
           <p id="hero-community-count" class="fade-in-d2 text-sm text-sage font-medium mb-1">
             🐾 A comunidade já começou a confirmar locais
@@ -372,7 +371,7 @@
           <div>
             <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
             <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
-            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência ou um espaço seguro para soltar o cão, adiciona-o.</p>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência, um centro comercial ou um espaço seguro para soltar o cão, adiciona-o.</p>
           </div>
           <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -383,12 +382,12 @@
         <div class="sr-only-seo" aria-hidden="true">
           <h2>Locais pet-friendly em Portugal</h2>
           <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
-          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos e sítios para passear com o cão.</p>
+          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos, centros comerciais que aceitam cães e sítios para passear com o cão.</p>
           <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
         </div>
 
         <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="cat-grid">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cat-grid">
           <button type="button" onclick="filterByCategory('Comer & Beber', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Comer & Beber</span>
           </button>
@@ -397,6 +396,9 @@
           </button>
           <button type="button" onclick="filterByCategory('Alojamento', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🏡</span><span class="text-sm font-medium">Alojamentos</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Espaços comerciais', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🛍️</span><span class="text-sm font-medium">Espaços comerciais</span>
           </button>
           <button type="button" onclick="filterByCategory('Soltar o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🦮</span><span class="text-sm font-medium">Soltar o cão</span>
@@ -447,6 +449,7 @@
           <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
           <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
           <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
+          <button type="button" onclick="filterByCategory('Espaços comerciais')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Espaços comerciais">Espaços comerciais</button>
           <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
           <button type="button" onclick="filterByCategory('Passear com o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Passear com o cão">Passear com o cão</button>
           <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
@@ -529,6 +532,7 @@
               <option>Comer & Beber</option>
               <option>Praia</option>
               <option>Alojamento</option>
+              <option>Espaços comerciais</option>
               <option>Soltar o cão</option>
               <option>Passear com o cão</option>
               <option>Experiências</option>
@@ -551,7 +555,7 @@
 
           <div>
             <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
-            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar no interior, só esplanada à noite, deram água ao cão..."></textarea>
+            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar nas zonas comuns, mas algumas lojas não aceitam, trela obrigatória..."></textarea>
           </div>
 
           <div>
@@ -698,6 +702,7 @@
               <option>Comer & Beber</option>
               <option>Praia</option>
               <option>Alojamento</option>
+              <option>Espaços comerciais</option>
               <option>Soltar o cão</option>
               <option>Passear com o cão</option>
               <option>Experiências</option>
@@ -808,7 +813,10 @@
 
   <script>
     const SUPABASE_URL = 'https://mezeuxfoblyodjfaooan.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lemV1eGZvYmx5b2RqZmFvb2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjcxNDEsImV4cCI6MjA5MTUwMzE0MX0.UCzhiqF1dSKLou-Ma9RUkYepn0tc1LK_OsfS_80f-94';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
+  </script>
+
+  <script>
     const MAC_IMAGE_DATA = 'mac.jpg';
 
     const FEATURE_OPTIONS = [
@@ -876,7 +884,7 @@
     function getVisitorId() {
       let id = localStorage.getItem(VISITOR_ID_STORAGE_KEY);
       if (!id) {
-        id = crypto.randomUUID ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        id = crypto.randomUUID ? crypto.randomUUID() : \`visitor-\${Date.now()}-\${Math.random().toString(36).slice(2, 10)}\`;
         localStorage.setItem(VISITOR_ID_STORAGE_KEY, id);
       }
       return id;
@@ -953,12 +961,12 @@
       const canCorrect = minutesSince <= CONFIRM_RULES.correctionMinutes;
       const canReconfirm = daysSince >= CONFIRM_RULES.reconfirmDays;
 
-      let helpText = `O teu voto: ${getVoteLabel(record.vote_type)}`;
+      let helpText = \`O teu voto: \${getVoteLabel(record.vote_type)}\`;
       if (canCorrect) {
-        helpText += ` · Podes corrigir durante ${CONFIRM_RULES.correctionMinutes} minutos`;
+        helpText += \` · Podes corrigir durante \${CONFIRM_RULES.correctionMinutes} minutos\`;
       } else if (!canReconfirm) {
         const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
-        helpText += ` · Podes reconfirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}`;
+        helpText += \` · Podes reconfirmar daqui a \${remainingDays} dia\${remainingDays === 1 ? '' : 's'}\`;
       } else {
         helpText += ' · Já podes reconfirmar';
       }
@@ -1008,6 +1016,7 @@
         'Comer & Beber': ['#C4A882', '#8BA67A', '#F0E6D3'],
         Praia: ['#7AADCF', '#E8D5B7', '#F5F0E8'],
         Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8'],
+        'Espaços comerciais': ['#D9C2A3', '#8BA67A', '#FFFDF7'],
         'Soltar o cão': ['#8BA67A', '#D4C5A9', '#FFFDF7'],
         'Passear com o cão': ['#A3B899', '#D4C5A9', '#FFFDF7'],
         'Experiências': ['#C4A882', '#D4C5A9', '#FFFDF7']
@@ -1056,6 +1065,12 @@
         if (veryFriendly) return 'Alojamento muito receptivo para quem viaja com o cão.';
         if (loc.dog_status === 'maybe') return 'Alojamento que aceita cães, mas pode ter restrições.';
         return 'Alojamento onde os cães são bem-vindos.';
+      }
+
+      if (loc.displayType === 'Espaços comerciais') {
+        if (loc.dog_status === 'maybe') return 'Espaço comercial onde os cães podem entrar, mas com algumas restrições.';
+        if (hasInterior) return 'Espaço comercial onde os cães podem entrar no interior.';
+        return 'Espaço comercial onde podes ir com o teu cão.';
       }
 
       if (loc.displayType === 'Soltar o cão') {
@@ -1252,11 +1267,11 @@
 
       if (days <= 0) return 'Confirmado hoje';
       if (days === 1) return 'Confirmado ontem';
-      if (days < 7) return `Confirmado há ${days} dias`;
+      if (days < 7) return \`Confirmado há \${days} dias\`;
 
       if (days < 30) {
         const weeks = Math.floor(days / 7);
-        return weeks <= 1 ? 'Confirmado há 1 semana' : `Confirmado há ${weeks} semanas`;
+        return weeks <= 1 ? 'Confirmado há 1 semana' : \`Confirmado há \${weeks} semanas\`;
       }
 
       return 'Confirmado há algum tempo';
@@ -1294,7 +1309,7 @@
     function populateSelect(selectId, options, placeholder, selectedValue = '') {
       const select = document.getElementById(selectId);
       if (!select) return;
-      select.innerHTML = `<option value="">${placeholder}</option>` + options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+      select.innerHTML = \`<option value="">\${placeholder}</option>\` + options.map(opt => \`<option value="\${opt}">\${opt}</option>\`).join('');
       select.value = selectedValue || '';
     }
 
@@ -1426,7 +1441,7 @@
     }
 
     function createCard(loc) {
-      const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
+      const grad = \`linear-gradient(135deg, \${loc.colors[0]}44, \${loc.colors[1]}33, \${loc.colors[2]}22)\`;
       const confirmationCount = getConfirmationCount(loc.id);
       const trustLevel = getTrustLevel(loc.id);
       const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
@@ -1437,55 +1452,55 @@
       const locationLine = getCardLocationLine(loc);
       const smartDesc = getSmartShortDescription(loc);
 
-      return `
-        <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
-          <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
-            <span class="text-5xl">${loc.emoji}</span>
+      return \`
+        <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(\${loc.id})">
+          <div class="h-36 relative flex items-center justify-center" style="background:\${grad}">
+            <span class="text-5xl">\${loc.emoji}</span>
             <div class="absolute top-3 left-3">
-              <span class="text-xs bg-white/90 text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${loc.displayType}</span>
+              <span class="text-xs bg-white/90 text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">\${loc.displayType}</span>
             </div>
             <div class="absolute top-3 right-3 flex items-center gap-2 flex-wrap justify-end">
-              ${recentBadge}
-              <span class="${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+              \${recentBadge}
+              <span class="\${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full">\${dogMeta.short}</span>
             </div>
           </div>
 
           <div class="p-4">
             <div class="mb-2">
-              <h3 class="font-display font-bold text-xl leading-tight">${loc.name}</h3>
+              <h3 class="font-display font-bold text-xl leading-tight">\${loc.name}</h3>
               <p class="text-bark/55 text-sm flex items-center gap-1 mt-1">
                 <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                ${locationLine}
+                \${locationLine}
               </p>
             </div>
 
-            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
+            <p class="text-bark/72 text-sm line-clamp-2">\${smartDesc}</p>
 
             <div class="mt-4 flex flex-wrap gap-2">
               <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">
-                ${confirmationCount} ${confirmationCount === 1 ? 'confirmação' : 'confirmações'}
+                \${confirmationCount} \${confirmationCount === 1 ? 'confirmação' : 'confirmações'}
               </span>
-              ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>` : ''}
+              \${trustLevel ? \`<span class="text-xs \${trustLevel.className} font-medium px-2.5 py-1 rounded-full">\${trustLevel.shortLabel}</span>\` : ''}
             </div>
 
             <div class="mt-3 flex items-center justify-between gap-3">
               <div class="text-xs text-bark/50">
-                ${lastUpdate ? `🕒 ${lastUpdate}` : 'Sem confirmações recentes'}
+                \${lastUpdate ? \`🕒 \${lastUpdate}\` : 'Sem confirmações recentes'}
               </div>
               <span class="text-sm text-sage font-semibold">Ver local →</span>
             </div>
           </div>
-        </article>`;
+        </article>\`;
     }
 
     function getResultsZone(locs) {
       if (!locs.length) return 'nenhuma zona';
 
       if (currentLocalityFilter && currentMunicipalityFilter && currentDistrictFilter) {
-        return `${currentLocalityFilter} · ${currentMunicipalityFilter} · ${currentDistrictFilter}`;
+        return \`\${currentLocalityFilter} · \${currentMunicipalityFilter} · \${currentDistrictFilter}\`;
       }
       if (currentMunicipalityFilter && currentDistrictFilter) {
-        return `${currentMunicipalityFilter} · ${currentDistrictFilter}`;
+        return \`\${currentMunicipalityFilter} · \${currentDistrictFilter}\`;
       }
       if (currentDistrictFilter) {
         return currentDistrictFilter;
@@ -1497,10 +1512,10 @@
       const cities = [...new Set(locs.map(l => l.city).filter(Boolean))];
 
       if (localities.length === 1 && municipalities.length === 1 && districts.length === 1) {
-        return `${localities[0]} · ${municipalities[0]} · ${districts[0]}`;
+        return \`\${localities[0]} · \${municipalities[0]} · \${districts[0]}\`;
       }
       if (municipalities.length === 1 && districts.length === 1) {
-        return `${municipalities[0]} · ${districts[0]}`;
+        return \`\${municipalities[0]} · \${districts[0]}\`;
       }
       if (districts.length === 1) {
         return districts[0];
@@ -1526,14 +1541,14 @@
 
         if (resultsRegion) {
           if (locs.length > 0) {
-            resultsRegion.textContent = `Resultados em ${getResultsZone(locs)}`;
+            resultsRegion.textContent = \`Resultados em \${getResultsZone(locs)}\`;
           } else {
             resultsRegion.textContent = 'Nenhum resultado encontrado';
           }
         }
 
         if (resultsCount) {
-          resultsCount.textContent = `${locs.length} ${locs.length === 1 ? 'local encontrado' : 'locais encontrados'}`;
+          resultsCount.textContent = \`\${locs.length} \${locs.length === 1 ? 'local encontrado' : 'locais encontrados'}\`;
         }
       } else if (noResults) {
         noResults.classList.add('hidden');
@@ -1558,7 +1573,7 @@
       const total = getTotalCommunityResponses();
 
       if (total > 0) {
-        el.textContent = `🐾 ${total} ${total === 1 ? 'confirmação' : 'confirmações'} da comunidade`;
+        el.textContent = \`🐾 \${total} \${total === 1 ? 'confirmação' : 'confirmações'} da comunidade\`;
       } else {
         el.textContent = '🐾 A comunidade já começou a confirmar locais';
       }
@@ -1623,12 +1638,12 @@
         return;
       }
 
-      box.innerHTML = items.map((item, index) => `
-        <div class="suggestion-item ${index === activeSuggestionIndex ? 'active' : ''}" onclick="selectSuggestion(${item.loc.id})">
-          <p class="font-medium">${item.loc.name}</p>
-          <p class="text-xs text-bark/50">${item.loc.district || ''}${item.loc.municipality ? ' · ' + item.loc.municipality : ''}${item.loc.locality ? ' · ' + item.loc.locality : ''}</p>
+      box.innerHTML = items.map((item, index) => \`
+        <div class="suggestion-item \${index === activeSuggestionIndex ? 'active' : ''}" onclick="selectSuggestion(\${item.loc.id})">
+          <p class="font-medium">\${item.loc.name}</p>
+          <p class="text-xs text-bark/50">\${item.loc.district || ''}\${item.loc.municipality ? ' · ' + item.loc.municipality : ''}\${item.loc.locality ? ' · ' + item.loc.locality : ''}</p>
         </div>
-      `).join('');
+      \`).join('');
 
       box.classList.remove('hidden');
     }
@@ -1713,83 +1728,83 @@
       const trustLevel = getTrustLevel(loc.id);
       const lastUpdate = getLastUpdateText(loc.id);
       const lastUpdateExact = getLastUpdateExactText(loc.id);
-      const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
-      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
+      const grad = \`linear-gradient(135deg, \${loc.colors[0]}55, \${loc.colors[1]}33)\`;
+      const mapsUrl = \`https://www.google.com/maps/search/?api=1&query=\${encodeURIComponent(loc.address)}\`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const userState = getUserVoteState(loc.id);
 
-      document.getElementById('detail-content').innerHTML = `
+      document.getElementById('detail-content').innerHTML = \`
         <button type="button" onclick="showView('list')" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
           <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
         </button>
         <div class="rounded-2xl overflow-hidden border border-sand shadow-sm bg-white">
-          <div class="h-48 flex items-center justify-center relative" style="background:${grad}">
-            <span class="text-6xl">${loc.emoji}</span>
-            <span class="absolute top-4 right-4 ${dogMeta.className} text-sm font-medium px-3 py-1.5 rounded-full">${dogMeta.text}</span>
+          <div class="h-48 flex items-center justify-center relative" style="background:\${grad}">
+            <span class="text-6xl">\${loc.emoji}</span>
+            <span class="absolute top-4 right-4 \${dogMeta.className} text-sm font-medium px-3 py-1.5 rounded-full">\${dogMeta.text}</span>
           </div>
           <div class="p-5 space-y-4">
             <div>
-              <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
-              <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.displayType}</p>
-              <p class="text-sm text-bark/55 mt-2">${loc.district ? `${loc.district}` : ''}${loc.municipality ? ` · ${loc.municipality}` : ''}${loc.locality ? ` · ${loc.locality}` : ''}</p>
+              <h1 class="font-display text-2xl font-bold">\${loc.name}</h1>
+              <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>\${loc.city} · \${loc.displayType}</p>
+              <p class="text-sm text-bark/55 mt-2">\${loc.district ? \`\${loc.district}\` : ''}\${loc.municipality ? \` · \${loc.municipality}\` : ''}\${loc.locality ? \` · \${loc.locality}\` : ''}</p>
             </div>
 
-            <p class="text-bark/80 leading-relaxed">${loc.desc}</p>
+            <p class="text-bark/80 leading-relaxed">\${loc.desc}</p>
 
             <div class="bg-sand/60 rounded-xl p-4 space-y-2">
               <p class="font-medium text-sm flex items-center gap-2"><i data-lucide="navigation" class="w-4 h-4 text-sage"></i> Morada</p>
-              <p class="text-sm text-bark/70">${loc.address}</p>
-              ${loc.website ? `<a href="${loc.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm text-sage font-medium hover:underline mt-2"><i data-lucide="external-link" class="w-4 h-4"></i> Ver website</a>` : ''}
+              <p class="text-sm text-bark/70">\${loc.address}</p>
+              \${loc.website ? \`<a href="\${loc.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm text-sage font-medium hover:underline mt-2"><i data-lucide="external-link" class="w-4 h-4"></i> Ver website</a>\` : ''}
             </div>
 
-            ${loc.notes ? `
+            \${loc.notes ? \`
               <div class="bg-white border border-sand rounded-xl p-4 space-y-2">
                 <p class="font-medium text-sm text-bark">Notas da comunidade</p>
-                <p class="text-sm text-bark/70 leading-relaxed">${loc.notes}</p>
-              </div>` : ''}
+                <p class="text-sm text-bark/70 leading-relaxed">\${loc.notes}</p>
+              </div>\` : ''}
 
-            ${Array.isArray(loc.features) && loc.features.length ? `
+            \${Array.isArray(loc.features) && loc.features.length ? \`
               <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
                 <p class="font-medium text-sm text-bark">Condições úteis</p>
                 <div class="flex flex-wrap gap-2">
-                  ${loc.features.map((feature) => `<span class="text-xs bg-sage/10 text-sage font-medium px-3 py-1.5 rounded-full">${feature}</span>`).join('')}
+                  \${loc.features.map((feature) => \`<span class="text-xs bg-sage/10 text-sage font-medium px-3 py-1.5 rounded-full">\${feature}</span>\`).join('')}
                 </div>
-              </div>` : ''}
+              </div>\` : ''}
 
             <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
                 <div>
                   <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
-                  <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
-                  ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
-                  ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
+                  <p class="text-sm text-bark/60">\${confirmationCount} confirmações · ✅ \${votes.yes} · ❌ \${votes.no} · ⚠️ \${votes.maybe}</p>
+                  \${lastUpdate ? \`<p class="text-xs text-bark/50 mt-1">🕒 \${lastUpdate}</p>\` : ''}
+                  \${lastUpdateExact ? \`<p class="text-xs text-bark/45 mt-1">📅 \${lastUpdateExact}</p>\` : ''}
                 </div>
-                <span class="text-xs ${userState.hasVote ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${userState.hasVote ? 'Já respondeste' : 'Ainda não respondeste'}</span>
+                <span class="text-xs \${userState.hasVote ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">\${userState.hasVote ? 'Já respondeste' : 'Ainda não respondeste'}</span>
               </div>
               <div class="flex items-center justify-between gap-3 flex-wrap">
-                ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
+                \${trustLevel ? \`<span class="text-xs \${trustLevel.className} font-medium px-3 py-1.5 rounded-full">\${trustLevel.shortLabel}</span>\` : ''}
                 <p class="text-xs text-bark/55">Sem reviews. Só respostas práticas: sim, não ou com restrições.</p>
               </div>
               <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
-                ${userState.helpText}
-                ${userState.dateText ? ` · ${userState.dateText}` : ''}
+                \${userState.helpText}
+                \${userState.dateText ? \` · \${userState.dateText}\` : ''}
               </div>
             </div>
 
             <div class="grid grid-cols-3 gap-2">
-              <button type="button" onclick="confirmPlace(${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">✅ Sim</button>
-              <button type="button" onclick="confirmPlace(${loc.id}, 'no')" class="bg-bark/80 text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">❌ Não</button>
-              <button type="button" onclick="confirmPlace(${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-3 rounded-full text-sm border border-bark/10 shadow-sm hover:bg-white transition">⚠️ Restr.</button>
+              <button type="button" onclick="confirmPlace(\${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">✅ Sim</button>
+              <button type="button" onclick="confirmPlace(\${loc.id}, 'no')" class="bg-bark/80 text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">❌ Não</button>
+              <button type="button" onclick="confirmPlace(\${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-3 rounded-full text-sm border border-bark/10 shadow-sm hover:bg-white transition">⚠️ Restr.</button>
             </div>
 
             <div class="grid sm:grid-cols-2 gap-3">
-              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
+              <a href="\${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
                 <i data-lucide="map" class="w-5 h-5"></i> Abrir no Google Maps
               </a>
             </div>
           </div>
         </div>
-      `;
+      \`;
 
       hideSuggestions();
       showView('detail');
@@ -1817,7 +1832,7 @@
 
           if (error) throw error;
 
-          alert(`Obrigado! Confirmaste "${loc.name}" 🐾`);
+          alert(\`Obrigado! Confirmaste "\${loc.name}" 🐾\`);
         } else {
           const referenceDate = existing.updated_at || existing.created_at;
           const minutesSince = getMinutesSince(referenceDate);
@@ -1825,7 +1840,7 @@
 
           if (type === existing.vote_type && minutesSince > CONFIRM_RULES.correctionMinutes && daysSince < CONFIRM_RULES.reconfirmDays) {
             const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
-            alert(`Já confirmaste "${loc.name}" com esse voto. Podes alterar durante ${CONFIRM_RULES.correctionMinutes} minutos ou reconfirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}.`);
+            alert(\`Já confirmaste "\${loc.name}" com esse voto. Podes alterar durante \${CONFIRM_RULES.correctionMinutes} minutos ou reconfirmar daqui a \${remainingDays} dia\${remainingDays === 1 ? '' : 's'}.\`);
             return;
           }
 
@@ -1840,7 +1855,7 @@
 
             if (error) throw error;
 
-            alert(`Voto corrigido em "${loc.name}" 🐾`);
+            alert(\`Voto corrigido em "\${loc.name}" 🐾\`);
           } else if (daysSince >= CONFIRM_RULES.reconfirmDays) {
             const { error } = await supabaseClient
               .from('place_confirmations')
@@ -1852,10 +1867,10 @@
 
             if (error) throw error;
 
-            alert(`Confirmação atualizada em "${loc.name}" 🐾`);
+            alert(\`Confirmação atualizada em "\${loc.name}" 🐾\`);
           } else {
             const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
-            alert(`Já confirmaste este local. Podes corrigir durante ${CONFIRM_RULES.correctionMinutes} minutos após o voto ou voltar a confirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}.`);
+            alert(\`Já confirmaste este local. Podes corrigir durante \${CONFIRM_RULES.correctionMinutes} minutos após o voto ou voltar a confirmar daqui a \${remainingDays} dia\${remainingDays === 1 ? '' : 's'}.\`);
             return;
           }
         }
@@ -1924,8 +1939,9 @@
 
       const emojiMap = {
         'Comer & Beber': '🍽️',
-        Praia: '🏖️',
-        Alojamento: '🏡',
+        'Praia': '🏖️',
+        'Alojamento': '🏡',
+        'Espaços comerciais': '🛍️',
         'Soltar o cão': '🦮',
         'Passear com o cão': '🚶',
         'Experiências': '🎯'
@@ -1952,7 +1968,7 @@
         locality: null,
         type,
         emoji: emojiMap[type] || '📍',
-        description: `Local sugerido pela comunidade em ${city}.`,
+        description: \`Local sugerido pela comunidade em \${city}.\`,
         address: address || city,
         notes: notes || null,
         website: website || null,
@@ -2035,37 +2051,37 @@
 
         container.innerHTML = rows.map((item) => {
           const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
-          return `
+          return \`
             <article class="border border-sand rounded-2xl p-4 bg-sand/30">
               <div class="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <h4 class="font-display text-lg font-bold">${item.name}</h4>
-                  <p class="text-sm text-bark/55 mt-1">${item.city} · ${mapDisplayType(item.type)}</p>
+                  <h4 class="font-display text-lg font-bold">\${item.name}</h4>
+                  <p class="text-sm text-bark/55 mt-1">\${item.city} · \${mapDisplayType(item.type)}</p>
                 </div>
                 <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Pendente</span>
               </div>
               <div class="space-y-2 text-sm text-bark/70 mb-4">
-                <p><strong>Estado:</strong> ${dogMeta.text}</p>
-                <p><strong>Distrito:</strong> ${item.district || '—'}</p>
-                <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
-                <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
-                <p><strong>Morada:</strong> ${item.address || '—'}</p>
-                <p><strong>Notas:</strong> ${item.notes || '—'}</p>
-                <p><strong>Website:</strong> ${item.website || '—'}</p>
-                ${Array.isArray(item.features) && item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+                <p><strong>Estado:</strong> \${dogMeta.text}</p>
+                <p><strong>Distrito:</strong> \${item.district || '—'}</p>
+                <p><strong>Concelho:</strong> \${item.municipality || '—'}</p>
+                <p><strong>Localidade:</strong> \${item.locality || '—'}</p>
+                <p><strong>Morada:</strong> \${item.address || '—'}</p>
+                <p><strong>Notas:</strong> \${item.notes || '—'}</p>
+                <p><strong>Website:</strong> \${item.website || '—'}</p>
+                \${Array.isArray(item.features) && item.features.length ? \`<div class="flex flex-wrap gap-2 pt-1">\${item.features.map((feature) => \`<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">\${feature}</span>\`).join('')}</div>\` : ''}
               </div>
               <div class="flex flex-wrap gap-2">
-                <button type="button" onclick="approveSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                <button type="button" onclick="approveSuggestion(\${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
                   <i data-lucide="check" class="w-4 h-4"></i>
                   Aprovar
                 </button>
-                <button type="button" onclick="rejectSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+                <button type="button" onclick="rejectSuggestion(\${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
                   <i data-lucide="x" class="w-4 h-4"></i>
                   Rejeitar
                 </button>
               </div>
             </article>
-          `;
+          \`;
         }).join('');
 
         lucide.createIcons();
@@ -2107,35 +2123,35 @@
 
         container.innerHTML = rows.map((item) => {
           const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
-          return `
+          return \`
             <article class="border border-sand rounded-2xl p-4 bg-white">
               <div class="flex items-start justify-between gap-3 mb-3">
                 <div>
-                  <h4 class="font-display text-lg font-bold">${item.name}</h4>
-                  <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.displayType}</p>
+                  <h4 class="font-display text-lg font-bold">\${item.name}</h4>
+                  <p class="text-sm text-bark/55 mt-1">\${item.city} · \${item.displayType}</p>
                 </div>
-                <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+                <span class="text-xs \${dogMeta.className} font-medium px-2.5 py-1 rounded-full">\${dogMeta.short}</span>
               </div>
               <div class="space-y-2 text-sm text-bark/70 mb-4">
-                <p><strong>Distrito:</strong> ${item.district || '—'}</p>
-                <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
-                <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
-                <p><strong>Morada:</strong> ${item.address || '—'}</p>
-                <p><strong>Website:</strong> ${item.website || '—'}</p>
-                ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+                <p><strong>Distrito:</strong> \${item.district || '—'}</p>
+                <p><strong>Concelho:</strong> \${item.municipality || '—'}</p>
+                <p><strong>Localidade:</strong> \${item.locality || '—'}</p>
+                <p><strong>Morada:</strong> \${item.address || '—'}</p>
+                <p><strong>Website:</strong> \${item.website || '—'}</p>
+                \${item.features.length ? \`<div class="flex flex-wrap gap-2 pt-1">\${item.features.map((feature) => \`<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">\${feature}</span>\`).join('')}</div>\` : ''}
               </div>
               <div class="flex flex-wrap gap-2">
-                <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                <button type="button" onclick="openEditPlaceModal(\${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
                   <i data-lucide="pencil" class="w-4 h-4"></i>
                   Editar
                 </button>
-                <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+                <button type="button" onclick="deactivatePlace(\${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
                   <i data-lucide="eye-off" class="w-4 h-4"></i>
                   Desativar
                 </button>
               </div>
             </article>
-          `;
+          \`;
         }).join('');
 
         lucide.createIcons();
@@ -2222,7 +2238,7 @@
       const place = locations.find((item) => item.id === id);
       if (!place) return;
 
-      const confirmed = confirm(`Desativar "${place.name}"?`);
+      const confirmed = confirm(\`Desativar "\${place.name}"?\`);
       if (!confirmed) return;
 
       try {
@@ -2439,7 +2455,7 @@
 
     function showView(view) {
       ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
-        const el = document.getElementById(`view-${section}`);
+        const el = document.getElementById(\`view-\${section}\`);
         if (el) el.classList.toggle('hidden', section !== view);
       });
 
