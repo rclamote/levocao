@@ -14,8 +14,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Levo o Cão | Locais pet-friendly em Portugal</title>
-  <meta name="description" content="Descobre restaurantes, praias, alojamentos e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
-  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão" />
+  <meta name="description" content="Descobre restaurantes, praias, alojamentos, espaços comerciais e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
+  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão, centros comerciais com cães, lojas que aceitam cães" />
   <meta name="author" content="Levo o Cão" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://levocao.pt/" />
@@ -25,7 +25,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Levo o Cão" />
   <meta property="og:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
-  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos e passeios pet-friendly." />
+  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos, espaços comerciais e passeios pet-friendly." />
   <meta property="og:url" content="https://levocao.pt/" />
   <meta property="og:image" content="https://levocao.pt/mac.jpg" />
 
@@ -49,7 +49,7 @@
       "@type": "WebSite",
       "name": "Levo o Cão",
       "url": "https://levocao.pt/",
-      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos e passeios onde podes levar o teu cão.",
+      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos, espaços comerciais e passeios onde podes levar o teu cão.",
       "inLanguage": "pt-PT"
     }
   </script>
@@ -282,18 +282,17 @@
             </div>
           </div>
 
-    <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-1">
-  Levo o cão?
-</h1>
+          <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-1">
+            Levo o cão?
+          </h1>
 
-<p class="text-xs text-bark/50 italic mb-2">
-  Inspirado pelo Mac 🐾
-</p>
+          <p class="text-xs text-bark/50 italic mb-2">
+            Inspirado pelo Mac 🐾
+          </p>
 
-<p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">
-  Descobre onde podes ir com o teu cão — antes de sair de casa.
-</p>
-        
+          <p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">
+            Descobre onde podes ir com o teu cão — antes de sair de casa.
+          </p>
 
           <p id="hero-community-count" class="fade-in-d2 text-sm text-sage font-medium mb-1">
             🐾 A comunidade já começou a confirmar locais
@@ -372,7 +371,7 @@
           <div>
             <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
             <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
-            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência ou um espaço seguro para soltar o cão, adiciona-o.</p>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência, um espaço comercial ou um espaço seguro para soltar o cão, adiciona-o.</p>
           </div>
           <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
             <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -383,12 +382,12 @@
         <div class="sr-only-seo" aria-hidden="true">
           <h2>Locais pet-friendly em Portugal</h2>
           <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
-          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos e sítios para passear com o cão.</p>
+          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos, espaços comerciais e sítios para passear com o cão.</p>
           <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
         </div>
 
         <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3" id="cat-grid">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cat-grid">
           <button type="button" onclick="filterByCategory('Comer & Beber', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Comer & Beber</span>
           </button>
@@ -397,6 +396,9 @@
           </button>
           <button type="button" onclick="filterByCategory('Alojamento', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🏡</span><span class="text-sm font-medium">Alojamentos</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Espaços comerciais', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🛍️</span><span class="text-sm font-medium">Espaços comerciais</span>
           </button>
           <button type="button" onclick="filterByCategory('Soltar o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
             <span class="text-2xl">🦮</span><span class="text-sm font-medium">Soltar o cão</span>
@@ -447,6 +449,7 @@
           <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
           <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
           <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
+          <button type="button" onclick="filterByCategory('Espaços comerciais')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Espaços comerciais">Espaços comerciais</button>
           <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
           <button type="button" onclick="filterByCategory('Passear com o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Passear com o cão">Passear com o cão</button>
           <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
@@ -529,6 +532,7 @@
               <option>Comer & Beber</option>
               <option>Praia</option>
               <option>Alojamento</option>
+              <option>Espaços comerciais</option>
               <option>Soltar o cão</option>
               <option>Passear com o cão</option>
               <option>Experiências</option>
@@ -551,7 +555,7 @@
 
           <div>
             <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
-            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar no interior, só esplanada à noite, deram água ao cão..."></textarea>
+            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar nas zonas comuns, algumas lojas não aceitam, trela obrigatória..."></textarea>
           </div>
 
           <div>
@@ -698,6 +702,7 @@
               <option>Comer & Beber</option>
               <option>Praia</option>
               <option>Alojamento</option>
+              <option>Espaços comerciais</option>
               <option>Soltar o cão</option>
               <option>Passear com o cão</option>
               <option>Experiências</option>
@@ -854,11 +859,13 @@
 
     function mapDisplayType(type) {
       if (type === 'Restaurante' || type === 'Café') return 'Comer & Beber';
+      if (type === 'Espaços Comerciais') return 'Espaços comerciais';
       return type;
     }
 
     function getTypeAliases(type) {
       if (type === 'Comer & Beber') return ['Comer & Beber', 'Restaurante', 'Café'];
+      if (type === 'Espaços comerciais' || type === 'Espaços Comerciais') return ['Espaços comerciais', 'Espaços Comerciais'];
       return [type];
     }
 
@@ -1008,6 +1015,7 @@
         'Comer & Beber': ['#C4A882', '#8BA67A', '#F0E6D3'],
         Praia: ['#7AADCF', '#E8D5B7', '#F5F0E8'],
         Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8'],
+        'Espaços comerciais': ['#BFA27A', '#8BA67A', '#F5F0E8'],
         'Soltar o cão': ['#8BA67A', '#D4C5A9', '#FFFDF7'],
         'Passear com o cão': ['#A3B899', '#D4C5A9', '#FFFDF7'],
         'Experiências': ['#C4A882', '#D4C5A9', '#FFFDF7']
@@ -1056,6 +1064,12 @@
         if (veryFriendly) return 'Alojamento muito receptivo para quem viaja com o cão.';
         if (loc.dog_status === 'maybe') return 'Alojamento que aceita cães, mas pode ter restrições.';
         return 'Alojamento onde os cães são bem-vindos.';
+      }
+
+      if (loc.displayType === 'Espaços comerciais') {
+        if (loc.dog_status === 'maybe') return 'Espaço comercial onde os cães podem entrar, com algumas restrições.';
+        if (hasInterior) return 'Espaço comercial onde os cães podem entrar no interior.';
+        return 'Espaço comercial onde podes ir com o teu cão.';
       }
 
       if (loc.displayType === 'Soltar o cão') {
@@ -1926,6 +1940,8 @@
         'Comer & Beber': '🍽️',
         Praia: '🏖️',
         Alojamento: '🏡',
+        'Espaços comerciais': '🛍️',
+        'Espaços Comerciais': '🛍️',
         'Soltar o cão': '🦮',
         'Passear com o cão': '🚶',
         'Experiências': '🎯'
