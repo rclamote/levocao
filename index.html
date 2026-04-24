@@ -583,73 +583,92 @@
       </div>
     </div>
 
-    <div id="view-admin" class="hidden">
-      <div class="max-w-3xl mx-auto px-5 py-6 view-transition">
-        <div class="flex items-center justify-between mb-4">
-          <div>
-            <h2 class="font-display text-xl font-bold">Painel Admin</h2>
-            <p class="text-sm text-bark/55 mt-1">Revê, aprova, edita ou desativa locais.</p>
-          </div>
-          <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
-            <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
-          </button>
-        </div>
+<div id="view-admin" class="hidden">
+  <div class="max-w-3xl mx-auto px-5 py-6 view-transition">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="font-display text-xl font-bold">Painel Admin</h2>
+        <p class="text-sm text-bark/55 mt-1">Revê, aprova, edita ou desativa locais.</p>
+      </div>
+      <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+      </button>
+    </div>
 
-        <div class="grid sm:grid-cols-3 gap-3 mb-6">
-          <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-            <p class="text-sm text-bark/55">Pendentes</p>
-            <p id="admin-pending-count" class="font-display text-2xl font-bold mt-1">0</p>
-          </div>
-          <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-            <p class="text-sm text-bark/55">Locais ativos</p>
-            <p id="admin-places-count" class="font-display text-2xl font-bold mt-1">0</p>
-          </div>
-          <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-            <p class="text-sm text-bark/55">Estado</p>
-            <p class="font-display text-lg font-bold mt-1">Protegido</p>
-          </div>
-        </div>
-
-        <div class="mb-6 rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">
-          <span class="inline-flex items-center gap-2 bg-sand text-bark/70 font-medium px-3 py-1.5 rounded-full">🛡️ Admin protegida por login</span>
-          <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Editar altera diretamente o local. Desativar tira-o do site sem apagar dados.</p>
-        </div>
-
-        <div class="mb-6">
-          <input
-            id="admin-search"
-            type="text"
-            placeholder="Procurar por nome ou cidade..."
-            class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm"
-            oninput="handleAdminSearch()"
-          />
-        </div>
-
-        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
-          <div class="flex items-center justify-between gap-3 mb-3">
-            <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
-            <button type="button" onclick="loadAdminSuggestions()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
-              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-              Atualizar
-            </button>
-          </div>
-          <div id="admin-suggestions" class="space-y-3"></div>
-          <p id="admin-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há sugestões pendentes neste momento.</p>
-        </div>
-
-        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-          <div class="flex items-center justify-between gap-3 mb-3">
-            <h3 class="font-display text-lg font-bold">Locais ativos</h3>
-            <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
-              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-              Atualizar
-            </button>
-          </div>
-          <div id="admin-places" class="space-y-3"></div>
-          <p id="admin-places-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há locais ativos.</p>
-        </div>
+    <div class="grid sm:grid-cols-4 gap-3 mb-6">
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Pendentes</p>
+        <p id="admin-pending-count" class="font-display text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Locais ativos</p>
+        <p id="admin-places-count" class="font-display text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Incompletos</p>
+        <p id="admin-incomplete-count" class="font-display text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Estado</p>
+        <p class="font-display text-lg font-bold mt-1">Protegido</p>
       </div>
     </div>
+
+    <div class="mb-6 rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">
+      <span class="inline-flex items-center gap-2 bg-sand text-bark/70 font-medium px-3 py-1.5 rounded-full">🛡️ Admin protegida por login</span>
+      <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Editar altera diretamente o local. Desativar tira-o do site sem apagar dados.</p>
+    </div>
+
+    <div class="mb-6">
+      <input
+        id="admin-search"
+        type="text"
+        placeholder="Procurar por nome ou cidade..."
+        class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm"
+        oninput="handleAdminSearch()"
+      />
+    </div>
+
+    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
+        <button type="button" onclick="loadAdminSuggestions()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Atualizar
+        </button>
+      </div>
+      <div id="admin-suggestions" class="space-y-3"></div>
+      <p id="admin-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há sugestões pendentes neste momento.</p>
+    </div>
+
+    <div class="bg-[#FFF8EE] border border-[#E8D9BB] rounded-2xl p-4 shadow-sm mb-6">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <div>
+          <h3 class="font-display text-lg font-bold">Locais incompletos</h3>
+          <p class="text-sm text-bark/55 mt-1">Sem distrito, concelho e/ou localidade.</p>
+        </div>
+        <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Atualizar
+        </button>
+      </div>
+      <div id="admin-incomplete-places" class="space-y-3"></div>
+      <p id="admin-incomplete-empty" class="hidden text-sm text-bark/50 py-6 text-center">Todos os locais ativos já têm distrito, concelho e localidade.</p>
+    </div>
+
+    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <h3 class="font-display text-lg font-bold">Locais ativos</h3>
+        <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Atualizar
+        </button>
+      </div>
+      <div id="admin-places" class="space-y-3"></div>
+      <p id="admin-places-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há locais ativos.</p>
+    </div>
+  </div>
+</div>
 
     <div id="edit-place-modal" class="hidden fixed inset-0 z-[80] bg-black/40 p-4">
       <div class="max-w-2xl mx-auto bg-cream rounded-3xl border border-sand shadow-xl mt-8 max-h-[90vh] overflow-y-auto">
@@ -2090,81 +2109,132 @@
         container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar sugestões.</p>';
       }
     }
+function isPlaceIncomplete(place) {
+  return !normalizeText(place.district) || !normalizeText(place.municipality) || !normalizeText(place.locality);
+}
 
-    async function loadAdminPlaces() {
-      if (!currentUser) return;
+function getMissingFields(place) {
+  const missing = [];
+  if (!normalizeText(place.district)) missing.push('Distrito');
+  if (!normalizeText(place.municipality)) missing.push('Concelho');
+  if (!normalizeText(place.locality)) missing.push('Localidade');
+  return missing;
+}
 
-      const container = document.getElementById('admin-places');
-      const empty = document.getElementById('admin-places-empty');
-      if (!container || !empty) return;
+function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
+  const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
+  const missingFields = getMissingFields(item);
+  const isIncomplete = missingFields.length > 0;
 
-      container.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
+  return `
+    <article class="border ${highlightIncomplete ? 'border-[#E8D9BB] bg-white' : 'border-sand bg-white'} rounded-2xl p-4">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div>
+          <h4 class="font-display text-lg font-bold">${item.name}</h4>
+          <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.displayType}</p>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-end">
+          ${isIncomplete ? `<span class="text-xs bg-amber-100 text-amber-900 font-medium px-2.5 py-1 rounded-full">Incompleto</span>` : ''}
+          <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+        </div>
+      </div>
 
-      try {
-        const { data, error } = await supabaseClient
-          .from('places')
-          .select('*')
-          .eq('is_active', true)
-          .order('name', { ascending: true });
+      <div class="space-y-2 text-sm text-bark/70 mb-4">
+        <p><strong>Distrito:</strong> ${item.district || '—'}</p>
+        <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
+        <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
+        <p><strong>Morada:</strong> ${item.address || '—'}</p>
+        <p><strong>Website:</strong> ${item.website || '—'}</p>
+        ${isIncomplete ? `<p><strong>Falta preencher:</strong> ${missingFields.join(' · ')}</p>` : ''}
+        ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+      </div>
 
-        if (error) throw error;
+      <div class="flex flex-wrap gap-2">
+        <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+          <i data-lucide="pencil" class="w-4 h-4"></i>
+          Editar
+        </button>
+        <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+          <i data-lucide="eye-off" class="w-4 h-4"></i>
+          Desativar
+        </button>
+      </div>
+    </article>
+  `;
 
-        let rows = (data || []).map(normalizePlace);
-        rows = filterAdminItems(rows);
+}
+   async function loadAdminPlaces() {
+  if (!currentUser) return;
 
-        if (!rows.length) {
-          container.innerHTML = '';
-          empty.classList.remove('hidden');
-          lucide.createIcons();
-          return;
-        }
+  const container = document.getElementById('admin-places');
+  const empty = document.getElementById('admin-places-empty');
+  const incompleteContainer = document.getElementById('admin-incomplete-places');
+  const incompleteEmpty = document.getElementById('admin-incomplete-empty');
+  const incompleteCountEl = document.getElementById('admin-incomplete-count');
 
-        empty.classList.add('hidden');
+  if (!container || !empty || !incompleteContainer || !incompleteEmpty || !incompleteCountEl) return;
 
-        container.innerHTML = rows.map((item) => {
-          const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
-          return `
-            <article class="border border-sand rounded-2xl p-4 bg-white">
-              <div class="flex items-start justify-between gap-3 mb-3">
-                <div>
-                  <h4 class="font-display text-lg font-bold">${item.name}</h4>
-                  <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.displayType}</p>
-                </div>
-                <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
-              </div>
-              <div class="space-y-2 text-sm text-bark/70 mb-4">
-                <p><strong>Distrito:</strong> ${item.district || '—'}</p>
-                <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
-                <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
-                <p><strong>Morada:</strong> ${item.address || '—'}</p>
-                <p><strong>Website:</strong> ${item.website || '—'}</p>
-                ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
-              </div>
-              <div class="flex flex-wrap gap-2">
-                <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
-                  <i data-lucide="pencil" class="w-4 h-4"></i>
-                  Editar
-                </button>
-                <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
-                  <i data-lucide="eye-off" class="w-4 h-4"></i>
-                  Desativar
-                </button>
-              </div>
-            </article>
-          `;
-        }).join('');
+  container.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
+  incompleteContainer.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
 
-        lucide.createIcons();
-      } catch (error) {
-        console.error('Erro ao carregar locais ativos:', error);
-        container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar locais.</p>';
-      }
+  try {
+    const { data, error } = await supabaseClient
+      .from('places')
+      .select('*')
+      .eq('is_active', true)
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+
+    let rows = (data || []).map(normalizePlace);
+    rows = filterAdminItems(rows);
+
+    const incompleteRows = rows.filter(isPlaceIncomplete);
+    const completeRows = rows.filter(item => !isPlaceIncomplete(item));
+
+    incompleteCountEl.textContent = String(incompleteRows.length);
+
+    if (!incompleteRows.length) {
+      incompleteContainer.innerHTML = '';
+      incompleteEmpty.classList.remove('hidden');
+    } else {
+      incompleteEmpty.classList.add('hidden');
+      incompleteContainer.innerHTML = incompleteRows
+        .map(item => createAdminPlaceCard(item, { highlightIncomplete: true }))
+        .join('');
     }
 
-    function updateAdminCounts() {
-      const placesCount = document.getElementById('admin-places-count');
-      if (placesCount) placesCount.textContent = String(locations.length);
+    if (!rows.length) {
+      container.innerHTML = '';
+      empty.classList.remove('hidden');
+      lucide.createIcons();
+      return;
     }
+
+    empty.classList.add('hidden');
+
+    container.innerHTML = rows
+      .map(item => createAdminPlaceCard(item))
+      .join('');
+
+    lucide.createIcons();
+  } catch (error) {
+    console.error('Erro ao carregar locais ativos:', error);
+    container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar locais.</p>';
+    incompleteContainer.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar locais incompletos.</p>';
+  }
+}
+
+   function updateAdminCounts() {
+  const placesCount = document.getElementById('admin-places-count');
+  const incompleteCount = document.getElementById('admin-incomplete-count');
+
+  if (placesCount) placesCount.textContent = String(locations.length);
+
+  if (incompleteCount) {
+    incompleteCount.textContent = String(locations.filter(isPlaceIncomplete).length);
+  }
+}
 
     async function approveSuggestion(id) {
       if (!currentUser) return;
@@ -2453,38 +2523,39 @@
       bar.classList.toggle('hidden', view !== 'list');
     }
 
-    function showView(view) {
-      ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
-        const el = document.getElementById(`view-${section}`);
-        if (el) el.classList.toggle('hidden', section !== view);
-      });
+function showView(view) {
+  ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
+    const el = document.getElementById(`view-${section}`);
+    if (el) el.classList.toggle('hidden', section !== view);
+  });
 
-      updateResultsBarVisibility(view);
-      window.scrollTo({ top: 0, behavior: 'auto' });
+  updateResultsBarVisibility(view);
+  window.scrollTo({ top: 0, behavior: 'auto' });
 
-      if (view === 'list') {
-        renderZoneFilters();
-        renderCards('cards-list', getFiltered());
-      }
+  if (view === 'list') {
+    renderZoneFilters();
+    renderCards('cards-list', getFiltered());
+  }
 
-      if (view === 'home') renderHomeSections();
+  if (view === 'home') renderHomeSections();
 
-      if (view === 'admin') {
-        if (!currentUser) {
-          alert('Precisas de entrar para aceder ao admin.');
-          openLoginModal();
-          document.getElementById('view-admin').classList.add('hidden');
-          document.getElementById('view-home').classList.remove('hidden');
-          updateResultsBarVisibility('home');
-          return;
-        }
-        loadAdminSuggestions();
-        loadAdminPlaces();
-      }
-
-      lucide.createIcons();
+  if (view === 'admin') {
+    if (!currentUser) {
+      alert('Precisas de entrar para aceder ao admin.');
+      openLoginModal();
+      document.getElementById('view-admin').classList.add('hidden');
+      document.getElementById('view-home').classList.remove('hidden');
+      updateResultsBarVisibility('home');
+      return;
     }
 
+    updateAdminCounts();
+    loadAdminSuggestions();
+    loadAdminPlaces();
+  }
+
+  lucide.createIcons();
+}
     document.addEventListener('click', function(e) {
       const input = document.getElementById('search-input');
       const box = document.getElementById('search-suggestions');
