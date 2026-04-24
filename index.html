@@ -684,6 +684,7 @@
 
         <form id="edit-place-form" class="p-5 space-y-4">
           <input type="hidden" id="edit-place-id" />
+          <input type="hidden" id="edit-source" value="place" />
 
           <div>
             <label for="edit-name" class="block text-sm font-medium mb-1">Nome do local</label>
@@ -2090,9 +2091,9 @@
                 ${Array.isArray(item.features) && item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
               </div>
               <div class="flex flex-wrap gap-2">
-                <button type="button" onclick="approveSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                <button type="button" onclick="openApproveSuggestionModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
                   <i data-lucide="check" class="w-4 h-4"></i>
-                  Aprovar
+                  Rever e aprovar
                 </button>
                 <button type="button" onclick="rejectSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
                   <i data-lucide="x" class="w-4 h-4"></i>
@@ -2327,32 +2328,70 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       }
     }
 
+    function fillEditModalFromItem(item, source = 'place') {
+      document.getElementById('edit-place-id').value = item.id;
+      document.getElementById('edit-source').value = source;
+
+      document.getElementById('edit-name').value = item.name || '';
+      document.getElementById('edit-district').value = item.district || '';
+      document.getElementById('edit-municipality').value = item.municipality || '';
+      document.getElementById('edit-locality').value = item.locality || '';
+      document.getElementById('edit-city').value = item.city || '';
+      document.getElementById('edit-address').value = item.address || '';
+      document.getElementById('edit-type').value = mapDisplayType(item.type) || 'Comer & Beber';
+      document.getElementById('edit-dog-status').value = item.dog_status || 'yes';
+      document.getElementById('edit-description').value = item.desc || item.description || '';
+      document.getElementById('edit-notes').value = item.notes || '';
+      document.getElementById('edit-website').value = item.website || '';
+      document.getElementById('edit-emoji').value = item.emoji || '📍';
+
+      const itemFeatures = Array.isArray(item.features) ? item.features : [];
+      document.querySelectorAll('#edit-features input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.checked = itemFeatures.includes(checkbox.value);
+      });
+
+      const title = document.querySelector('#edit-place-modal h3');
+      const subtitle = document.querySelector('#edit-place-modal h3 + p');
+
+      if (title) title.textContent = source === 'suggestion' ? 'Rever e aprovar sugestão' : 'Editar local';
+      if (subtitle) subtitle.textContent = source === 'suggestion'
+        ? 'Confirma ou corrige a informação antes de publicar no site.'
+        : 'Atualiza a informação do local ativo.';
+
+      const submitButton = document.querySelector('#edit-place-form button[type="submit"]');
+      if (submitButton) submitButton.textContent = source === 'suggestion' ? 'Guardar e aprovar' : 'Guardar alterações';
+
+      document.getElementById('edit-place-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
     function openEditPlaceModal(id) {
       if (!currentUser) return;
 
       const place = locations.find((item) => item.id === id);
       if (!place) return;
 
-      document.getElementById('edit-place-id').value = place.id;
-      document.getElementById('edit-name').value = place.name || '';
-      document.getElementById('edit-district').value = place.district || '';
-      document.getElementById('edit-municipality').value = place.municipality || '';
-      document.getElementById('edit-locality').value = place.locality || '';
-      document.getElementById('edit-city').value = place.city || '';
-      document.getElementById('edit-address').value = place.address || '';
-      document.getElementById('edit-type').value = place.displayType || 'Comer & Beber';
-      document.getElementById('edit-dog-status').value = place.dog_status || 'yes';
-      document.getElementById('edit-description').value = place.desc || '';
-      document.getElementById('edit-notes').value = place.notes || '';
-      document.getElementById('edit-website').value = place.website || '';
-      document.getElementById('edit-emoji').value = place.emoji || '';
+      fillEditModalFromItem(place, 'place');
+    }
 
-      document.querySelectorAll('#edit-features input[type="checkbox"]').forEach((checkbox) => {
-        checkbox.checked = place.features.includes(checkbox.value);
-      });
+    async function openApproveSuggestionModal(id) {
+      if (!currentUser) return;
 
-      document.getElementById('edit-place-modal').classList.remove('hidden');
-      lucide.createIcons();
+      try {
+        const { data, error } = await supabaseClient
+          .from('suggestions')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) throw error;
+        if (!data) return;
+
+        fillEditModalFromItem(data, 'suggestion');
+      } catch (error) {
+        console.error('Erro ao abrir sugestão:', error);
+        alert('Não foi possível abrir a sugestão para rever.');
+      }
     }
 
     function closeEditPlaceModal() {
@@ -2364,6 +2403,7 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       if (!currentUser) return;
 
       const id = Number(document.getElementById('edit-place-id').value);
+      const source = document.getElementById('edit-source')?.value || 'place';
       const name = document.getElementById('edit-name').value.trim();
       const district = document.getElementById('edit-district').value.trim();
       const municipality = document.getElementById('edit-municipality').value.trim();
@@ -2378,35 +2418,61 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       const emoji = document.getElementById('edit-emoji').value.trim() || '📍';
       const features = Array.from(document.querySelectorAll('#edit-features input:checked')).map((input) => input.value);
 
-      try {
-        const { error } = await supabaseClient
-          .from('places')
-          .update({
-            name,
-            city,
-            district: district || null,
-            municipality: municipality || null,
-            locality: locality || null,
-            address: address || city,
-            type,
-            dog_status,
-            dogs: dog_status !== 'no',
-            description: description || 'Local pet-friendly.',
-            notes: notes || null,
-            website: website || null,
-            emoji,
-            features
-          })
-          .eq('id', id);
+      const payload = {
+        name,
+        city,
+        district: district || null,
+        municipality: municipality || null,
+        locality: locality || null,
+        address: address || city,
+        type,
+        dog_status,
+        dogs: dog_status !== 'no',
+        description: description || 'Local pet-friendly.',
+        notes: notes || null,
+        website: website || null,
+        emoji,
+        features
+      };
 
-        if (error) throw error;
+      try {
+        if (source === 'suggestion') {
+          const { error: insertError } = await supabaseClient
+            .from('places')
+            .insert([{ ...payload, confirmations: 1, is_active: true }]);
+
+          if (insertError) {
+            if (insertError.code === '23505') {
+              alert('Este local já existe nos locais ativos.');
+              return;
+            }
+            throw insertError;
+          }
+
+          const { error: deleteError } = await supabaseClient
+            .from('suggestions')
+            .delete()
+            .eq('id', id);
+
+          if (deleteError) throw deleteError;
+        } else {
+          const { error } = await supabaseClient
+            .from('places')
+            .update(payload)
+            .eq('id', id);
+
+          if (error) throw error;
+        }
 
         closeEditPlaceModal();
         await loadPlacesFromSupabase();
+        await loadAdminSuggestions();
         await loadAdminPlaces();
       } catch (error) {
         console.error('Erro ao guardar local:', error);
-        alert('Não foi possível guardar as alterações.');
+        alert(source === 'suggestion'
+          ? 'Não foi possível guardar e aprovar a sugestão.'
+          : 'Não foi possível guardar as alterações.');
       }
     }
 
