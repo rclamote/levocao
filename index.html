@@ -834,17 +834,13 @@
     const MAC_IMAGE_DATA = 'mac.jpg';
 
     const FEATURE_OPTIONS = [
+      '🐾 Muito pet-friendly',
       '🏠 Interior permitido',
-      '☀️ Só esplanada',
+      '☀️ Esplanada permitida',
       '🦮 Trela obrigatória',
       '💧 Água disponível',
-      '🐾 Muito pet-friendly',
-      '🚫 Não no interior',
       '🔒 Vedado',
-      '🚧 Semi-vedado',
-      '🌳 Espaço aberto',
-      '🚪 Tem portão',
-      '🚗 Perto de estrada'
+      '🌳 Espaço aberto'
     ];
 
     const VISITOR_ID_STORAGE_KEY = 'levocao_visitor_id';
@@ -1048,13 +1044,13 @@
 
       const features = Array.isArray(loc.features) ? loc.features : [];
       const hasInterior = features.includes('🏠 Interior permitido');
-      const hasTerrace = features.includes('☀️ Só esplanada');
+      const hasTerrace = features.includes('☀️ Esplanada permitida') || features.includes('☀️ Só esplanada');
       const hasWater = features.includes('💧 Água disponível');
       const leash = features.includes('🦮 Trela obrigatória');
       const fenced = features.includes('🔒 Vedado');
       const semiFenced = features.includes('🚧 Semi-vedado');
       const openSpace = features.includes('🌳 Espaço aberto');
-      const noInterior = features.includes('🚫 Não no interior');
+      const noInterior = features.includes('🚫 Não no interior') || features.includes('🚫 Não permite interior');
       const veryFriendly = features.includes('🐾 Muito pet-friendly');
       const hasGate = features.includes('🚪 Tem portão');
       const nearRoad = features.includes('🚗 Perto de estrada');
