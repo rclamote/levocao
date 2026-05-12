@@ -1,0 +1,2788 @@
+<!doctype html>
+<html lang="pt" class="h-full">
+<head>
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0GW8S5DEE2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0GW8S5DEE2');
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Levo o Cão | Locais pet-friendly em Portugal</title>
+  <meta name="description" content="Descobre restaurantes, praias, alojamentos, espaços comerciais e passeios pet-friendly em Portugal. Informação real de quem já lá esteve com o cão." />
+  <meta name="keywords" content="pet-friendly Portugal, cães Portugal, onde posso ir com o meu cão, restaurantes que aceitam cães, praias para cães, alojamentos pet-friendly, passear com o cão, centros comerciais com cães, lojas que aceitam cães" />
+  <meta name="author" content="Levo o Cão" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://levocao.pt/" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="pt_PT" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Levo o Cão" />
+  <meta property="og:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
+  <meta property="og:description" content="Descobre onde podes ir com o teu cão em Portugal. Restaurantes, praias, alojamentos, espaços comerciais e passeios pet-friendly." />
+  <meta property="og:url" content="https://levocao.pt/" />
+  <meta property="og:image" content="https://levocao.pt/mac.jpg" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Levo o Cão | Locais pet-friendly em Portugal" />
+  <meta name="twitter:description" content="Descobre onde podes ir com o teu cão em Portugal." />
+  <meta name="twitter:image" content="https://levocao.pt/mac.jpg" />
+
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Levo o Cão",
+      "url": "https://levocao.pt/",
+      "description": "Descobre locais pet-friendly em Portugal. Restaurantes, praias, alojamentos, espaços comerciais e passeios onde podes levar o teu cão.",
+      "inLanguage": "pt-PT"
+    }
+  </script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: '#5B7553',
+            sand: '#F5F0E8',
+            bark: '#3D2C1E',
+            cream: '#FFFDF7',
+            moss: '#8BA67A'
+          },
+          fontFamily: {
+            display: ['Fraunces', 'Georgia', 'serif'],
+            body: ['DM Sans', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; }
+    .app-wrapper { min-height: 100%; overflow-x: hidden; }
+    .fade-in { animation: fadeIn 0.6s ease both; }
+    .fade-in-d1 { animation: fadeIn 0.6s 0.1s ease both; }
+    .fade-in-d2 { animation: fadeIn 0.6s 0.2s ease both; }
+    .fade-in-d3 { animation: fadeIn 0.6s 0.3s ease both; }
+    .fade-in-d4 { animation: fadeIn 0.6s 0.4s ease both; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-hover { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(61, 44, 30, 0.1); }
+
+    .cat-btn { transition: all 0.2s ease; }
+    .cat-btn:hover, .cat-btn.active { background: #5B7553; color: #FFFDF7; transform: scale(1.04); }
+
+    .view-transition { animation: slideUp 0.35s ease both; }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .sr-only-seo {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-thumb { background: #8BA67A; border-radius: 3px; }
+
+    .search-shell {
+      position: relative;
+      max-width: 28rem;
+      margin-left: auto;
+      margin-right: auto;
+      z-index: 30;
+    }
+
+    .suggestion-box {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #F5F0E8;
+      border-radius: 18px;
+      box-shadow: 0 18px 35px rgba(61, 44, 30, 0.12);
+      overflow: hidden;
+      z-index: 80;
+      max-height: 260px;
+      overflow-y: auto;
+    }
+
+    .suggestion-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid #F5F0E8;
+      transition: background 0.15s ease;
+      text-align: left;
+      background: #fff;
+    }
+
+    .suggestion-item:last-child { border-bottom: none; }
+    .suggestion-item:hover,
+    .suggestion-item.active { background: #F5F0E8; }
+
+    .auth-btn {
+      font-size: 0.875rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 9999px;
+      border: 1px solid #F5F0E8;
+      background: white;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .auth-btn:hover { background: #F5F0E8; }
+
+    .auth-btn.primary {
+      background: #5B7553;
+      color: #FFFDF7;
+      border-color: #5B7553;
+    }
+
+    .auth-btn.primary:hover {
+      background: #8BA67A;
+      border-color: #8BA67A;
+    }
+
+
+    .feature-groups {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .feature-group {
+      background: rgba(245, 240, 232, 0.45);
+      border: 1px solid #F5F0E8;
+      border-radius: 18px;
+      padding: 0.75rem;
+    }
+
+    .feature-group-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(61, 44, 30, 0.55);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-height: 2.35rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid #F5F0E8;
+      background: #fff;
+      color: rgba(61, 44, 30, 0.76);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .feature-chip:hover {
+      transform: translateY(-1px);
+      border-color: #8BA67A;
+      box-shadow: 0 6px 14px rgba(61, 44, 30, 0.06);
+    }
+
+    .feature-chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .feature-chip:has(input:checked) {
+      background: #5B7553;
+      color: #FFFDF7;
+      border-color: #5B7553;
+      box-shadow: 0 8px 18px rgba(91, 117, 83, 0.18);
+    }
+
+    .feature-chip:has(input:checked)::after {
+      content: '✓';
+      width: 1rem;
+      height: 1rem;
+      border-radius: 9999px;
+      background: rgba(255, 253, 247, 0.22);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+
+    .results-fixed-bar {
+      position: fixed;
+      top: 61px;
+      left: 0;
+      right: 0;
+      z-index: 45;
+      pointer-events: none;
+    }
+
+    .results-fixed-inner {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding-left: 1.25rem;
+      padding-right: 1.25rem;
+    }
+
+    .results-fixed-card {
+      pointer-events: auto;
+      background: rgba(255, 253, 247, 0.96);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid #F5F0E8;
+      box-shadow: 0 8px 24px rgba(61, 44, 30, 0.08);
+    }
+
+    .list-top-spacer {
+      height: 86px;
+    }
+
+    @media (max-width: 640px) {
+      .suggestion-box {
+        top: calc(100% + 6px);
+        border-radius: 16px;
+        max-height: 220px;
+      }
+      .suggestion-item { padding: 11px 14px; }
+      .auth-btn {
+        padding: 0.45rem 0.75rem;
+        font-size: 0.8rem;
+      }
+      .results-fixed-bar {
+        top: 57px;
+      }
+      .results-fixed-inner {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      .list-top-spacer {
+        height: 82px;
+      }
+    }
+  </style>
+</head>
+
+<body class="h-full bg-cream font-body text-bark">
+  <div class="app-wrapper" id="app">
+    <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand">
+      <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+        <button type="button" onclick="showView('home')" class="flex items-center">
+  <img src="logo.svg" alt="Levo o Cão" class="h-12 sm:h-14 w-auto" />
+</button>
+
+        <div class="flex items-center gap-2">
+          <button type="button" onclick="showView('list')" class="p-2 rounded-full hover:bg-sand transition" aria-label="Lista de locais">
+            <i data-lucide="list" class="w-5 h-5"></i>
+          </button>
+
+          <button type="button" onclick="showView('suggest')" class="p-2 rounded-full hover:bg-sand transition" aria-label="Sugerir local">
+            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          </button>
+
+          <button id="nav-admin-btn" type="button" onclick="goToAdmin()" class="auth-btn hidden">
+            Admin
+          </button>
+
+          <button id="nav-login-btn" type="button" onclick="openLoginModal()" class="auth-btn">
+            Entrar
+          </button>
+
+          <button id="nav-logout-btn" type="button" onclick="logout()" class="auth-btn hidden">
+            Sair
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div id="view-home">
+      <section class="relative overflow-hidden bg-gradient-to-br from-sand via-cream to-sand">
+        <div class="absolute inset-0 opacity-[0.04]" style="background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='1.5' fill='%233D2C1E'/%3E%3C/svg%3E&quot;);"></div>
+        <div class="relative max-w-3xl mx-auto px-5 pt-12 pb-10 text-center">
+          <div class="fade-in mb-4 flex justify-center">
+            <div class="w-24 h-24 rounded-full bg-white p-[3px] shadow-lg flex items-center justify-center overflow-hidden cursor-pointer" id="mac-hero-wrap">
+              <img id="mac-hero" src="" alt="Mac" class="w-full h-full rounded-full object-cover border-2 border-sage" />
+            </div>
+          </div>
+
+          <h1 class="fade-in-d1 font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-1">
+            Levo o cão?
+          </h1>
+
+          <p class="text-xs text-bark/50 italic mb-2">
+            Inspirado pelo Mac 🐾
+          </p>
+
+          <p class="fade-in-d2 text-bark/70 text-lg mb-4 max-w-xl mx-auto">
+            Descobre onde podes ir com o teu cão — antes de sair de casa.
+          </p>
+
+          <p id="hero-community-count" class="fade-in-d2 text-sm text-sage font-medium mb-1">
+            🐾 A comunidade já começou a confirmar locais
+          </p>
+
+          <p class="fade-in-d2 text-xs text-bark/50 max-w-md mx-auto">
+            Informação real de quem já lá esteve com o cão.
+          </p>
+
+          <div class="fade-in-d2 mt-5 flex flex-wrap items-center justify-center gap-2 text-sm">
+            <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">🐾 Feito pela comunidade</span>
+            <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">📍 Descobre novos locais</span>
+            <span class="bg-white/80 border border-sand rounded-full px-3 py-1 text-bark/70">✅ Confirma o que é mesmo pet-friendly</span>
+          </div>
+
+          <div class="search-shell fade-in-d3 mt-6">
+            <div class="flex items-center bg-white rounded-2xl shadow-lg shadow-bark/5 border border-sand overflow-hidden">
+              <i data-lucide="search" class="w-5 h-5 text-bark/40 ml-4 shrink-0"></i>
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Procura por local, cidade ou categoria"
+                class="flex-1 py-3.5 px-3 bg-transparent outline-none text-bark placeholder:text-bark/40"
+                autocomplete="off"
+                oninput="handleSearchInput()"
+                onkeydown="handleSearchKey(event)"
+                onfocus="handleSearchInput()"
+              />
+            </div>
+            <div id="search-suggestions" class="suggestion-box hidden"></div>
+          </div>
+
+          <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
+            <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              <i data-lucide="map-pin" class="w-4 h-4"></i>
+              Onde posso ir com o meu cão?
+            </button>
+            <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              Adicionar local
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 py-6">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">📍 Locais adicionados pela comunidade</h2>
+          <button type="button" onclick="showView('suggest')" class="text-sage text-sm font-medium inline-flex items-center gap-1">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar o teu
+          </button>
+        </div>
+        <div id="cards-recent" class="grid gap-4 sm:grid-cols-2"></div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 py-8">
+        <div class="mb-6 rounded-3xl bg-sand/70 border border-sand p-5">
+          <div class="grid sm:grid-cols-3 gap-4 text-left">
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">1. Descobre</p>
+              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, zona ou categoria.</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">2. Confirma</p>
+              <p class="text-sm text-bark/70">Ajuda a comunidade a saber quais os locais onde os cães são realmente bem-vindos.</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">3. Adiciona</p>
+              <p class="text-sm text-bark/70">Conheces um bom sítio? Partilha-o para outros donos de cães o descobrirem.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-6 rounded-3xl bg-white border border-sand shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
+            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência, um espaço comercial ou um espaço seguro para soltar o cão, adiciona-o.</p>
+          </div>
+          <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar local
+          </button>
+        </div>
+
+        <div class="sr-only-seo" aria-hidden="true">
+          <h2>Locais pet-friendly em Portugal</h2>
+          <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
+          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos, espaços comerciais e sítios para passear com o cão.</p>
+          <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
+        </div>
+
+        <h2 class="font-display text-xl font-bold mb-4">Explorar por categoria</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3" id="cat-grid">
+          <button type="button" onclick="filterByCategory('Comer & Beber', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🍽️</span><span class="text-sm font-medium">Comer & Beber</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Praia', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🏖️</span><span class="text-sm font-medium">Praias</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Alojamento', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🏡</span><span class="text-sm font-medium">Alojamentos</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Espaços comerciais', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🛍️</span><span class="text-sm font-medium">Espaços comerciais</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Soltar o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🦮</span><span class="text-sm font-medium">Soltar o cão</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Passear com o cão', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🚶</span><span class="text-sm font-medium">Passear com o cão</span>
+          </button>
+          <button type="button" onclick="filterByCategory('Experiências', this)" class="cat-btn flex flex-col items-center gap-2 p-4 rounded-2xl bg-white border border-sand shadow-sm">
+            <span class="text-2xl">🎯</span><span class="text-sm font-medium">Experiências</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="max-w-3xl mx-auto px-5 pb-12">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">Mais confirmados pela comunidade</h2>
+          <span class="text-sm text-bark/55">Locais com mais confiança</span>
+        </div>
+        <div id="cards-top" class="grid gap-4 sm:grid-cols-2"></div>
+      </section>
+    </div>
+
+    <div id="view-list" class="hidden">
+      <div id="results-fixed-bar" class="results-fixed-bar hidden">
+        <div class="results-fixed-inner">
+          <div class="results-fixed-card rounded-2xl px-4 py-3">
+            <p id="results-region" class="text-sm font-medium text-bark/80">Resultados</p>
+            <p id="results-count" class="text-xs text-bark/50 mt-1">0 locais encontrados</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-3xl mx-auto px-5 py-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="font-display text-xl font-bold">Locais pet-friendly</h2>
+            <p class="text-sm text-bark/55 mt-1">Explora, confirma e ajuda a melhorar a informação.</p>
+          </div>
+          <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+          </button>
+        </div>
+
+        <div class="list-top-spacer"></div>
+
+        <div class="flex gap-2 flex-wrap mb-5" id="filter-bar">
+          <button type="button" onclick="filterByCategory(null)" class="cat-btn active text-sm px-4 py-2 rounded-full bg-sage text-cream border border-sage font-medium" data-cat="all">Todos</button>
+          <button type="button" onclick="filterByCategory('Comer & Beber')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Comer & Beber">Comer & Beber</button>
+          <button type="button" onclick="filterByCategory('Praia')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Praia">Praias</button>
+          <button type="button" onclick="filterByCategory('Alojamento')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Alojamento">Alojamentos</button>
+          <button type="button" onclick="filterByCategory('Espaços comerciais')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Espaços comerciais">Espaços comerciais</button>
+          <button type="button" onclick="filterByCategory('Soltar o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Soltar o cão">Soltar o cão</button>
+          <button type="button" onclick="filterByCategory('Passear com o cão')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Passear com o cão">Passear com o cão</button>
+          <button type="button" onclick="filterByCategory('Experiências')" class="cat-btn text-sm px-4 py-2 rounded-full bg-white border border-sand font-medium" data-cat="Experiências">Experiências</button>
+        </div>
+
+        <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-5">
+          <div class="grid sm:grid-cols-4 gap-3">
+            <div>
+              <label for="filter-district" class="block text-sm font-medium mb-1">Distrito</label>
+              <select id="filter-district" onchange="handleDistrictFilterChange()" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div>
+              <label for="filter-municipality" class="block text-sm font-medium mb-1">Concelho</label>
+              <select id="filter-municipality" onchange="handleMunicipalityFilterChange()" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+                <option value="">Todos</option>
+              </select>
+            </div>
+            <div>
+              <label for="filter-locality" class="block text-sm font-medium mb-1">Localidade</label>
+              <select id="filter-locality" onchange="handleLocalityFilterChange()" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+                <option value="">Todas</option>
+              </select>
+            </div>
+            <div class="flex items-end">
+              <button type="button" onclick="clearZoneFilters()" class="w-full inline-flex items-center justify-center gap-2 bg-sand text-bark font-semibold px-4 py-3 rounded-xl border border-sand hover:bg-white transition">
+                <i data-lucide="x-circle" class="w-4 h-4"></i>
+                Limpar filtros
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
+        <div id="loading-places" class="hidden text-center text-bark/50 py-8">A carregar locais...</div>
+        <div id="no-results" class="hidden text-center py-12 px-4">
+          <p class="text-bark/60 text-lg mb-3">Ainda não temos locais nesta zona 😕</p>
+          <p class="text-bark/45 text-sm mb-5">Ajuda-nos a construir e adiciona o primeiro local.</p>
+          <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar primeiro local
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-detail" class="hidden">
+      <div class="max-w-3xl mx-auto px-5 py-6 view-transition" id="detail-content"></div>
+    </div>
+
+    <div id="view-suggest" class="hidden">
+      <div class="max-w-3xl mx-auto px-5 py-10 text-center view-transition">
+        <span class="text-5xl mb-4 block">📍</span>
+        <h2 class="font-display text-2xl font-bold mb-2">Conheces um sítio pet-friendly?</h2>
+        <p class="text-bark/60 mb-8 max-w-sm mx-auto">Ajuda-nos a crescer! Sugere um local e ajuda outros donos de cães.</p>
+        <p class="text-xs text-bark/45 mb-6 max-w-sm mx-auto">As sugestões entram primeiro em revisão e só depois ficam visíveis publicamente.</p>
+
+        <form id="suggest-form" class="max-w-sm mx-auto text-left space-y-4">
+          <div class="rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">Partilha um local que conheças. Não precisa de estar perfeito — podes começar com o básico e melhorar depois.</div>
+
+          <div>
+            <label for="sg-name" class="block text-sm font-medium mb-1">Nome do local</label>
+            <input id="sg-name" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Café do Parque" />
+          </div>
+
+          <div>
+            <label for="sg-city" class="block text-sm font-medium mb-1">Cidade</label>
+            <input id="sg-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Portimão" />
+          </div>
+
+          <div>
+            <label for="sg-address" class="block text-sm font-medium mb-1">Morada ou zona</label>
+            <input id="sg-address" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: Rua..., Praia..., Zona antiga..." />
+          </div>
+
+          <div>
+            <label for="sg-type" class="block text-sm font-medium mb-1">Tipo de local</label>
+            <select id="sg-type" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option>Comer & Beber</option>
+              <option>Praia</option>
+              <option>Alojamento</option>
+              <option>Espaços comerciais</option>
+              <option>Soltar o cão</option>
+              <option>Passear com o cão</option>
+              <option>Experiências</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sg-dog-status" class="block text-sm font-medium mb-1">Estado do local</label>
+            <select id="sg-dog-status" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option value="yes">✅ Aceita cães</option>
+              <option value="maybe">⚠️ Com restrições</option>
+              <option value="no">❌ Não aceita cães</option>
+            </select>
+          </div>
+
+          <div>
+            <p class="block text-sm font-medium mb-1">Condições úteis</p>
+            <p class="text-xs text-bark/45 mb-3">Escolhe só o que tens a certeza. O resto pode ficar nas notas.</p>
+            <div id="sg-features" class="feature-groups"></div>
+          </div>
+
+          <div>
+            <label for="sg-notes" class="block text-sm font-medium mb-1">Notas (opcional)</label>
+            <textarea id="sg-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none" placeholder="Ex: deixam entrar nas zonas comuns, algumas lojas não aceitam, trela obrigatória..."></textarea>
+          </div>
+
+          <div>
+            <label for="sg-website" class="block text-sm font-medium mb-1">Website (opcional)</label>
+            <input id="sg-website" type="url" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: www.cafepark.pt" />
+          </div>
+
+          <button type="submit" class="w-full bg-sage text-cream font-semibold py-3.5 rounded-full shadow-md hover:bg-moss transition active:scale-95">Enviar sugestão</button>
+        </form>
+
+        <div id="suggest-success" class="hidden mt-6 p-4 bg-sage/10 rounded-2xl text-sage font-medium">
+          ✅ Obrigado pela sugestão! Adicionado pela comunidade · em revisão.
+          <div class="mt-2 text-sm text-bark/70">O local só fica visível no site depois da tua confirmação no painel Admin.</div>
+          <div class="mt-4">
+            <button type="button" onclick="resetSuggestForm()" class="inline-flex items-center gap-2 bg-white text-sage border border-sage font-semibold px-4 py-2 rounded-full hover:bg-sand transition">
+              <i data-lucide="plus-circle" class="w-4 h-4"></i>
+              Adicionar outro local
+            </button>
+          </div>
+        </div>
+
+        <button type="button" onclick="showView('home')" class="mt-6 text-sage font-medium text-sm inline-flex items-center gap-1">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar ao início
+        </button>
+      </div>
+    </div>
+
+<div id="view-admin" class="hidden">
+  <div class="max-w-3xl mx-auto px-5 py-6 view-transition">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="font-display text-xl font-bold">Painel Admin</h2>
+        <p class="text-sm text-bark/55 mt-1">Revê, aprova, edita ou desativa locais.</p>
+      </div>
+      <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+      </button>
+    </div>
+
+    <div class="grid sm:grid-cols-4 gap-3 mb-6">
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Pendentes</p>
+        <p id="admin-pending-count" class="font-display text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Locais ativos</p>
+        <p id="admin-places-count" class="font-display text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Incompletos</p>
+        <p id="admin-incomplete-count" class="font-display text-2xl font-bold mt-1">0</p>
+      </div>
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <p class="text-sm text-bark/55">Estado</p>
+        <p class="font-display text-lg font-bold mt-1">Protegido</p>
+      </div>
+    </div>
+
+    <div class="mb-6 rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">
+      <span class="inline-flex items-center gap-2 bg-sand text-bark/70 font-medium px-3 py-1.5 rounded-full">🛡️ Admin protegida por login</span>
+      <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Editar altera diretamente o local. Desativar tira-o do site sem apagar dados.</p>
+    </div>
+
+    <div class="mb-6">
+      <input
+        id="admin-search"
+        type="text"
+        placeholder="Procurar por nome ou cidade..."
+        class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm"
+        oninput="handleAdminSearch()"
+      />
+    </div>
+
+    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
+        <button type="button" onclick="loadAdminSuggestions()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Atualizar
+        </button>
+      </div>
+      <div id="admin-suggestions" class="space-y-3"></div>
+      <p id="admin-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há sugestões pendentes neste momento.</p>
+    </div>
+
+    <div class="bg-[#FFF8EE] border border-[#E8D9BB] rounded-2xl p-4 shadow-sm mb-6">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <div>
+          <h3 class="font-display text-lg font-bold">Locais incompletos</h3>
+          <p class="text-sm text-bark/55 mt-1">Sem distrito, concelho e/ou localidade.</p>
+        </div>
+        <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Atualizar
+        </button>
+      </div>
+      <div id="admin-incomplete-places" class="space-y-3"></div>
+      <p id="admin-incomplete-empty" class="hidden text-sm text-bark/50 py-6 text-center">Todos os locais ativos já têm distrito, concelho e localidade.</p>
+    </div>
+
+    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <h3 class="font-display text-lg font-bold">Locais ativos</h3>
+        <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          Atualizar
+        </button>
+      </div>
+      <div id="admin-places" class="space-y-3"></div>
+      <p id="admin-places-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há locais ativos.</p>
+    </div>
+  </div>
+</div>
+
+    <div id="edit-place-modal" class="hidden fixed inset-0 z-[80] bg-black/40 p-4">
+      <div class="max-w-2xl mx-auto bg-cream rounded-3xl border border-sand shadow-xl mt-8 max-h-[90vh] overflow-y-auto">
+        <div class="p-5 border-b border-sand flex items-center justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold">Editar local</h3>
+            <p class="text-sm text-bark/55">Atualiza a informação do local ativo.</p>
+          </div>
+          <button type="button" onclick="closeEditPlaceModal()" class="p-2 rounded-full hover:bg-sand transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <form id="edit-place-form" class="p-5 space-y-4">
+          <input type="hidden" id="edit-place-id" />
+          <input type="hidden" id="edit-source" value="place" />
+
+          <div>
+            <label for="edit-name" class="block text-sm font-medium mb-1">Nome do local</label>
+            <input id="edit-name" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-district" class="block text-sm font-medium mb-1">Distrito</label>
+            <input id="edit-district" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-municipality" class="block text-sm font-medium mb-1">Concelho</label>
+            <input id="edit-municipality" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-locality" class="block text-sm font-medium mb-1">Localidade</label>
+            <input id="edit-locality" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-city" class="block text-sm font-medium mb-1">Cidade</label>
+            <input id="edit-city" type="text" required class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-address" class="block text-sm font-medium mb-1">Morada ou zona</label>
+            <input id="edit-address" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-type" class="block text-sm font-medium mb-1">Categoria</label>
+            <select id="edit-type" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option>Comer & Beber</option>
+              <option>Praia</option>
+              <option>Alojamento</option>
+              <option>Espaços comerciais</option>
+              <option>Soltar o cão</option>
+              <option>Passear com o cão</option>
+              <option>Experiências</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="edit-dog-status" class="block text-sm font-medium mb-1">Estado do local</label>
+            <select id="edit-dog-status" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
+              <option value="yes">✅ Aceita cães</option>
+              <option value="maybe">⚠️ Com restrições</option>
+              <option value="no">❌ Não aceita cães</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="edit-description" class="block text-sm font-medium mb-1">Descrição</label>
+            <textarea id="edit-description" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label for="edit-notes" class="block text-sm font-medium mb-1">Notas</label>
+            <textarea id="edit-notes" rows="3" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition resize-none"></textarea>
+          </div>
+
+          <div>
+            <label for="edit-website" class="block text-sm font-medium mb-1">Website</label>
+            <input id="edit-website" type="url" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <label for="edit-emoji" class="block text-sm font-medium mb-1">Emoji</label>
+            <input id="edit-emoji" type="text" maxlength="4" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <p class="block text-sm font-medium mb-1">Condições úteis</p>
+            <p class="text-xs text-bark/45 mb-3">Escolhe só o que tens a certeza. O resto pode ficar nas notas.</p>
+            <div id="edit-features" class="feature-groups"></div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row gap-3 pt-2">
+            <button type="submit" class="flex-1 bg-sage text-cream font-semibold py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              Guardar alterações
+            </button>
+            <button type="button" onclick="closeEditPlaceModal()" class="flex-1 bg-white text-sage font-semibold py-3 rounded-full border border-sage hover:bg-sand transition">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="login-modal" class="hidden fixed inset-0 z-[100] bg-black/40 p-4">
+      <div class="max-w-md mx-auto bg-white rounded-3xl border border-sand shadow-xl mt-12">
+        <div class="p-5 border-b border-sand flex items-center justify-between">
+          <div>
+            <h3 class="font-display text-xl font-bold">Entrar no admin</h3>
+            <p class="text-sm text-bark/55">Usa o teu email e password do Supabase.</p>
+          </div>
+          <button type="button" onclick="closeLoginModal()" class="p-2 rounded-full hover:bg-sand transition">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div class="p-5 space-y-4">
+          <div>
+            <label for="login-email" class="block text-sm font-medium mb-1">Email</label>
+            <input id="login-email" type="email" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="O teu email" />
+          </div>
+
+          <div>
+            <label for="login-password" class="block text-sm font-medium mb-1">Password</label>
+            <input id="login-password" type="password" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="A tua password" />
+          </div>
+
+          <p id="login-error" class="hidden text-sm text-red-600">Não foi possível entrar.</p>
+
+          <button type="button" onclick="login()" class="w-full bg-sage text-cream font-semibold py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+            Entrar
+          </button>
+
+          <button type="button" onclick="closeLoginModal()" class="w-full bg-white text-sage font-semibold py-3 rounded-full border border-sage hover:bg-sand transition">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="bg-bark text-cream/80 mt-auto">
+      <div class="max-w-3xl mx-auto px-5 py-8">
+        <div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
+          <div class="flex-1">
+            <p class="font-display font-bold text-lg text-cream mb-2">🐾 Levo o Cão</p>
+            <p class="text-sm text-cream/60 leading-relaxed">Ajudamos donos de cães a descobrir os melhores locais pet-friendly em Portugal.</p>
+          </div>
+          <div class="flex flex-col gap-2 text-sm">
+            <a href="#" onclick="event.preventDefault(); showView('suggest')" class="hover:text-cream transition">Sugerir local</a>
+            <a href="mailto:levocao.pt@gmail.com" class="hover:text-cream transition">levocao.pt@gmail.com</a>
+            <a href="https://instagram.com/levocao.pt" target="_blank" rel="noopener noreferrer" class="hover:text-cream transition flex items-center gap-1">
+              <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
+            </a>
+          </div>
+        </div>
+        <p class="text-xs text-cream/30 mt-6 border-t border-cream/10 pt-4">© <span id="year"></span> Levo o Cão — Feito com ❤️ em Portugal</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://mezeuxfoblyodjfaooan.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lemV1eGZvYmx5b2RqZmFvb2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjcxNDEsImV4cCI6MjA5MTUwMzE0MX0.UCzhiqF1dSKLou-Ma9RUkYepn0tc1LK_OsfS_80f-94';
+    const MAC_IMAGE_DATA = 'mac.jpg';
+
+    const FEATURE_OPTIONS = [
+      '🐾 Muito pet-friendly',
+      '🏠 Interior permitido',
+      '☀️ Esplanada permitida',
+      '🦮 Trela obrigatória',
+      '💧 Água disponível',
+      '🔒 Vedado',
+      '🌳 Espaço aberto'
+    ];
+
+    const FEATURE_GROUPS = [
+      {
+        title: 'Receção ao cão',
+        items: ['🐾 Muito pet-friendly', '💧 Água disponível']
+      },
+      {
+        title: 'Entrada e zonas permitidas',
+        items: ['🏠 Interior permitido', '☀️ Esplanada permitida']
+      },
+      {
+        title: 'Passeio e segurança',
+        items: ['🦮 Trela obrigatória', '🔒 Vedado', '🌳 Espaço aberto']
+      }
+    ];
+
+    const VISITOR_ID_STORAGE_KEY = 'levocao_visitor_id';
+    const CONFIRM_RULES = {
+      correctionMinutes: 10,
+      reconfirmDays: 30
+    };
+
+    let supabaseClient = null;
+    let locations = [];
+    let confirmationSummaryMap = {};
+    let userVoteMap = {};
+    let currentFilter = null;
+    let currentSearch = '';
+    let currentDistrictFilter = '';
+    let currentMunicipalityFilter = '';
+    let currentLocalityFilter = '';
+    let activeSuggestionIndex = -1;
+    let currentUser = null;
+    let adminSearch = '';
+
+    function normalizeText(value) {
+      return (value || '').trim();
+    }
+
+    function normalizedLower(value) {
+      return normalizeText(value).toLowerCase();
+    }
+
+    function mapDisplayType(type) {
+      if (type === 'Restaurante' || type === 'Café') return 'Comer & Beber';
+      if (type === 'Espaços Comerciais') return 'Espaços comerciais';
+      return type;
+    }
+
+    function getTypeAliases(type) {
+      if (type === 'Comer & Beber') return ['Comer & Beber', 'Restaurante', 'Café'];
+      if (type === 'Espaços comerciais' || type === 'Espaços Comerciais') return ['Espaços comerciais', 'Espaços Comerciais'];
+      return [type];
+    }
+
+    function buildFeaturesCheckboxes(targetId, inputName) {
+      const container = document.getElementById(targetId);
+      if (!container) return;
+
+      container.innerHTML = FEATURE_GROUPS.map((group) => `
+        <div class="feature-group">
+          <p class="feature-group-title">${group.title}</p>
+          <div class="flex flex-wrap gap-2">
+            ${group.items.map((feature) => `
+              <label class="feature-chip">
+                <input type="checkbox" name="${inputName}" value="${feature}" />
+                <span>${feature}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getVisitorId() {
+      let id = localStorage.getItem(VISITOR_ID_STORAGE_KEY);
+      if (!id) {
+        id = crypto.randomUUID ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+        localStorage.setItem(VISITOR_ID_STORAGE_KEY, id);
+      }
+      return id;
+    }
+
+    function getDogStatusMeta(status) {
+      if (status === 'no') {
+        return {
+          text: '❌ Não aceita cães',
+          short: '❌ Não aceita',
+          className: 'bg-bark text-cream'
+        };
+      }
+      if (status === 'maybe') {
+        return {
+          text: '⚠️ Com restrições',
+          short: '⚠️ Restrições',
+          className: 'bg-sand text-bark/80 border border-bark/10'
+        };
+      }
+      return {
+        text: '🐕 Aceita cães',
+        short: '🐕 Aceita cães',
+        className: 'bg-sage/90 text-cream'
+      };
+    }
+
+    function formatExactDate(isoDate) {
+      if (!isoDate) return null;
+      try {
+        return new Intl.DateTimeFormat('pt-PT', {
+          dateStyle: 'short',
+          timeStyle: 'short'
+        }).format(new Date(isoDate));
+      } catch {
+        return null;
+      }
+    }
+
+    function getVoteLabel(type) {
+      if (type === 'yes') return '✅ Sim';
+      if (type === 'no') return '❌ Não';
+      if (type === 'maybe') return '⚠️ Restrições';
+      return '—';
+    }
+
+    function getMinutesSince(dateString) {
+      if (!dateString) return Infinity;
+      return (Date.now() - new Date(dateString).getTime()) / (1000 * 60);
+    }
+
+    function getDaysSince(dateString) {
+      if (!dateString) return Infinity;
+      return (Date.now() - new Date(dateString).getTime()) / (1000 * 60 * 60 * 24);
+    }
+
+    function getUserVoteState(placeId) {
+      const record = userVoteMap[placeId];
+      if (!record) {
+        return {
+          hasVote: false,
+          canCorrect: false,
+          canReconfirm: true,
+          voteType: null,
+          dateText: null,
+          helpText: 'Ainda não respondeste'
+        };
+      }
+
+      const referenceDate = record.updated_at || record.created_at;
+      const minutesSince = getMinutesSince(referenceDate);
+      const daysSince = getDaysSince(referenceDate);
+
+      const canCorrect = minutesSince <= CONFIRM_RULES.correctionMinutes;
+      const canReconfirm = daysSince >= CONFIRM_RULES.reconfirmDays;
+
+      let helpText = `O teu voto: ${getVoteLabel(record.vote_type)}`;
+      if (canCorrect) {
+        helpText += ` · Podes corrigir durante ${CONFIRM_RULES.correctionMinutes} minutos`;
+      } else if (!canReconfirm) {
+        const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
+        helpText += ` · Podes reconfirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}`;
+      } else {
+        helpText += ' · Já podes reconfirmar';
+      }
+
+      return {
+        hasVote: true,
+        canCorrect,
+        canReconfirm,
+        voteType: record.vote_type,
+        dateText: formatExactDate(referenceDate),
+        helpText
+      };
+    }
+
+    function setupSupabase() {
+      if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return false;
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      return true;
+    }
+
+    function normalizePlace(row) {
+      return {
+        id: row.id,
+        name: row.name,
+        city: row.city,
+        district: normalizeText(row.district),
+        municipality: normalizeText(row.municipality),
+        locality: normalizeText(row.locality),
+        type: row.type,
+        displayType: mapDisplayType(row.type),
+        emoji: row.emoji || '📍',
+        desc: row.description || 'Local pet-friendly.',
+        address: row.address || row.city,
+        notes: row.notes || '',
+        website: row.website || '',
+        features: Array.isArray(row.features) ? row.features : [],
+        dogs: row.dogs !== false,
+        dog_status: row.dog_status || 'yes',
+        confirmations: Number(row.confirmations || 0),
+        createdAt: row.created_at || null,
+        colors: getColorByType(mapDisplayType(row.type))
+      };
+    }
+
+    function getColorByType(type) {
+      const map = {
+        'Comer & Beber': ['#C4A882', '#8BA67A', '#F0E6D3'],
+        Praia: ['#7AADCF', '#E8D5B7', '#F5F0E8'],
+        Alojamento: ['#5B7553', '#8BA67A', '#F5F0E8'],
+        'Espaços comerciais': ['#BFA27A', '#8BA67A', '#F5F0E8'],
+        'Soltar o cão': ['#8BA67A', '#D4C5A9', '#FFFDF7'],
+        'Passear com o cão': ['#A3B899', '#D4C5A9', '#FFFDF7'],
+        'Experiências': ['#C4A882', '#D4C5A9', '#FFFDF7']
+      };
+      return map[type] || ['#8BA67A', '#D4C5A9', '#FFFDF7'];
+    }
+
+    function getSmartShortDescription(loc) {
+      const cleanNotes = (loc.notes || '').replace(/\s+/g, ' ').trim();
+      if (cleanNotes && cleanNotes.length <= 90) {
+        return cleanNotes;
+      }
+
+      const features = Array.isArray(loc.features) ? loc.features : [];
+      const hasInterior = features.includes('🏠 Interior permitido');
+      const hasTerrace = features.includes('☀️ Esplanada permitida') || features.includes('☀️ Só esplanada');
+      const hasWater = features.includes('💧 Água disponível');
+      const leash = features.includes('🦮 Trela obrigatória');
+      const fenced = features.includes('🔒 Vedado');
+      const semiFenced = features.includes('🚧 Semi-vedado');
+      const openSpace = features.includes('🌳 Espaço aberto');
+      const noInterior = features.includes('🚫 Não no interior') || features.includes('🚫 Não permite interior');
+      const veryFriendly = features.includes('🐾 Muito pet-friendly');
+      const hasGate = features.includes('🚪 Tem portão');
+      const nearRoad = features.includes('🚗 Perto de estrada');
+
+      if (loc.displayType === 'Comer & Beber') {
+        if (hasInterior && hasWater) return 'Aceitam cães no interior e costumam ter água disponível.';
+        if (hasInterior) return 'Aceitam cães no interior.';
+        if (hasTerrace && hasWater) return 'Aceitam cães na esplanada e costumam ter água disponível.';
+        if (hasTerrace) return 'Aceitam cães na esplanada.';
+        if (noInterior) return 'Aceitam cães, mas não no interior.';
+        if (veryFriendly) return 'Espaço muito acolhedor para quem vai com o cão.';
+        if (loc.dog_status === 'maybe') return 'Aceitam cães, mas pode haver restrições.';
+        if (loc.dog_status === 'yes') return 'Local onde podes ir com o teu cão.';
+      }
+
+      if (loc.displayType === 'Praia') {
+        if (leash) return 'Praia onde podes ir com o teu cão, com trela obrigatória.';
+        if (veryFriendly) return 'Praia bem vista para quem vai com o cão.';
+        if (loc.dog_status === 'maybe') return 'Praia onde os cães podem ser aceites, com algumas restrições.';
+        return 'Praia pet-friendly para passear com o teu cão.';
+      }
+
+      if (loc.displayType === 'Alojamento') {
+        if (veryFriendly) return 'Alojamento muito receptivo para quem viaja com o cão.';
+        if (loc.dog_status === 'maybe') return 'Alojamento que aceita cães, mas pode ter restrições.';
+        return 'Alojamento onde os cães são bem-vindos.';
+      }
+
+      if (loc.displayType === 'Espaços comerciais') {
+        if (loc.dog_status === 'maybe') return 'Espaço comercial onde os cães podem entrar, com algumas restrições.';
+        if (hasInterior) return 'Espaço comercial onde os cães podem entrar no interior.';
+        return 'Espaço comercial onde podes ir com o teu cão.';
+      }
+
+      if (loc.displayType === 'Soltar o cão') {
+        if (fenced && hasGate) return 'Espaço vedado com portão, bom para soltar o cão com mais segurança.';
+        if (fenced) return 'Espaço vedado, bom para soltar o cão com mais segurança.';
+        if (semiFenced) return 'Espaço semi-vedado para o cão correr com mais liberdade.';
+        if (openSpace && nearRoad) return 'Espaço aberto para o cão correr, perto de estrada.';
+        if (openSpace) return 'Espaço aberto para o cão correr e explorar.';
+        return 'Local pensado para o cão correr mais à vontade.';
+      }
+
+      if (loc.displayType === 'Passear com o cão') {
+        if (openSpace) return 'Bom local para passear com o cão com mais espaço.';
+        if (leash) return 'Bom para passeio com o cão, com trela recomendada.';
+        return 'Sítio agradável para passear com o teu cão.';
+      }
+
+      if (loc.displayType === 'Experiências') {
+        if (veryFriendly) return 'Experiência muito pet-friendly para fazer com o teu cão.';
+        if (loc.dog_status === 'maybe') return 'Experiência onde os cães podem ser aceites, com algumas condições.';
+        return 'Experiência pet-friendly para fazer com o teu cão.';
+      }
+
+      if (loc.dog_status === 'maybe') return 'Local que pode aceitar cães, com algumas restrições.';
+      if (loc.dog_status === 'yes') return 'Local pet-friendly.';
+      return 'Convém confirmar antes de ir com o cão.';
+    }
+
+    function clearSearchState() {
+      currentSearch = '';
+      const input = document.getElementById('search-input');
+      if (input) input.value = '';
+      hideSuggestions();
+    }
+
+    function findLocationByQuery(query) {
+      const q = normalizedLower(query);
+      if (!q) return null;
+
+      const exactLocality = locations.find(loc => normalizedLower(loc.locality) === q);
+      if (exactLocality) return exactLocality;
+
+      const exactMunicipality = locations.find(loc => normalizedLower(loc.municipality) === q);
+      if (exactMunicipality) return exactMunicipality;
+
+      const exactCity = locations.find(loc => normalizedLower(loc.city) === q);
+      if (exactCity) return exactCity;
+
+      const exactDistrict = locations.find(loc => normalizedLower(loc.district) === q);
+      if (exactDistrict) return exactDistrict;
+
+      return null;
+    }
+
+    function applyZoneFiltersFromLocation(loc) {
+      if (!loc) return;
+
+      currentDistrictFilter = loc.district || '';
+      currentMunicipalityFilter = loc.municipality || '';
+      currentLocalityFilter = loc.locality || '';
+      renderZoneFilters();
+    }
+
+    async function loadPlacesFromSupabase() {
+      const loading = document.getElementById('loading-places');
+      if (loading) loading.classList.remove('hidden');
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('places')
+          .select('*')
+          .eq('is_active', true)
+          .order('id', { ascending: false });
+
+        if (error) throw error;
+
+        locations = (data || []).map(normalizePlace);
+
+        await Promise.all([
+          loadConfirmationSummary(),
+          loadUserVotes()
+        ]);
+
+        renderZoneFilters();
+        renderHomeSections();
+        renderCards('cards-list', getFiltered());
+        updateAdminCounts();
+      } catch (error) {
+        console.error('Erro ao carregar locais:', error);
+        alert('Não foi possível carregar os locais do Supabase.');
+      } finally {
+        if (loading) loading.classList.add('hidden');
+      }
+    }
+
+    async function loadConfirmationSummary() {
+      confirmationSummaryMap = {};
+      if (!locations.length) return;
+
+      try {
+        const placeIds = locations.map(loc => loc.id);
+
+        const { data, error } = await supabaseClient
+          .from('place_confirmations')
+          .select('place_id, vote_type, created_at, updated_at')
+          .in('place_id', placeIds);
+
+        if (error) throw error;
+
+        const grouped = {};
+
+        (data || []).forEach((row) => {
+          if (!grouped[row.place_id]) {
+            grouped[row.place_id] = {
+              yes: 0,
+              no: 0,
+              maybe: 0,
+              lastUpdated: null
+            };
+          }
+
+          if (row.vote_type === 'yes') grouped[row.place_id].yes += 1;
+          if (row.vote_type === 'no') grouped[row.place_id].no += 1;
+          if (row.vote_type === 'maybe') grouped[row.place_id].maybe += 1;
+
+          const rowDate = row.updated_at || row.created_at;
+          if (!grouped[row.place_id].lastUpdated || new Date(rowDate) > new Date(grouped[row.place_id].lastUpdated)) {
+            grouped[row.place_id].lastUpdated = rowDate;
+          }
+        });
+
+        locations.forEach((loc) => {
+          const fallbackYes = Number(loc.confirmations || 0);
+          confirmationSummaryMap[loc.id] = grouped[loc.id] || {
+            yes: fallbackYes,
+            no: 0,
+            maybe: 0,
+            lastUpdated: null
+          };
+        });
+      } catch (error) {
+        console.error('Erro ao carregar confirmações:', error);
+
+        locations.forEach((loc) => {
+          confirmationSummaryMap[loc.id] = {
+            yes: Number(loc.confirmations || 0),
+            no: 0,
+            maybe: 0,
+            lastUpdated: null
+          };
+        });
+      }
+    }
+
+    async function loadUserVotes() {
+      userVoteMap = {};
+      if (!locations.length) return;
+
+      try {
+        const visitorId = getVisitorId();
+        const placeIds = locations.map(loc => loc.id);
+
+        const { data, error } = await supabaseClient
+          .from('place_confirmations')
+          .select('id, place_id, vote_type, created_at, updated_at, visitor_id')
+          .eq('visitor_id', visitorId)
+          .in('place_id', placeIds);
+
+        if (error) throw error;
+
+        (data || []).forEach((row) => {
+          userVoteMap[row.place_id] = row;
+        });
+      } catch (error) {
+        console.error('Erro ao carregar votos do utilizador:', error);
+      }
+    }
+
+    function getStoredPlaceVotes(id) {
+      return confirmationSummaryMap[id] || { yes: 0, no: 0, maybe: 0, lastUpdated: null };
+    }
+
+    function getConfirmationCount(id) {
+      const votes = getStoredPlaceVotes(id);
+      return votes.yes + votes.no + votes.maybe;
+    }
+
+    function getLastUpdateText(id) {
+      const votes = getStoredPlaceVotes(id);
+      if (!votes.lastUpdated) return null;
+
+      const diff = Date.now() - new Date(votes.lastUpdated).getTime();
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+      if (days <= 0) return 'Confirmado hoje';
+      if (days === 1) return 'Confirmado ontem';
+      if (days < 7) return `Confirmado há ${days} dias`;
+
+      if (days < 30) {
+        const weeks = Math.floor(days / 7);
+        return weeks <= 1 ? 'Confirmado há 1 semana' : `Confirmado há ${weeks} semanas`;
+      }
+
+      return 'Confirmado há algum tempo';
+    }
+
+    function getLastUpdateExactText(id) {
+      const votes = getStoredPlaceVotes(id);
+      return formatExactDate(votes.lastUpdated);
+    }
+
+    function uniqueSorted(values) {
+      return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt'));
+    }
+
+    function getDistrictOptions() {
+      return uniqueSorted(locations.map(loc => loc.district));
+    }
+
+    function getMunicipalityOptions(district = '') {
+      return uniqueSorted(
+        locations
+          .filter(loc => !district || loc.district === district)
+          .map(loc => loc.municipality)
+      );
+    }
+
+    function getLocalityOptions(district = '', municipality = '') {
+      return uniqueSorted(
+        locations
+          .filter(loc => (!district || loc.district === district) && (!municipality || loc.municipality === municipality))
+          .map(loc => loc.locality)
+      );
+    }
+
+    function populateSelect(selectId, options, placeholder, selectedValue = '') {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      select.innerHTML = `<option value="">${placeholder}</option>` + options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+      select.value = selectedValue || '';
+    }
+
+    function renderZoneFilters() {
+      populateSelect('filter-district', getDistrictOptions(), 'Todos', currentDistrictFilter);
+      populateSelect('filter-municipality', getMunicipalityOptions(currentDistrictFilter), 'Todos', currentMunicipalityFilter);
+      populateSelect('filter-locality', getLocalityOptions(currentDistrictFilter, currentMunicipalityFilter), 'Todas', currentLocalityFilter);
+    }
+
+    function handleDistrictFilterChange() {
+      const districtSelect = document.getElementById('filter-district');
+      currentDistrictFilter = districtSelect ? districtSelect.value : '';
+
+      clearSearchState();
+
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+
+      renderZoneFilters();
+      renderCards('cards-list', getFiltered());
+    }
+
+    function handleMunicipalityFilterChange() {
+      const municipalitySelect = document.getElementById('filter-municipality');
+      currentMunicipalityFilter = municipalitySelect ? municipalitySelect.value : '';
+
+      clearSearchState();
+
+      currentLocalityFilter = '';
+
+      renderZoneFilters();
+      renderCards('cards-list', getFiltered());
+    }
+
+    function handleLocalityFilterChange() {
+      const localitySelect = document.getElementById('filter-locality');
+      currentLocalityFilter = localitySelect ? localitySelect.value : '';
+
+      clearSearchState();
+
+      renderCards('cards-list', getFiltered());
+    }
+
+    function clearZoneFilters() {
+      currentDistrictFilter = '';
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+      clearSearchState();
+      renderZoneFilters();
+      renderCards('cards-list', getFiltered());
+    }
+
+    function getFiltered() {
+      return locations.filter((loc) => {
+        const matchCat = !currentFilter || loc.displayType === currentFilter;
+        const matchSearch = !currentSearch ||
+          normalizedLower(loc.name).includes(currentSearch) ||
+          normalizedLower(loc.city).includes(currentSearch) ||
+          normalizedLower(loc.displayType).includes(currentSearch) ||
+          normalizedLower(loc.address).includes(currentSearch) ||
+          normalizedLower(loc.district).includes(currentSearch) ||
+          normalizedLower(loc.municipality).includes(currentSearch) ||
+          normalizedLower(loc.locality).includes(currentSearch);
+        const matchDistrict = !currentDistrictFilter || loc.district === currentDistrictFilter;
+        const matchMunicipality = !currentMunicipalityFilter || loc.municipality === currentMunicipalityFilter;
+        const matchLocality = !currentLocalityFilter || loc.locality === currentLocalityFilter;
+        return matchCat && matchSearch && matchDistrict && matchMunicipality && matchLocality;
+      });
+    }
+
+    function updateFilterButtons(cat) {
+      document.querySelectorAll('#filter-bar .cat-btn').forEach((button) => {
+        const buttonCat = button.dataset.cat;
+        const isActive = (!cat && buttonCat === 'all') || buttonCat === cat;
+        button.classList.toggle('active', isActive);
+        if (isActive) {
+          button.classList.add('bg-sage', 'text-cream', 'border-sage');
+          button.classList.remove('bg-white', 'border-sand');
+        } else {
+          button.classList.remove('bg-sage', 'text-cream', 'border-sage');
+          button.classList.add('bg-white', 'border-sand');
+        }
+      });
+    }
+
+    function updateHomeCategoryButtons(btn) {
+      document.querySelectorAll('#cat-grid .cat-btn').forEach((button) => button.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+    }
+
+    function getRecentLocations(limit = 4) {
+      return locations
+        .slice()
+        .sort((a, b) => {
+          const aTime = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+          const bTime = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+          return bTime - aTime;
+        })
+        .slice(0, limit);
+    }
+
+    function getTopConfirmedLocations(limit = 4) {
+      const recentIds = new Set(getRecentLocations(limit).map(l => l.id));
+
+      return locations
+        .filter(loc => !recentIds.has(loc.id))
+        .sort((a, b) => getConfirmationCount(b.id) - getConfirmationCount(a.id))
+        .slice(0, limit);
+    }
+
+    function getTrustLevel(id) {
+      const votes = getStoredPlaceVotes(id);
+      if (votes.no > votes.yes && votes.no >= 2) return { label: 'Não aceitam', shortLabel: '❌ Não aceitam', className: 'bg-bark text-cream' };
+      if (votes.yes >= 10) return { label: 'Muito recomendado', shortLabel: '⭐ Muito recomendado', className: 'bg-sage text-cream' };
+      if (votes.yes >= 3) return { label: 'Confirmado', shortLabel: '👍 Confirmado', className: 'bg-moss/20 text-sage' };
+      if (votes.maybe > 0) return { label: 'Com restrições', shortLabel: '⚠️ Restrições', className: 'bg-sand text-bark/70' };
+      return null;
+    }
+
+    function getCardLocationLine(loc) {
+      const parts = [];
+      if (loc.locality) parts.push(loc.locality);
+      else if (loc.city) parts.push(loc.city);
+
+      if (loc.municipality && loc.municipality !== loc.locality && loc.municipality !== loc.city) parts.push(loc.municipality);
+      if (loc.district && loc.district !== loc.municipality && loc.district !== loc.city) parts.push(loc.district);
+
+      return parts.join(' · ') || loc.city || 'Portugal';
+    }
+
+    function createCard(loc) {
+      const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
+      const confirmationCount = getConfirmationCount(loc.id);
+      const trustLevel = getTrustLevel(loc.id);
+      const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
+        ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>'
+        : '';
+      const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
+      const lastUpdate = getLastUpdateText(loc.id);
+      const locationLine = getCardLocationLine(loc);
+      const smartDesc = getSmartShortDescription(loc);
+
+      return `
+        <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
+          <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
+            <span class="text-5xl">${loc.emoji}</span>
+            <div class="absolute top-3 left-3">
+              <span class="text-xs bg-white/90 text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${loc.displayType}</span>
+            </div>
+            <div class="absolute top-3 right-3 flex items-center gap-2 flex-wrap justify-end">
+              ${recentBadge}
+              <span class="${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+            </div>
+          </div>
+
+          <div class="p-4">
+            <div class="mb-2">
+              <h3 class="font-display font-bold text-xl leading-tight">${loc.name}</h3>
+              <p class="text-bark/55 text-sm flex items-center gap-1 mt-1">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                ${locationLine}
+              </p>
+            </div>
+
+            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">
+                ${confirmationCount} ${confirmationCount === 1 ? 'confirmação' : 'confirmações'}
+              </span>
+              ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>` : ''}
+            </div>
+
+            <div class="mt-3 flex items-center justify-between gap-3">
+              <div class="text-xs text-bark/50">
+                ${lastUpdate ? `🕒 ${lastUpdate}` : 'Sem confirmações recentes'}
+              </div>
+              <span class="text-sm text-sage font-semibold">Ver local →</span>
+            </div>
+          </div>
+        </article>`;
+    }
+
+    function getResultsZone(locs) {
+      if (!locs.length) return 'nenhuma zona';
+
+      if (currentLocalityFilter && currentMunicipalityFilter && currentDistrictFilter) {
+        return `${currentLocalityFilter} · ${currentMunicipalityFilter} · ${currentDistrictFilter}`;
+      }
+      if (currentMunicipalityFilter && currentDistrictFilter) {
+        return `${currentMunicipalityFilter} · ${currentDistrictFilter}`;
+      }
+      if (currentDistrictFilter) {
+        return currentDistrictFilter;
+      }
+
+      const districts = [...new Set(locs.map(l => l.district).filter(Boolean))];
+      const municipalities = [...new Set(locs.map(l => l.municipality).filter(Boolean))];
+      const localities = [...new Set(locs.map(l => l.locality).filter(Boolean))];
+      const cities = [...new Set(locs.map(l => l.city).filter(Boolean))];
+
+      if (localities.length === 1 && municipalities.length === 1 && districts.length === 1) {
+        return `${localities[0]} · ${municipalities[0]} · ${districts[0]}`;
+      }
+      if (municipalities.length === 1 && districts.length === 1) {
+        return `${municipalities[0]} · ${districts[0]}`;
+      }
+      if (districts.length === 1) {
+        return districts[0];
+      }
+      if (cities.length === 1) {
+        return cities[0];
+      }
+
+      return 'várias zonas';
+    }
+
+    function renderCards(targetId, locs) {
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      el.innerHTML = locs.map(createCard).join('');
+
+      const noResults = document.getElementById('no-results');
+      const resultsRegion = document.getElementById('results-region');
+      const resultsCount = document.getElementById('results-count');
+
+      if (targetId === 'cards-list') {
+        if (noResults) noResults.classList.toggle('hidden', locs.length > 0);
+
+        if (resultsRegion) {
+          if (locs.length > 0) {
+            resultsRegion.textContent = `Resultados em ${getResultsZone(locs)}`;
+          } else {
+            resultsRegion.textContent = 'Nenhum resultado encontrado';
+          }
+        }
+
+        if (resultsCount) {
+          resultsCount.textContent = `${locs.length} ${locs.length === 1 ? 'local encontrado' : 'locais encontrados'}`;
+        }
+      } else if (noResults) {
+        noResults.classList.add('hidden');
+      }
+
+      lucide.createIcons();
+    }
+
+    function renderHomeSections() {
+      renderCards('cards-recent', getRecentLocations());
+      renderCards('cards-top', getTopConfirmedLocations());
+      updateCommunityStats();
+    }
+
+    function getTotalCommunityResponses() {
+      return locations.reduce((total, loc) => total + getConfirmationCount(loc.id), 0);
+    }
+
+    function updateCommunityStats() {
+      const el = document.getElementById('hero-community-count');
+      if (!el) return;
+      const total = getTotalCommunityResponses();
+
+      if (total > 0) {
+        el.textContent = `🐾 ${total} ${total === 1 ? 'confirmação' : 'confirmações'} da comunidade`;
+      } else {
+        el.textContent = '🐾 A comunidade já começou a confirmar locais';
+      }
+    }
+
+    function filterByCategory(cat, btn = null) {
+      currentFilter = cat;
+      updateFilterButtons(cat);
+      updateHomeCategoryButtons(btn);
+      renderCards('cards-list', getFiltered());
+      hideSuggestions();
+      showView('list');
+    }
+
+    function getSuggestions(query) {
+      const q = query.trim().toLowerCase();
+      if (!q) return [];
+
+      return locations
+        .map(loc => {
+          let score = 0;
+
+          if (normalizedLower(loc.name).startsWith(q)) score += 10;
+          else if (normalizedLower(loc.name).includes(q)) score += 7;
+
+          if (normalizedLower(loc.city).startsWith(q)) score += 6;
+          else if (normalizedLower(loc.city).includes(q)) score += 4;
+
+          if (normalizedLower(loc.municipality).startsWith(q)) score += 6;
+          else if (normalizedLower(loc.municipality).includes(q)) score += 4;
+
+          if (normalizedLower(loc.locality).startsWith(q)) score += 5;
+          else if (normalizedLower(loc.locality).includes(q)) score += 3;
+
+          if (normalizedLower(loc.district).startsWith(q)) score += 4;
+          else if (normalizedLower(loc.district).includes(q)) score += 2;
+
+          if (normalizedLower(loc.displayType).startsWith(q)) score += 3;
+          else if (normalizedLower(loc.displayType).includes(q)) score += 2;
+
+          return { loc, score };
+        })
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score || a.loc.name.localeCompare(b.loc.name, 'pt'))
+        .slice(0, 5);
+    }
+
+    function hideSuggestions() {
+      const box = document.getElementById('search-suggestions');
+      if (!box) return;
+      box.classList.add('hidden');
+      box.innerHTML = '';
+      activeSuggestionIndex = -1;
+    }
+
+    function renderSuggestions(items) {
+      const box = document.getElementById('search-suggestions');
+      if (!box) return;
+
+      if (!items.length) {
+        hideSuggestions();
+        return;
+      }
+
+      box.innerHTML = items.map((item, index) => `
+        <div class="suggestion-item ${index === activeSuggestionIndex ? 'active' : ''}" onclick="selectSuggestion(${item.loc.id})">
+          <p class="font-medium">${item.loc.name}</p>
+          <p class="text-xs text-bark/50">${item.loc.district || ''}${item.loc.municipality ? ' · ' + item.loc.municipality : ''}${item.loc.locality ? ' · ' + item.loc.locality : ''}</p>
+        </div>
+      `).join('');
+
+      box.classList.remove('hidden');
+    }
+
+    function handleSearchInput() {
+      const input = document.getElementById('search-input');
+      const value = input ? input.value.trim() : '';
+
+      currentSearch = value.toLowerCase();
+      activeSuggestionIndex = -1;
+
+      const matchedZone = findLocationByQuery(value);
+      if (matchedZone) {
+        applyZoneFiltersFromLocation(matchedZone);
+      } else if (!value) {
+        currentDistrictFilter = '';
+        currentMunicipalityFilter = '';
+        currentLocalityFilter = '';
+        renderZoneFilters();
+      }
+
+      renderSuggestions(getSuggestions(value));
+    }
+
+    function handleSearchKey(event) {
+      const input = document.getElementById('search-input');
+      const suggestions = getSuggestions(input.value);
+
+      if (event.key === 'ArrowDown') {
+        if (!suggestions.length) return;
+        event.preventDefault();
+        activeSuggestionIndex = (activeSuggestionIndex + 1) % suggestions.length;
+        renderSuggestions(suggestions);
+        return;
+      }
+
+      if (event.key === 'ArrowUp') {
+        if (!suggestions.length) return;
+        event.preventDefault();
+        activeSuggestionIndex = (activeSuggestionIndex - 1 + suggestions.length) % suggestions.length;
+        renderSuggestions(suggestions);
+        return;
+      }
+
+      if (event.key === 'Escape') {
+        hideSuggestions();
+        return;
+      }
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+
+        const matchedZone = findLocationByQuery(input.value);
+        if (matchedZone) {
+          currentSearch = '';
+          if (input) input.value = '';
+          applyZoneFiltersFromLocation(matchedZone);
+        }
+
+        hideSuggestions();
+        showView('list');
+        renderCards('cards-list', getFiltered());
+      }
+    }
+
+    function selectSuggestion(id) {
+      const loc = locations.find(item => item.id === id);
+      if (!loc) return;
+
+      clearSearchState();
+      applyZoneFiltersFromLocation(loc);
+      showView('list');
+      renderCards('cards-list', getFiltered());
+    }
+
+    function showDetail(id) {
+      const loc = locations.find((item) => item.id === id);
+      if (!loc) return;
+
+      const votes = getStoredPlaceVotes(loc.id);
+      const confirmationCount = getConfirmationCount(loc.id);
+      const trustLevel = getTrustLevel(loc.id);
+      const lastUpdate = getLastUpdateText(loc.id);
+      const lastUpdateExact = getLastUpdateExactText(loc.id);
+      const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
+      const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
+      const userState = getUserVoteState(loc.id);
+
+      document.getElementById('detail-content').innerHTML = `
+        <button type="button" onclick="showView('list')" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+        </button>
+        <div class="rounded-2xl overflow-hidden border border-sand shadow-sm bg-white">
+          <div class="h-48 flex items-center justify-center relative" style="background:${grad}">
+            <span class="text-6xl">${loc.emoji}</span>
+            <span class="absolute top-4 right-4 ${dogMeta.className} text-sm font-medium px-3 py-1.5 rounded-full">${dogMeta.text}</span>
+          </div>
+          <div class="p-5 space-y-4">
+            <div>
+              <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
+              <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.displayType}</p>
+              <p class="text-sm text-bark/55 mt-2">${loc.district ? `${loc.district}` : ''}${loc.municipality ? ` · ${loc.municipality}` : ''}${loc.locality ? ` · ${loc.locality}` : ''}</p>
+            </div>
+
+            <p class="text-bark/80 leading-relaxed">${loc.desc}</p>
+
+            <div class="bg-sand/60 rounded-xl p-4 space-y-2">
+              <p class="font-medium text-sm flex items-center gap-2"><i data-lucide="navigation" class="w-4 h-4 text-sage"></i> Morada</p>
+              <p class="text-sm text-bark/70">${loc.address}</p>
+              ${loc.website ? `<a href="${loc.website}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 text-sm text-sage font-medium hover:underline mt-2"><i data-lucide="external-link" class="w-4 h-4"></i> Ver website</a>` : ''}
+            </div>
+
+            ${loc.notes ? `
+              <div class="bg-white border border-sand rounded-xl p-4 space-y-2">
+                <p class="font-medium text-sm text-bark">Notas da comunidade</p>
+                <p class="text-sm text-bark/70 leading-relaxed">${loc.notes}</p>
+              </div>` : ''}
+
+            ${Array.isArray(loc.features) && loc.features.length ? `
+              <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
+                <p class="font-medium text-sm text-bark">Condições úteis</p>
+                <div class="flex flex-wrap gap-2">
+                  ${loc.features.map((feature) => `<span class="text-xs bg-sage/10 text-sage font-medium px-3 py-1.5 rounded-full">${feature}</span>`).join('')}
+                </div>
+              </div>` : ''}
+
+            <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
+              <div class="flex items-center justify-between gap-3">
+                <div>
+                  <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
+                  <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
+                  ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
+                  ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
+                </div>
+                <span class="text-xs ${userState.hasVote ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${userState.hasVote ? 'Já respondeste' : 'Ainda não respondeste'}</span>
+              </div>
+              <div class="flex items-center justify-between gap-3 flex-wrap">
+                ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
+                <p class="text-xs text-bark/55">Sem reviews. Só respostas práticas: sim, não ou com restrições.</p>
+              </div>
+              <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
+                ${userState.helpText}
+                ${userState.dateText ? ` · ${userState.dateText}` : ''}
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="confirmPlace(${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">✅ Sim</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'no')" class="bg-bark/80 text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">❌ Não</button>
+              <button type="button" onclick="confirmPlace(${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-3 rounded-full text-sm border border-bark/10 shadow-sm hover:bg-white transition">⚠️ Restr.</button>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-3">
+              <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
+                <i data-lucide="map" class="w-5 h-5"></i> Abrir no Google Maps
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+
+      hideSuggestions();
+      showView('detail');
+      lucide.createIcons();
+    }
+
+    async function confirmPlace(id, type = 'yes') {
+      const loc = locations.find((item) => item.id === id);
+      if (!loc) return;
+
+      const visitorId = getVisitorId();
+      const existing = userVoteMap[id];
+      const nowIso = new Date().toISOString();
+
+      try {
+        if (!existing) {
+          const { error } = await supabaseClient
+            .from('place_confirmations')
+            .insert([{
+              place_id: id,
+              vote_type: type,
+              visitor_id: visitorId,
+              updated_at: nowIso
+            }]);
+
+          if (error) throw error;
+
+          alert(`Obrigado! Confirmaste "${loc.name}" 🐾`);
+        } else {
+          const referenceDate = existing.updated_at || existing.created_at;
+          const minutesSince = getMinutesSince(referenceDate);
+          const daysSince = getDaysSince(referenceDate);
+
+          if (type === existing.vote_type && minutesSince > CONFIRM_RULES.correctionMinutes && daysSince < CONFIRM_RULES.reconfirmDays) {
+            const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
+            alert(`Já confirmaste "${loc.name}" com esse voto. Podes alterar durante ${CONFIRM_RULES.correctionMinutes} minutos ou reconfirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}.`);
+            return;
+          }
+
+          if (minutesSince <= CONFIRM_RULES.correctionMinutes) {
+            const { error } = await supabaseClient
+              .from('place_confirmations')
+              .update({
+                vote_type: type,
+                updated_at: nowIso
+              })
+              .eq('id', existing.id);
+
+            if (error) throw error;
+
+            alert(`Voto corrigido em "${loc.name}" 🐾`);
+          } else if (daysSince >= CONFIRM_RULES.reconfirmDays) {
+            const { error } = await supabaseClient
+              .from('place_confirmations')
+              .update({
+                vote_type: type,
+                updated_at: nowIso
+              })
+              .eq('id', existing.id);
+
+            if (error) throw error;
+
+            alert(`Confirmação atualizada em "${loc.name}" 🐾`);
+          } else {
+            const remainingDays = Math.ceil(CONFIRM_RULES.reconfirmDays - daysSince);
+            alert(`Já confirmaste este local. Podes corrigir durante ${CONFIRM_RULES.correctionMinutes} minutos após o voto ou voltar a confirmar daqui a ${remainingDays} dia${remainingDays === 1 ? '' : 's'}.`);
+            return;
+          }
+        }
+
+        await Promise.all([
+          loadConfirmationSummary(),
+          loadUserVotes()
+        ]);
+
+        renderHomeSections();
+        renderCards('cards-list', getFiltered());
+        showDetail(id);
+      } catch (error) {
+        console.error('Erro ao guardar confirmação:', error);
+        alert('Não foi possível guardar a confirmação.');
+      }
+    }
+
+    async function checkDuplicateSuggestion(name, city, type) {
+      const cleanName = name.trim();
+      const cleanCity = city.trim();
+      const typeAliases = getTypeAliases(type);
+
+      const [placesResult, suggestionsResult] = await Promise.all([
+        supabaseClient
+          .from('places')
+          .select('id,type')
+          .in('type', typeAliases)
+          .eq('is_active', true)
+          .ilike('name', cleanName)
+          .ilike('city', cleanCity)
+          .limit(1),
+
+        supabaseClient
+          .from('suggestions')
+          .select('id,type')
+          .in('type', typeAliases)
+          .eq('status', 'pending')
+          .ilike('name', cleanName)
+          .ilike('city', cleanCity)
+          .limit(1)
+      ]);
+
+      if (placesResult.error) throw placesResult.error;
+      if (suggestionsResult.error) throw suggestionsResult.error;
+
+      const existsInPlaces = Array.isArray(placesResult.data) && placesResult.data.length > 0;
+      const existsInSuggestions = Array.isArray(suggestionsResult.data) && suggestionsResult.data.length > 0;
+
+      return {
+        exists: existsInPlaces || existsInSuggestions,
+        existsInPlaces,
+        existsInSuggestions
+      };
+    }
+
+    async function submitSuggestion() {
+      const name = document.getElementById('sg-name').value.trim();
+      const city = document.getElementById('sg-city').value.trim();
+      const type = document.getElementById('sg-type').value;
+      const dog_status = document.getElementById('sg-dog-status').value;
+      const notes = document.getElementById('sg-notes').value.trim();
+      const website = document.getElementById('sg-website').value.trim();
+      const address = document.getElementById('sg-address').value.trim();
+      const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
+
+      const emojiMap = {
+        'Comer & Beber': '🍽️',
+        Praia: '🏖️',
+        Alojamento: '🏡',
+        'Espaços comerciais': '🛍️',
+        'Espaços Comerciais': '🛍️',
+        'Soltar o cão': '🦮',
+        'Passear com o cão': '🚶',
+        'Experiências': '🎯'
+      };
+
+      const duplicateCheck = await checkDuplicateSuggestion(name, city, type);
+
+      if (duplicateCheck.exists) {
+        if (duplicateCheck.existsInPlaces) {
+          alert('Este local já existe nos locais ativos.');
+        } else if (duplicateCheck.existsInSuggestions) {
+          alert('Este local já foi sugerido e está pendente de revisão.');
+        } else {
+          alert('Este local já existe.');
+        }
+        return;
+      }
+
+      const payload = {
+        name,
+        city,
+        district: null,
+        municipality: null,
+        locality: null,
+        type,
+        emoji: emojiMap[type] || '📍',
+        description: `Local sugerido pela comunidade em ${city}.`,
+        address: address || city,
+        notes: notes || null,
+        website: website || null,
+        features,
+        dogs: dog_status !== 'no',
+        dog_status,
+        confirmations: 1,
+        status: 'pending'
+      };
+
+      const { error } = await supabaseClient.from('suggestions').insert([payload]);
+      if (error) {
+        if (error.code === '23505') {
+          alert('Este local já existe ou já foi sugerido.');
+          return;
+        }
+        throw error;
+      }
+    }
+
+    function resetSuggestForm() {
+      const form = document.getElementById('suggest-form');
+      const success = document.getElementById('suggest-success');
+      if (form) {
+        form.reset();
+        form.classList.remove('hidden');
+      }
+      if (success) success.classList.add('hidden');
+      showView('suggest');
+      lucide.createIcons();
+    }
+
+    function filterAdminItems(items) {
+      if (!adminSearch) return items;
+
+      return items.filter(item => {
+        const name = (item.name || '').toLowerCase();
+        const city = (item.city || '').toLowerCase();
+        return name.includes(adminSearch) || city.includes(adminSearch);
+      });
+    }
+
+    function handleAdminSearch() {
+      const input = document.getElementById('admin-search');
+      adminSearch = input ? input.value.toLowerCase().trim() : '';
+      loadAdminSuggestions();
+      loadAdminPlaces();
+    }
+
+    async function loadAdminSuggestions() {
+      if (!currentUser) return;
+
+      const container = document.getElementById('admin-suggestions');
+      const empty = document.getElementById('admin-empty');
+      if (!container || !empty) return;
+      container.innerHTML = '<p class="text-sm text-bark/50">A carregar sugestões...</p>';
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('suggestions')
+          .select('*')
+          .eq('status', 'pending')
+          .order('id', { ascending: false });
+
+        if (error) throw error;
+
+        let rows = data || [];
+        rows = filterAdminItems(rows);
+
+        document.getElementById('admin-pending-count').textContent = String(rows.length);
+
+        if (!rows.length) {
+          container.innerHTML = '';
+          empty.classList.remove('hidden');
+          lucide.createIcons();
+          return;
+        }
+
+        empty.classList.add('hidden');
+
+        container.innerHTML = rows.map((item) => {
+          const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
+          return `
+            <article class="border border-sand rounded-2xl p-4 bg-sand/30">
+              <div class="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <h4 class="font-display text-lg font-bold">${item.name}</h4>
+                  <p class="text-sm text-bark/55 mt-1">${item.city} · ${mapDisplayType(item.type)}</p>
+                </div>
+                <span class="text-xs bg-sand text-bark/70 font-medium px-2.5 py-1 rounded-full">Pendente</span>
+              </div>
+              <div class="space-y-2 text-sm text-bark/70 mb-4">
+                <p><strong>Estado:</strong> ${dogMeta.text}</p>
+                <p><strong>Distrito:</strong> ${item.district || '—'}</p>
+                <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
+                <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
+                <p><strong>Morada:</strong> ${item.address || '—'}</p>
+                <p><strong>Notas:</strong> ${item.notes || '—'}</p>
+                <p><strong>Website:</strong> ${item.website || '—'}</p>
+                ${Array.isArray(item.features) && item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="openApproveSuggestionModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+                  <i data-lucide="check" class="w-4 h-4"></i>
+                  Rever e aprovar
+                </button>
+                <button type="button" onclick="rejectSuggestion(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+                  <i data-lucide="x" class="w-4 h-4"></i>
+                  Rejeitar
+                </button>
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        lucide.createIcons();
+      } catch (error) {
+        console.error('Erro ao carregar sugestões:', error);
+        container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar sugestões.</p>';
+      }
+    }
+function isPlaceIncomplete(place) {
+  return !normalizeText(place.district) || !normalizeText(place.municipality) || !normalizeText(place.locality);
+}
+
+function getMissingFields(place) {
+  const missing = [];
+  if (!normalizeText(place.district)) missing.push('Distrito');
+  if (!normalizeText(place.municipality)) missing.push('Concelho');
+  if (!normalizeText(place.locality)) missing.push('Localidade');
+  return missing;
+}
+
+function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
+  const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
+  const missingFields = getMissingFields(item);
+  const isIncomplete = missingFields.length > 0;
+
+  return `
+    <article class="border ${highlightIncomplete ? 'border-[#E8D9BB] bg-white' : 'border-sand bg-white'} rounded-2xl p-4">
+      <div class="flex items-start justify-between gap-3 mb-3">
+        <div>
+          <h4 class="font-display text-lg font-bold">${item.name}</h4>
+          <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.displayType}</p>
+        </div>
+        <div class="flex flex-wrap gap-2 justify-end">
+          ${isIncomplete ? `<span class="text-xs bg-amber-100 text-amber-900 font-medium px-2.5 py-1 rounded-full">Incompleto</span>` : ''}
+          <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-sm text-bark/70 mb-4">
+        <p><strong>Distrito:</strong> ${item.district || '—'}</p>
+        <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
+        <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
+        <p><strong>Morada:</strong> ${item.address || '—'}</p>
+        <p><strong>Website:</strong> ${item.website || '—'}</p>
+        ${isIncomplete ? `<p><strong>Falta preencher:</strong> ${missingFields.join(' · ')}</p>` : ''}
+        ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
+          <i data-lucide="pencil" class="w-4 h-4"></i>
+          Editar
+        </button>
+        <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
+          <i data-lucide="eye-off" class="w-4 h-4"></i>
+          Desativar
+        </button>
+      </div>
+    </article>
+  `;
+
+}
+   async function loadAdminPlaces() {
+  if (!currentUser) return;
+
+  const container = document.getElementById('admin-places');
+  const empty = document.getElementById('admin-places-empty');
+  const incompleteContainer = document.getElementById('admin-incomplete-places');
+  const incompleteEmpty = document.getElementById('admin-incomplete-empty');
+  const incompleteCountEl = document.getElementById('admin-incomplete-count');
+
+  if (!container || !empty || !incompleteContainer || !incompleteEmpty || !incompleteCountEl) return;
+
+  container.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
+  incompleteContainer.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('places')
+      .select('*')
+      .eq('is_active', true)
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+
+    let rows = (data || []).map(normalizePlace);
+    rows = filterAdminItems(rows);
+
+    const incompleteRows = rows.filter(isPlaceIncomplete);
+    const completeRows = rows.filter(item => !isPlaceIncomplete(item));
+
+    incompleteCountEl.textContent = String(incompleteRows.length);
+
+    if (!incompleteRows.length) {
+      incompleteContainer.innerHTML = '';
+      incompleteEmpty.classList.remove('hidden');
+    } else {
+      incompleteEmpty.classList.add('hidden');
+      incompleteContainer.innerHTML = incompleteRows
+        .map(item => createAdminPlaceCard(item, { highlightIncomplete: true }))
+        .join('');
+    }
+
+    if (!rows.length) {
+      container.innerHTML = '';
+      empty.classList.remove('hidden');
+      lucide.createIcons();
+      return;
+    }
+
+    empty.classList.add('hidden');
+
+    container.innerHTML = rows
+      .map(item => createAdminPlaceCard(item))
+      .join('');
+
+    lucide.createIcons();
+  } catch (error) {
+    console.error('Erro ao carregar locais ativos:', error);
+    container.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar locais.</p>';
+    incompleteContainer.innerHTML = '<p class="text-sm text-red-600">Erro ao carregar locais incompletos.</p>';
+  }
+}
+
+   function updateAdminCounts() {
+  const placesCount = document.getElementById('admin-places-count');
+  const incompleteCount = document.getElementById('admin-incomplete-count');
+
+  if (placesCount) placesCount.textContent = String(locations.length);
+
+  if (incompleteCount) {
+    incompleteCount.textContent = String(locations.filter(isPlaceIncomplete).length);
+  }
+}
+
+    async function approveSuggestion(id) {
+      if (!currentUser) return;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('suggestions')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) throw error;
+        if (!data) return;
+
+        const payload = {
+          name: data.name,
+          city: data.city,
+          district: data.district || null,
+          municipality: data.municipality || null,
+          locality: data.locality || null,
+          type: data.type,
+          emoji: data.emoji,
+          description: data.description,
+          address: data.address,
+          notes: data.notes,
+          website: data.website,
+          features: data.features || [],
+          dogs: data.dogs !== false,
+          dog_status: data.dog_status || 'yes',
+          confirmations: Number(data.confirmations || 1),
+          is_active: true
+        };
+
+        const { error: insertError } = await supabaseClient.from('places').insert([payload]);
+        if (insertError) {
+          if (insertError.code === '23505') {
+            alert('Este local já existe nos locais ativos.');
+            return;
+          }
+          throw insertError;
+        }
+
+        const { error: deleteError } = await supabaseClient.from('suggestions').delete().eq('id', id);
+        if (deleteError) throw deleteError;
+
+        await loadPlacesFromSupabase();
+        await loadAdminSuggestions();
+        await loadAdminPlaces();
+      } catch (error) {
+        console.error('Erro ao aprovar sugestão:', error);
+        alert('Não foi possível aprovar a sugestão.');
+      }
+    }
+
+    async function rejectSuggestion(id) {
+      if (!currentUser) return;
+
+      try {
+        const { error } = await supabaseClient.from('suggestions').delete().eq('id', id);
+        if (error) throw error;
+        await loadAdminSuggestions();
+      } catch (error) {
+        console.error('Erro ao rejeitar sugestão:', error);
+        alert('Não foi possível rejeitar a sugestão.');
+      }
+    }
+
+    async function deactivatePlace(id) {
+      if (!currentUser) return;
+
+      const place = locations.find((item) => item.id === id);
+      if (!place) return;
+
+      const confirmed = confirm(`Desativar "${place.name}"?`);
+      if (!confirmed) return;
+
+      try {
+        const { error } = await supabaseClient
+          .from('places')
+          .update({ is_active: false })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        await loadPlacesFromSupabase();
+        await loadAdminPlaces();
+      } catch (error) {
+        console.error('Erro ao desativar local:', error);
+        alert('Não foi possível desativar o local.');
+      }
+    }
+
+    function fillEditModalFromItem(item, source = 'place') {
+      document.getElementById('edit-place-id').value = item.id;
+      document.getElementById('edit-source').value = source;
+
+      document.getElementById('edit-name').value = item.name || '';
+      document.getElementById('edit-district').value = item.district || '';
+      document.getElementById('edit-municipality').value = item.municipality || '';
+      document.getElementById('edit-locality').value = item.locality || '';
+      document.getElementById('edit-city').value = item.city || '';
+      document.getElementById('edit-address').value = item.address || '';
+      document.getElementById('edit-type').value = mapDisplayType(item.type) || 'Comer & Beber';
+      document.getElementById('edit-dog-status').value = item.dog_status || 'yes';
+      document.getElementById('edit-description').value = item.desc || item.description || '';
+      document.getElementById('edit-notes').value = item.notes || '';
+      document.getElementById('edit-website').value = item.website || '';
+      document.getElementById('edit-emoji').value = item.emoji || '📍';
+
+      const itemFeatures = Array.isArray(item.features) ? item.features : [];
+      document.querySelectorAll('#edit-features input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.checked = itemFeatures.includes(checkbox.value);
+      });
+
+      const title = document.querySelector('#edit-place-modal h3');
+      const subtitle = document.querySelector('#edit-place-modal h3 + p');
+
+      if (title) title.textContent = source === 'suggestion' ? 'Rever e aprovar sugestão' : 'Editar local';
+      if (subtitle) subtitle.textContent = source === 'suggestion'
+        ? 'Confirma ou corrige a informação antes de publicar no site.'
+        : 'Atualiza a informação do local ativo.';
+
+      const submitButton = document.querySelector('#edit-place-form button[type="submit"]');
+      if (submitButton) submitButton.textContent = source === 'suggestion' ? 'Guardar e aprovar' : 'Guardar alterações';
+
+      document.getElementById('edit-place-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function openEditPlaceModal(id) {
+      if (!currentUser) return;
+
+      const place = locations.find((item) => item.id === id);
+      if (!place) return;
+
+      fillEditModalFromItem(place, 'place');
+    }
+
+    async function openApproveSuggestionModal(id) {
+      if (!currentUser) return;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('suggestions')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) throw error;
+        if (!data) return;
+
+        fillEditModalFromItem(data, 'suggestion');
+      } catch (error) {
+        console.error('Erro ao abrir sugestão:', error);
+        alert('Não foi possível abrir a sugestão para rever.');
+      }
+    }
+
+    function closeEditPlaceModal() {
+      document.getElementById('edit-place-modal').classList.add('hidden');
+    }
+
+    async function saveEditPlace(event) {
+      event.preventDefault();
+      if (!currentUser) return;
+
+      const id = Number(document.getElementById('edit-place-id').value);
+      const source = document.getElementById('edit-source')?.value || 'place';
+      const name = document.getElementById('edit-name').value.trim();
+      const district = document.getElementById('edit-district').value.trim();
+      const municipality = document.getElementById('edit-municipality').value.trim();
+      const locality = document.getElementById('edit-locality').value.trim();
+      const city = document.getElementById('edit-city').value.trim();
+      const address = document.getElementById('edit-address').value.trim();
+      const type = document.getElementById('edit-type').value;
+      const dog_status = document.getElementById('edit-dog-status').value;
+      const description = document.getElementById('edit-description').value.trim();
+      const notes = document.getElementById('edit-notes').value.trim();
+      const website = document.getElementById('edit-website').value.trim();
+      const emoji = document.getElementById('edit-emoji').value.trim() || '📍';
+      const features = Array.from(document.querySelectorAll('#edit-features input:checked')).map((input) => input.value);
+
+      const payload = {
+        name,
+        city,
+        district: district || null,
+        municipality: municipality || null,
+        locality: locality || null,
+        address: address || city,
+        type,
+        dog_status,
+        dogs: dog_status !== 'no',
+        description: description || 'Local pet-friendly.',
+        notes: notes || null,
+        website: website || null,
+        emoji,
+        features
+      };
+
+      try {
+        if (source === 'suggestion') {
+          const { error: insertError } = await supabaseClient
+            .from('places')
+            .insert([{ ...payload, confirmations: 1, is_active: true }]);
+
+          if (insertError) {
+            if (insertError.code === '23505') {
+              alert('Este local já existe nos locais ativos.');
+              return;
+            }
+            throw insertError;
+          }
+
+          const { error: deleteError } = await supabaseClient
+            .from('suggestions')
+            .delete()
+            .eq('id', id);
+
+          if (deleteError) throw deleteError;
+        } else {
+          const { error } = await supabaseClient
+            .from('places')
+            .update(payload)
+            .eq('id', id);
+
+          if (error) throw error;
+        }
+
+        closeEditPlaceModal();
+        await loadPlacesFromSupabase();
+        await loadAdminSuggestions();
+        await loadAdminPlaces();
+      } catch (error) {
+        console.error('Erro ao guardar local:', error);
+        alert(source === 'suggestion'
+          ? 'Não foi possível guardar e aprovar a sugestão.'
+          : 'Não foi possível guardar as alterações.');
+      }
+    }
+
+    function openLoginModal() {
+      document.getElementById('login-modal').classList.remove('hidden');
+      document.getElementById('login-error').classList.add('hidden');
+      lucide.createIcons();
+    }
+
+    function closeLoginModal() {
+      document.getElementById('login-modal').classList.add('hidden');
+    }
+
+    function updateAuthUI() {
+      const loginBtn = document.getElementById('nav-login-btn');
+      const logoutBtn = document.getElementById('nav-logout-btn');
+      const adminBtn = document.getElementById('nav-admin-btn');
+
+      if (!loginBtn || !logoutBtn || !adminBtn) return;
+
+      if (currentUser) {
+        loginBtn.classList.add('hidden');
+        logoutBtn.classList.remove('hidden');
+        adminBtn.classList.remove('hidden');
+      } else {
+        loginBtn.classList.remove('hidden');
+        logoutBtn.classList.add('hidden');
+        adminBtn.classList.add('hidden');
+
+        if (!document.getElementById('view-admin').classList.contains('hidden')) {
+          showView('home');
+        }
+      }
+    }
+
+    async function login() {
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errorEl = document.getElementById('login-error');
+
+      errorEl.classList.add('hidden');
+
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        currentUser = data.user || null;
+        updateAuthUI();
+        closeLoginModal();
+        showView('admin');
+      } catch (error) {
+        console.error('Erro no login:', error);
+        errorEl.textContent = 'Email ou password inválidos.';
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    async function logout() {
+      try {
+        await supabaseClient.auth.signOut();
+      } catch (error) {
+        console.error('Erro no logout:', error);
+      }
+      currentUser = null;
+      updateAuthUI();
+      showView('home');
+    }
+
+    function goToAdmin() {
+      if (!currentUser) {
+        openLoginModal();
+        return;
+      }
+      showView('admin');
+    }
+
+    async function restoreSession() {
+      try {
+        const { data, error } = await supabaseClient.auth.getSession();
+        if (error) throw error;
+        currentUser = data?.session?.user || null;
+        updateAuthUI();
+      } catch (error) {
+        console.error('Erro ao restaurar sessão:', error);
+        currentUser = null;
+        updateAuthUI();
+      }
+    }
+
+    function setMacImage() {
+      const nav = document.getElementById('mac-nav');
+      const hero = document.getElementById('mac-hero');
+      const navWrap = document.getElementById('mac-nav-wrap');
+      const heroWrap = document.getElementById('mac-hero-wrap');
+
+      if (nav) {
+        nav.onerror = () => { if (navWrap) navWrap.textContent = '🐶'; };
+        nav.src = MAC_IMAGE_DATA;
+      }
+
+      if (hero) {
+        hero.onerror = () => { if (heroWrap) heroWrap.textContent = '🐶'; };
+        hero.src = MAC_IMAGE_DATA;
+      }
+    }
+
+    function updateResultsBarVisibility(view) {
+      const bar = document.getElementById('results-fixed-bar');
+      if (!bar) return;
+      bar.classList.toggle('hidden', view !== 'list');
+    }
+
+function showView(view) {
+  ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
+    const el = document.getElementById(`view-${section}`);
+    if (el) el.classList.toggle('hidden', section !== view);
+  });
+
+  updateResultsBarVisibility(view);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+
+  if (view === 'list') {
+    renderZoneFilters();
+    renderCards('cards-list', getFiltered());
+  }
+
+  if (view === 'home') renderHomeSections();
+
+  if (view === 'admin') {
+    if (!currentUser) {
+      alert('Precisas de entrar para aceder ao admin.');
+      openLoginModal();
+      document.getElementById('view-admin').classList.add('hidden');
+      document.getElementById('view-home').classList.remove('hidden');
+      updateResultsBarVisibility('home');
+      return;
+    }
+
+    updateAdminCounts();
+    loadAdminSuggestions();
+    loadAdminPlaces();
+  }
+
+  lucide.createIcons();
+}
+    document.addEventListener('click', function(e) {
+      const input = document.getElementById('search-input');
+      const box = document.getElementById('search-suggestions');
+      const loginModal = document.getElementById('login-modal');
+
+      if (input && box && !box.contains(e.target) && e.target !== input) {
+        hideSuggestions();
+      }
+
+      if (loginModal && e.target === loginModal) {
+        closeLoginModal();
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLoginModal();
+        closeEditPlaceModal();
+      }
+    });
+
+    async function initApp() {
+      document.getElementById('year').textContent = String(new Date().getFullYear());
+
+      buildFeaturesCheckboxes('sg-features', 'sg-feature');
+      buildFeaturesCheckboxes('edit-features', 'edit-feature');
+
+      getVisitorId();
+      setMacImage();
+      updateResultsBarVisibility('home');
+      lucide.createIcons();
+
+      const ok = setupSupabase();
+      if (!ok) {
+        alert('Falta configurar o Supabase.');
+        return;
+      }
+
+      await restoreSession();
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        currentUser = session?.user || null;
+        updateAuthUI();
+      });
+
+      const suggestForm = document.getElementById('suggest-form');
+      if (suggestForm) {
+        suggestForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          try {
+            await submitSuggestion();
+            suggestForm.reset();
+            suggestForm.classList.add('hidden');
+            const success = document.getElementById('suggest-success');
+            if (success) success.classList.remove('hidden');
+            lucide.createIcons();
+          } catch (error) {
+            console.error('Erro ao enviar sugestão:', error);
+            alert('Não foi possível enviar a sugestão. Confirma a ligação ao Supabase.');
+          }
+        });
+      }
+
+      const editPlaceForm = document.getElementById('edit-place-form');
+      if (editPlaceForm) {
+        editPlaceForm.addEventListener('submit', saveEditPlace);
+      }
+
+      await loadPlacesFromSupabase();
+    }
+
+    initApp();
+  </script>
+</body>
+</html>
