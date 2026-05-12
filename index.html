@@ -183,6 +183,77 @@
       border-color: #8BA67A;
     }
 
+
+    .feature-groups {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .feature-group {
+      background: rgba(245, 240, 232, 0.45);
+      border: 1px solid #F5F0E8;
+      border-radius: 18px;
+      padding: 0.75rem;
+    }
+
+    .feature-group-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(61, 44, 30, 0.55);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      min-height: 2.35rem;
+      padding: 0.55rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid #F5F0E8;
+      background: #fff;
+      color: rgba(61, 44, 30, 0.76);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      user-select: none;
+    }
+
+    .feature-chip:hover {
+      transform: translateY(-1px);
+      border-color: #8BA67A;
+      box-shadow: 0 6px 14px rgba(61, 44, 30, 0.06);
+    }
+
+    .feature-chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .feature-chip:has(input:checked) {
+      background: #5B7553;
+      color: #FFFDF7;
+      border-color: #5B7553;
+      box-shadow: 0 8px 18px rgba(91, 117, 83, 0.18);
+    }
+
+    .feature-chip:has(input:checked)::after {
+      content: '✓';
+      width: 1rem;
+      height: 1rem;
+      border-radius: 9999px;
+      background: rgba(255, 253, 247, 0.22);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 800;
+    }
+
     .results-fixed-bar {
       position: fixed;
       top: 61px;
@@ -546,8 +617,9 @@
           </div>
 
           <div>
-            <p class="block text-sm font-medium mb-2">Condições úteis</p>
-            <div id="sg-features" class="flex flex-wrap gap-2"></div>
+            <p class="block text-sm font-medium mb-1">Condições úteis</p>
+            <p class="text-xs text-bark/45 mb-3">Escolhe só o que tens a certeza. O resto pode ficar nas notas.</p>
+            <div id="sg-features" class="feature-groups"></div>
           </div>
 
           <div>
@@ -756,8 +828,9 @@
           </div>
 
           <div>
-            <p class="block text-sm font-medium mb-2">Condições úteis</p>
-            <div id="edit-features" class="flex flex-wrap gap-2"></div>
+            <p class="block text-sm font-medium mb-1">Condições úteis</p>
+            <p class="text-xs text-bark/45 mb-3">Escolhe só o que tens a certeza. O resto pode ficar nas notas.</p>
+            <div id="edit-features" class="feature-groups"></div>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3 pt-2">
@@ -834,17 +907,28 @@
     const MAC_IMAGE_DATA = 'mac.jpg';
 
     const FEATURE_OPTIONS = [
+      '🐾 Muito pet-friendly',
       '🏠 Interior permitido',
-      '☀️ Só esplanada',
+      '☀️ Esplanada permitida',
       '🦮 Trela obrigatória',
       '💧 Água disponível',
-      '🐾 Muito pet-friendly',
-      '🚫 Não no interior',
       '🔒 Vedado',
-      '🚧 Semi-vedado',
-      '🌳 Espaço aberto',
-      '🚪 Tem portão',
-      '🚗 Perto de estrada'
+      '🌳 Espaço aberto'
+    ];
+
+    const FEATURE_GROUPS = [
+      {
+        title: 'Receção ao cão',
+        items: ['🐾 Muito pet-friendly', '💧 Água disponível']
+      },
+      {
+        title: 'Entrada e zonas permitidas',
+        items: ['🏠 Interior permitido', '☀️ Esplanada permitida']
+      },
+      {
+        title: 'Passeio e segurança',
+        items: ['🦮 Trela obrigatória', '🔒 Vedado', '🌳 Espaço aberto']
+      }
     ];
 
     const VISITOR_ID_STORAGE_KEY = 'levocao_visitor_id';
@@ -889,11 +973,19 @@
     function buildFeaturesCheckboxes(targetId, inputName) {
       const container = document.getElementById(targetId);
       if (!container) return;
-      container.innerHTML = FEATURE_OPTIONS.map((feature) => `
-        <label class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-sand bg-white text-sm text-bark/75 cursor-pointer hover:bg-sand transition">
-          <input type="checkbox" name="${inputName}" value="${feature}" class="accent-[#5B7553]" />
-          ${feature}
-        </label>
+
+      container.innerHTML = FEATURE_GROUPS.map((group) => `
+        <div class="feature-group">
+          <p class="feature-group-title">${group.title}</p>
+          <div class="flex flex-wrap gap-2">
+            ${group.items.map((feature) => `
+              <label class="feature-chip">
+                <input type="checkbox" name="${inputName}" value="${feature}" />
+                <span>${feature}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
       `).join('');
     }
 
@@ -1048,13 +1140,13 @@
 
       const features = Array.isArray(loc.features) ? loc.features : [];
       const hasInterior = features.includes('🏠 Interior permitido');
-      const hasTerrace = features.includes('☀️ Só esplanada');
+      const hasTerrace = features.includes('☀️ Esplanada permitida') || features.includes('☀️ Só esplanada');
       const hasWater = features.includes('💧 Água disponível');
       const leash = features.includes('🦮 Trela obrigatória');
       const fenced = features.includes('🔒 Vedado');
       const semiFenced = features.includes('🚧 Semi-vedado');
       const openSpace = features.includes('🌳 Espaço aberto');
-      const noInterior = features.includes('🚫 Não no interior');
+      const noInterior = features.includes('🚫 Não no interior') || features.includes('🚫 Não permite interior');
       const veryFriendly = features.includes('🐾 Muito pet-friendly');
       const hasGate = features.includes('🚪 Tem portão');
       const nearRoad = features.includes('🚗 Perto de estrada');
