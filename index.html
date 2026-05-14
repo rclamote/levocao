@@ -317,6 +317,27 @@
       white-space: nowrap;
     }
 
+
+    .list-filter-shell.collapsed {
+      position: fixed;
+      top: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 48rem;
+      z-index: 48;
+      margin-bottom: 0;
+    }
+
+    .list-filter-shell.collapsed + .list-filter-collapse-spacer {
+      display: block;
+      height: 78px;
+    }
+
+    .list-filter-collapse-spacer {
+      display: none;
+    }
+
     .results-fixed-bar {
       position: fixed;
       top: 61px;
@@ -366,6 +387,14 @@
       }
       .list-filter-body {
         padding: 0 0.85rem 0.85rem;
+      }
+      .list-filter-shell.collapsed {
+        top: 72px;
+        width: calc(100% - 1rem);
+      }
+
+      .list-filter-shell.collapsed + .list-filter-collapse-spacer {
+        height: 74px;
       }
       .results-fixed-bar {
         top: 57px;
@@ -663,6 +692,7 @@
             </div>
           </div>
         </div>
+        <div class="list-filter-collapse-spacer" aria-hidden="true"></div>
 
         <div id="cards-list" class="grid gap-4 sm:grid-cols-2"></div>
         <div id="loading-places" class="hidden text-center text-bark/50 py-8">A carregar locais...</div>
