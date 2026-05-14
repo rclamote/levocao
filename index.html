@@ -459,6 +459,25 @@
       }
     }
 
+
+    /* Desktop/tablet: mostrar todas as categorias em várias linhas, sem cortar */
+    @media (min-width: 641px) {
+      .filter-chip-row {
+        overflow-x: visible;
+        flex-wrap: wrap;
+        padding-bottom: 0;
+      }
+
+      #filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      #filter-bar .cat-btn {
+        flex: 0 0 auto;
+      }
+    }
+
   </style>
 </head>
 
