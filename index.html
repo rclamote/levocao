@@ -777,7 +777,7 @@
               <div class="flex items-center justify-between gap-3 mb-2">
                 <div>
                   <p class="text-sm font-semibold text-sage">🐶 Onde posso estar com o cão?</p>
-                  <p class="text-xs text-bark/50 mt-0.5">Seleciona uma ou mais condições.</p>
+                  <p class="text-xs text-bark/50 mt-0.5">Seleciona uma ou mais condições úteis.</p>
                 </div>
                 <button type="button" onclick="clearFeatureFilters()" class="text-xs text-sage font-semibold whitespace-nowrap">Limpar</button>
               </div>
@@ -1739,7 +1739,7 @@
     }
 
     function shouldShowFeatureFilters() {
-      return currentFilter === 'Comer & Beber';
+      return currentFilter === 'Comer & Beber' || currentFilter === 'Alojamento';
     }
 
     function updateFeatureFilterPanel() {
@@ -1748,7 +1748,11 @@
 
       document.querySelectorAll('#feature-filter-bar .filter-chip-btn').forEach((button) => {
         const key = button.dataset.featureFilter;
-        button.classList.toggle('active', currentFeatureFilters.includes(key));
+        const isActive = currentFeatureFilters.includes(key);
+        const shouldHideForCategory = currentFilter === 'Alojamento' && key === 'terrace';
+
+        button.classList.toggle('hidden', shouldHideForCategory);
+        button.classList.toggle('active', isActive);
       });
 
       updateListFilterSummary();
@@ -2089,8 +2093,12 @@
     function filterByCategory(cat, btn = null) {
       currentFilter = cat;
 
-      if (cat !== 'Comer & Beber') {
+      if (cat !== 'Comer & Beber' && cat !== 'Alojamento') {
         currentFeatureFilters = [];
+      }
+
+      if (cat === 'Alojamento') {
+        currentFeatureFilters = currentFeatureFilters.filter(item => item !== 'terrace');
       }
 
       updateFilterButtons(cat);
