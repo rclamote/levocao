@@ -478,6 +478,39 @@
       }
     }
 
+
+    /* Quando se abre a partir da barra colapsada a meio do scroll,
+       o painel completo abre no ecrã atual, sem obrigar a voltar ao topo da lista. */
+    .list-filter-shell.floating-open {
+      position: fixed;
+      top: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 48rem;
+      z-index: 49;
+      margin-bottom: 0;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+    }
+
+    .list-filter-shell.floating-open + .list-filter-collapse-spacer {
+      display: block;
+      height: 78px;
+    }
+
+    @media (max-width: 640px) {
+      .list-filter-shell.floating-open {
+        top: 78px;
+        width: calc(100% - 1rem);
+        max-height: calc(100vh - 92px);
+      }
+
+      .list-filter-shell.floating-open + .list-filter-collapse-spacer {
+        height: 74px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1777,15 +1810,21 @@
       }
     }
 
-    function setListFiltersExpanded(expanded) {
+    function setListFiltersExpanded(expanded, options = {}) {
       listFiltersExpanded = expanded;
       const shell = document.getElementById('list-filter-shell');
-      if (shell) shell.classList.toggle('collapsed', !expanded);
+      if (shell) {
+        shell.classList.toggle('collapsed', !expanded);
+        shell.classList.toggle('floating-open', expanded && options.floating === true);
+      }
       lucide.createIcons();
     }
 
     function toggleListFilters() {
-      setListFiltersExpanded(!listFiltersExpanded);
+      const shell = document.getElementById('list-filter-shell');
+      const wasCollapsed = shell ? shell.classList.contains('collapsed') : !listFiltersExpanded;
+      const isFloating = wasCollapsed && (window.scrollY || 0) > 160;
+      setListFiltersExpanded(!listFiltersExpanded, { floating: isFloating });
     }
 
     function collapseListFilters() {
@@ -1812,8 +1851,14 @@
 
       const currentY = window.scrollY || 0;
       const scrollingDown = currentY > lastListScrollY;
+      const shell = document.getElementById('list-filter-shell');
+      const isFloatingOpen = shell ? shell.classList.contains('floating-open') : false;
 
       if (scrollingDown && currentY > 220 && listFiltersExpanded) {
+        setListFiltersExpanded(false);
+      }
+
+      if (!scrollingDown && isFloatingOpen && Math.abs(currentY - lastListScrollY) > 8) {
         setListFiltersExpanded(false);
       }
 
@@ -3053,7 +3098,7 @@ function showView(view) {
     renderCards('cards-list', getFiltered());
 
     if (window.scrollY < 120) {
-      setListFiltersExpanded(true);
+      setListFiltersExpanded(true, { floating: false });
     }
   }
 
