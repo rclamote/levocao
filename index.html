@@ -522,6 +522,34 @@
       }
     }
 
+
+    /* Forçar scroll horizontal das categorias no mobile */
+    @media (max-width: 640px) {
+      #filter-bar {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow-x: scroll !important;
+        overflow-y: hidden !important;
+        flex-wrap: nowrap !important;
+        touch-action: pan-x;
+        overscroll-behavior-x: contain;
+        cursor: grab;
+      }
+
+      #filter-bar.is-dragging {
+        cursor: grabbing;
+      }
+
+      #filter-bar.is-dragging .cat-btn {
+        pointer-events: none;
+      }
+
+      #filter-bar .cat-btn {
+        flex: 0 0 auto !important;
+      }
+    }
+
   </style>
 </head>
 
@@ -3095,6 +3123,7 @@ function showView(view) {
     renderZoneFilters();
     updateFeatureFilterPanel();
     renderCards('cards-list', getFiltered());
+    setupHorizontalCategoryScroll();
 
     if (window.scrollY < 120) {
       setListFiltersExpanded(true);
@@ -3141,6 +3170,53 @@ function showView(view) {
       }
     });
 
+
+    function setupHorizontalCategoryScroll() {
+      const row = document.getElementById('filter-bar');
+      if (!row || row.dataset.dragReady === 'true') return;
+
+      row.dataset.dragReady = 'true';
+
+      let isDown = false;
+      let startX = 0;
+      let startScrollLeft = 0;
+      let moved = false;
+
+      row.addEventListener('pointerdown', function(event) {
+        isDown = true;
+        moved = false;
+        startX = event.clientX;
+        startScrollLeft = row.scrollLeft;
+        row.classList.add('is-dragging');
+      });
+
+      row.addEventListener('pointermove', function(event) {
+        if (!isDown) return;
+
+        const delta = event.clientX - startX;
+        if (Math.abs(delta) > 4) moved = true;
+
+        row.scrollLeft = startScrollLeft - delta;
+      });
+
+      function stopDragging() {
+        isDown = false;
+        row.classList.remove('is-dragging');
+      }
+
+      row.addEventListener('pointerup', stopDragging);
+      row.addEventListener('pointerleave', stopDragging);
+      row.addEventListener('pointercancel', stopDragging);
+
+      row.addEventListener('click', function(event) {
+        if (moved) {
+          event.preventDefault();
+          event.stopPropagation();
+          moved = false;
+        }
+      }, true);
+    }
+
     window.addEventListener('scroll', handleListScrollCollapse, { passive: true });
 
     async function initApp() {
@@ -3153,6 +3229,7 @@ function showView(view) {
       setMacImage();
       updateResultsBarVisibility('home');
       lucide.createIcons();
+      setupHorizontalCategoryScroll();
 
       const ok = setupSupabase();
       if (!ok) {
