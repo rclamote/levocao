@@ -407,6 +407,58 @@
         height: 82px;
       }
     }
+
+    /* Ajuste da barra de filtros */
+    .list-filter-shell {
+      top: 88px;
+    }
+
+    .list-filter-shell.collapsed {
+      top: 88px;
+    }
+
+    #feature-filter-panel.hidden {
+      display: none !important;
+    }
+
+    #feature-filter-panel.hidden + .filter-actions-row {
+      margin-top: 0;
+    }
+
+    .filter-actions-row {
+      border-top: 1px solid #F5F0E8;
+      padding-top: 0.75rem;
+    }
+
+    .filter-close-btn {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      .list-filter-shell {
+        top: 78px;
+      }
+
+      .list-filter-shell.collapsed {
+        top: 78px;
+      }
+
+      .list-filter-body {
+        gap: 0.75rem;
+      }
+
+      .filter-chip-row {
+        margin-left: -0.15rem;
+        margin-right: -0.15rem;
+        padding-left: 0.15rem;
+        padding-right: 0.15rem;
+      }
+
+      .list-filter-body select {
+        min-height: 3rem;
+      }
+    }
+
   </style>
 </head>
 
@@ -686,9 +738,9 @@
               </div>
             </div>
 
-            <div class="flex justify-between gap-3">
+            <div class="filter-actions-row flex justify-between gap-3">
               <button type="button" onclick="clearAllListFilters()" class="text-sm text-sage font-semibold">Limpar tudo</button>
-              <button type="button" onclick="collapseListFilters()" class="text-sm text-bark/55 font-semibold">Fechar filtros</button>
+              <button type="button" onclick="collapseListFilters()" class="filter-close-btn text-sm text-bark/55 font-semibold">Fechar filtros</button>
             </div>
           </div>
         </div>
