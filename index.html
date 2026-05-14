@@ -479,35 +479,46 @@
     }
 
 
-    /* Quando se abre a partir da barra colapsada a meio do scroll,
-       o painel completo abre no ecrã atual, sem obrigar a voltar ao topo da lista. */
-    .list-filter-shell.floating-open {
-      position: fixed;
-      top: 82px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 2rem);
-      max-width: 48rem;
-      z-index: 49;
-      margin-bottom: 0;
-      max-height: calc(100vh - 100px);
-      overflow-y: auto;
-    }
-
-    .list-filter-shell.floating-open + .list-filter-collapse-spacer {
-      display: block;
-      height: 78px;
-    }
-
+    /* Mobile: categorias em scroll horizontal claro e compacto */
     @media (max-width: 640px) {
-      .list-filter-shell.floating-open {
-        top: 78px;
-        width: calc(100% - 1rem);
-        max-height: calc(100vh - 92px);
+      #filter-bar {
+        display: flex;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 0.55rem;
+        padding: 0.15rem 2.75rem 0.35rem 0.15rem;
+        margin-right: -0.85rem;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        position: relative;
       }
 
-      .list-filter-shell.floating-open + .list-filter-collapse-spacer {
-        height: 74px;
+      #filter-bar::-webkit-scrollbar {
+        display: none;
+      }
+
+      #filter-bar .cat-btn {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        scroll-snap-align: start;
+      }
+
+      #list-filter-body > div:first-child {
+        position: relative;
+      }
+
+      #list-filter-body > div:first-child::after {
+        content: '';
+        position: absolute;
+        right: -0.85rem;
+        bottom: 0;
+        width: 3.25rem;
+        height: 3.4rem;
+        pointer-events: none;
+        background: linear-gradient(to right, rgba(255,253,247,0), rgba(255,253,247,0.96) 70%);
+        border-radius: 0 18px 18px 0;
       }
     }
 
@@ -777,7 +788,7 @@
               <div class="flex items-center justify-between gap-3 mb-2">
                 <div>
                   <p class="text-sm font-semibold text-sage">🐶 Onde posso estar com o cão?</p>
-                  <p class="text-xs text-bark/50 mt-0.5">Seleciona uma ou mais condições úteis.</p>
+                  <p class="text-xs text-bark/50 mt-0.5">Seleciona uma ou mais condições.</p>
                 </div>
                 <button type="button" onclick="clearFeatureFilters()" class="text-xs text-sage font-semibold whitespace-nowrap">Limpar</button>
               </div>
@@ -1739,7 +1750,7 @@
     }
 
     function shouldShowFeatureFilters() {
-      return currentFilter === 'Comer & Beber' || currentFilter === 'Alojamento';
+      return currentFilter === 'Comer & Beber';
     }
 
     function updateFeatureFilterPanel() {
@@ -1748,11 +1759,7 @@
 
       document.querySelectorAll('#feature-filter-bar .filter-chip-btn').forEach((button) => {
         const key = button.dataset.featureFilter;
-        const isActive = currentFeatureFilters.includes(key);
-        const shouldHideForCategory = currentFilter === 'Alojamento' && key === 'terrace';
-
-        button.classList.toggle('hidden', shouldHideForCategory);
-        button.classList.toggle('active', isActive);
+        button.classList.toggle('active', currentFeatureFilters.includes(key));
       });
 
       updateListFilterSummary();
@@ -1814,21 +1821,15 @@
       }
     }
 
-    function setListFiltersExpanded(expanded, options = {}) {
+    function setListFiltersExpanded(expanded) {
       listFiltersExpanded = expanded;
       const shell = document.getElementById('list-filter-shell');
-      if (shell) {
-        shell.classList.toggle('collapsed', !expanded);
-        shell.classList.toggle('floating-open', expanded && options.floating === true);
-      }
+      if (shell) shell.classList.toggle('collapsed', !expanded);
       lucide.createIcons();
     }
 
     function toggleListFilters() {
-      const shell = document.getElementById('list-filter-shell');
-      const wasCollapsed = shell ? shell.classList.contains('collapsed') : !listFiltersExpanded;
-      const isFloating = wasCollapsed && (window.scrollY || 0) > 160;
-      setListFiltersExpanded(!listFiltersExpanded, { floating: isFloating });
+      setListFiltersExpanded(!listFiltersExpanded);
     }
 
     function collapseListFilters() {
@@ -1855,14 +1856,8 @@
 
       const currentY = window.scrollY || 0;
       const scrollingDown = currentY > lastListScrollY;
-      const shell = document.getElementById('list-filter-shell');
-      const isFloatingOpen = shell ? shell.classList.contains('floating-open') : false;
 
       if (scrollingDown && currentY > 220 && listFiltersExpanded) {
-        setListFiltersExpanded(false);
-      }
-
-      if (!scrollingDown && isFloatingOpen && Math.abs(currentY - lastListScrollY) > 8) {
         setListFiltersExpanded(false);
       }
 
@@ -2093,12 +2088,8 @@
     function filterByCategory(cat, btn = null) {
       currentFilter = cat;
 
-      if (cat !== 'Comer & Beber' && cat !== 'Alojamento') {
+      if (cat !== 'Comer & Beber') {
         currentFeatureFilters = [];
-      }
-
-      if (cat === 'Alojamento') {
-        currentFeatureFilters = currentFeatureFilters.filter(item => item !== 'terrace');
       }
 
       updateFilterButtons(cat);
@@ -3106,7 +3097,7 @@ function showView(view) {
     renderCards('cards-list', getFiltered());
 
     if (window.scrollY < 120) {
-      setListFiltersExpanded(true, { floating: false });
+      setListFiltersExpanded(true);
     }
   }
 
