@@ -1719,10 +1719,7 @@
 
             <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
 
-            <div class="mt-4 flex items-center justify-between gap-3">
-              <span class="text-xs text-bark/45">
-                ${confirmationCount > 0 ? 'Sem reviews — só confirmações' : 'Ajuda a confirmar este local'}
-              </span>
+            <div class="mt-4 flex items-center justify-end">
               <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
             </div>
           </div>
@@ -2019,7 +2016,7 @@
               </div>
               <div class="flex items-center justify-between gap-3 flex-wrap">
                 ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
-                <p class="text-xs text-bark/55">Sem reviews — só confirmações práticas.</p>
+                
               </div>
               <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
                 ${userState.helpText}
