@@ -254,6 +254,36 @@
       font-weight: 800;
     }
 
+
+    .card-trust-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 9999px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .card-feature-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 9999px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .card-status-strip {
+      background: rgba(245, 240, 232, 0.55);
+      border: 1px solid #F5F0E8;
+      border-radius: 16px;
+      padding: 0.65rem;
+    }
+
     .results-fixed-bar {
       position: fixed;
       top: 61px;
@@ -1548,10 +1578,97 @@
       return parts.join(' · ') || loc.city || 'Portugal';
     }
 
+    function getPrimaryFeatureBadge(loc) {
+      const features = Array.isArray(loc.features) ? loc.features : [];
+      const type = loc.displayType;
+      const has = (value) => features.includes(value);
+
+      if (type === 'Comer & Beber') {
+        if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
+        if (has('☀️ Esplanada permitida') || has('☀️ Só esplanada')) return { text: '☀️ Esplanada', className: 'bg-sand text-bark/75 border border-bark/10' };
+        if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🐕 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (type === 'Alojamento') {
+        if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
+        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço exterior', className: 'bg-sand text-bark/75 border border-bark/10' };
+        if (loc.dog_status === 'maybe') return { text: '⚠️ Pode ter restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🏡 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (type === 'Soltar o cão') {
+        if (has('🔒 Vedado')) return { text: '🔒 Vedado', className: 'bg-sage/10 text-sage border border-sage/15' };
+        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço aberto', className: 'bg-sand text-bark/75 border border-bark/10' };
+      }
+
+      if (type === 'Passear com o cão') {
+        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço aberto', className: 'bg-sand text-bark/75 border border-bark/10' };
+        if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
+      }
+
+      if (type === 'Praia') {
+        if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🏖️ Pet-friendly', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (type === 'Experiências') {
+        if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🎯 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (loc.dog_status === 'maybe') return { text: '⚠️ Com restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
+      if (loc.dog_status === 'no') return { text: '❌ Não aceita cães', className: 'bg-bark text-cream border border-bark' };
+
+      return { text: '🐕 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+    }
+
+    function getCardTrustBadge(loc) {
+      const votes = getStoredPlaceVotes(loc.id);
+      const total = getConfirmationCount(loc.id);
+
+      if (total <= 0) {
+        return {
+          text: '🕒 Ainda por confirmar',
+          className: 'bg-sand text-bark/70 border border-bark/10',
+          detail: 'A comunidade ainda não confirmou este local.'
+        };
+      }
+
+      if (votes.no > votes.yes && votes.no >= 2) {
+        return {
+          text: `❌ Informação duvidosa · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
+          className: 'bg-bark text-cream border border-bark',
+          detail: 'Há respostas a indicar que pode não aceitar cães.'
+        };
+      }
+
+      if (votes.maybe > 0 && votes.maybe >= votes.yes) {
+        return {
+          text: `⚠️ Há restrições · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
+          className: 'bg-sand text-bark/80 border border-bark/10',
+          detail: 'A comunidade indicou que pode haver condições.'
+        };
+      }
+
+      if (votes.yes >= 3) {
+        return {
+          text: `👍 Confirmado · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
+          className: 'bg-sage text-cream border border-sage',
+          detail: 'Confirmado pela comunidade.'
+        };
+      }
+
+      return {
+        text: `✅ ${total} ${total === 1 ? 'resposta' : 'respostas'} da comunidade`,
+        className: 'bg-sage/10 text-sage border border-sage/15',
+        detail: 'Já tem confirmação da comunidade.'
+      };
+    }
+
     function createCard(loc) {
       const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
       const confirmationCount = getConfirmationCount(loc.id);
-      const trustLevel = getTrustLevel(loc.id);
       const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
         ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>'
         : '';
@@ -1559,6 +1676,8 @@
       const lastUpdate = getLastUpdateText(loc.id);
       const locationLine = getCardLocationLine(loc);
       const smartDesc = getSmartShortDescription(loc);
+      const primaryFeature = getPrimaryFeatureBadge(loc);
+      const trustBadge = getCardTrustBadge(loc);
 
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
@@ -1574,7 +1693,7 @@
           </div>
 
           <div class="p-4">
-            <div class="mb-2">
+            <div class="mb-3">
               <h3 class="font-display font-bold text-xl leading-tight">${loc.name}</h3>
               <p class="text-bark/55 text-sm flex items-center gap-1 mt-1">
                 <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
@@ -1582,20 +1701,23 @@
               </p>
             </div>
 
-            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
-
-            <div class="mt-4 flex flex-wrap gap-2">
-              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">
-                ${confirmationCount} ${confirmationCount === 1 ? 'confirmação' : 'confirmações'}
-              </span>
-              ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>` : ''}
+            <div class="card-status-strip mb-3">
+              <div class="flex flex-wrap gap-2">
+                <span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>
+                <span class="card-trust-line ${trustBadge.className}">${trustBadge.text}</span>
+              </div>
+              <p class="text-xs text-bark/50 mt-2">
+                ${lastUpdate ? `🕒 ${lastUpdate}` : trustBadge.detail}
+              </p>
             </div>
 
-            <div class="mt-3 flex items-center justify-between gap-3">
-              <div class="text-xs text-bark/50">
-                ${lastUpdate ? `🕒 ${lastUpdate}` : 'Sem confirmações recentes'}
-              </div>
-              <span class="text-sm text-sage font-semibold">Ver local →</span>
+            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
+
+            <div class="mt-4 flex items-center justify-between gap-3">
+              <span class="text-xs text-bark/45">
+                ${confirmationCount > 0 ? 'Sem reviews — só confirmações práticas' : 'Ajuda a confirmar este local'}
+              </span>
+              <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
             </div>
           </div>
         </article>`;
