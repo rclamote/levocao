@@ -1721,7 +1721,7 @@
 
             <div class="mt-4 flex items-center justify-between gap-3">
               <span class="text-xs text-bark/45">
-                ${confirmationCount > 0 ? 'Informação prática da comunidade' : 'Ajuda a confirmar este local'}
+                ${confirmationCount > 0 ? 'Sem reviews — só confirmações' : 'Ajuda a confirmar este local'}
               </span>
               <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
             </div>
@@ -1995,7 +1995,7 @@
 
             ${loc.notes ? `
               <div class="bg-white border border-sand rounded-xl p-4 space-y-2">
-                <p class="font-medium text-sm text-bark">Notas da comunidade</p>
+                <p class="font-medium text-sm text-bark">Notas úteis</p>
                 <p class="text-sm text-bark/70 leading-relaxed">${loc.notes}</p>
               </div>` : ''}
 
@@ -2010,7 +2010,7 @@
             <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
                 <div>
-                  <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
+                  <p class="font-medium text-sm text-bark">Confirmações</p>
                   <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
                   ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
                   ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
@@ -2019,7 +2019,7 @@
               </div>
               <div class="flex items-center justify-between gap-3 flex-wrap">
                 ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
-                <p class="text-xs text-bark/55">Sem reviews. Só respostas práticas: sim, não ou com restrições.</p>
+                <p class="text-xs text-bark/55">Sem reviews — só confirmações práticas.</p>
               </div>
               <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
                 ${userState.helpText}
