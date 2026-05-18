@@ -1653,16 +1653,24 @@
 
       if (votes.yes >= 3) {
         return {
-          text: `👍 Confirmado · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
+          text: `👍 Confirmado por ${votes.yes} ${votes.yes === 1 ? 'pessoa' : 'pessoas'}`,
           className: 'bg-sage text-cream border border-sage',
-          detail: 'Confirmado pela comunidade.'
+          detail: ''
+        };
+      }
+
+      if (votes.yes > 0) {
+        return {
+          text: `✅ Confirmado por ${votes.yes} ${votes.yes === 1 ? 'pessoa' : 'pessoas'}`,
+          className: 'bg-sage/10 text-sage border border-sage/15',
+          detail: ''
         };
       }
 
       return {
-        text: `✅ ${total} ${total === 1 ? 'resposta' : 'respostas'} da comunidade`,
-        className: 'bg-sage/10 text-sage border border-sage/15',
-        detail: 'Já tem confirmação da comunidade.'
+        text: `⚠️ ${total} ${total === 1 ? 'resposta' : 'respostas'} com restrições`,
+        className: 'bg-sand text-bark/80 border border-bark/10',
+        detail: ''
       };
     }
 
@@ -1706,16 +1714,14 @@
                 <span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>
                 <span class="card-trust-line ${trustBadge.className}">${trustBadge.text}</span>
               </div>
-              <p class="text-xs text-bark/50 mt-2">
-                ${lastUpdate ? `🕒 ${lastUpdate}` : trustBadge.detail}
-              </p>
+              ${lastUpdate ? `<p class="text-xs text-bark/50 mt-2">🕒 ${lastUpdate}</p>` : ''}
             </div>
 
             <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
 
             <div class="mt-4 flex items-center justify-between gap-3">
               <span class="text-xs text-bark/45">
-                ${confirmationCount > 0 ? 'Sem reviews — só confirmações práticas' : 'Ajuda a confirmar este local'}
+                ${confirmationCount > 0 ? 'Informação prática da comunidade' : 'Ajuda a confirmar este local'}
               </span>
               <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
             </div>
