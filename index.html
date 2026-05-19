@@ -338,6 +338,36 @@
       display: none;
     }
 
+
+    .card-trust-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 9999px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .card-feature-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border-radius: 9999px;
+      padding: 0.45rem 0.7rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .card-status-strip {
+      background: rgba(245, 240, 232, 0.55);
+      border: 1px solid #F5F0E8;
+      border-radius: 16px;
+      padding: 0.65rem;
+    }
+
     .results-fixed-bar {
       position: fixed;
       top: 61px;
@@ -577,6 +607,64 @@
 
       #filter-bar {
         display: flex !important;
+      }
+    }
+
+
+    /* Ajustes mobile: chips úteis visíveis + filtros abrem no sítio onde estás */
+    .list-filter-shell.floating-open {
+      position: fixed;
+      top: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      max-width: 48rem;
+      max-height: calc(100vh - 104px);
+      overflow-y: auto;
+      z-index: 49;
+      margin-bottom: 0;
+    }
+
+    .list-filter-shell.floating-open + .list-filter-collapse-spacer {
+      display: block;
+      height: 78px;
+    }
+
+    #feature-filter-bar {
+      flex-wrap: wrap;
+      overflow-x: visible;
+      padding-right: 0;
+      margin-right: 0;
+    }
+
+    #feature-filter-bar .filter-chip-btn {
+      flex: 0 0 auto;
+      max-width: 100%;
+    }
+
+    @media (max-width: 640px) {
+      .list-filter-shell.floating-open {
+        top: 72px;
+        width: calc(100% - 1rem);
+        max-height: calc(100vh - 88px);
+      }
+
+      .list-filter-shell.floating-open + .list-filter-collapse-spacer {
+        height: 74px;
+      }
+
+      #feature-filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        overflow: visible;
+      }
+
+      #feature-filter-bar .filter-chip-btn {
+        flex: 0 1 auto;
+        font-size: 0.92rem;
+        padding-left: 0.85rem;
+        padding-right: 0.85rem;
       }
     }
 
@@ -1893,7 +1981,17 @@
     function setListFiltersExpanded(expanded) {
       listFiltersExpanded = expanded;
       const shell = document.getElementById('list-filter-shell');
-      if (shell) shell.classList.toggle('collapsed', !expanded);
+
+      if (shell) {
+        shell.classList.toggle('collapsed', !expanded);
+
+        if (expanded && window.scrollY > 140) {
+          shell.classList.add('floating-open');
+        } else {
+          shell.classList.remove('floating-open');
+        }
+      }
+
       lucide.createIcons();
     }
 
@@ -2014,10 +2112,105 @@
       return parts.join(' · ') || loc.city || 'Portugal';
     }
 
+    function getPrimaryFeatureBadge(loc) {
+      const features = Array.isArray(loc.features) ? loc.features : [];
+      const type = loc.displayType;
+      const has = (value) => features.includes(value);
+
+      if (type === 'Comer & Beber') {
+        if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
+        if (has('☀️ Esplanada permitida') || has('☀️ Só esplanada')) return { text: '☀️ Esplanada', className: 'bg-sand text-bark/75 border border-bark/10' };
+        if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🐕 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (type === 'Alojamento') {
+        if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
+        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço exterior', className: 'bg-sand text-bark/75 border border-bark/10' };
+        if (loc.dog_status === 'maybe') return { text: '⚠️ Pode ter restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🏡 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (type === 'Soltar o cão') {
+        if (has('🔒 Vedado')) return { text: '🔒 Vedado', className: 'bg-sage/10 text-sage border border-sage/15' };
+        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço aberto', className: 'bg-sand text-bark/75 border border-bark/10' };
+      }
+
+      if (type === 'Passear com o cão') {
+        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço aberto', className: 'bg-sand text-bark/75 border border-bark/10' };
+        if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
+      }
+
+      if (type === 'Praia') {
+        if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🏖️ Pet-friendly', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (type === 'Experiências') {
+        if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
+        return { text: '🎯 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      }
+
+      if (loc.dog_status === 'maybe') return { text: '⚠️ Com restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
+      if (loc.dog_status === 'no') return { text: '❌ Não aceita cães', className: 'bg-bark text-cream border border-bark' };
+
+      return { text: '🐕 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+    }
+
+    function getCardTrustBadge(loc) {
+      const votes = getStoredPlaceVotes(loc.id);
+      const total = getConfirmationCount(loc.id);
+
+      if (total <= 0) {
+        return {
+          text: '🕒 Ainda por confirmar',
+          className: 'bg-sand text-bark/70 border border-bark/10',
+          detail: ''
+        };
+      }
+
+      if (votes.no > votes.yes && votes.no >= 2) {
+        return {
+          text: `❌ Informação duvidosa · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
+          className: 'bg-bark text-cream border border-bark',
+          detail: ''
+        };
+      }
+
+      if (votes.maybe > 0 && votes.maybe >= votes.yes) {
+        return {
+          text: `⚠️ Há restrições · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
+          className: 'bg-sand text-bark/80 border border-bark/10',
+          detail: ''
+        };
+      }
+
+      if (votes.yes >= 3) {
+        return {
+          text: `👍 Confirmado por ${votes.yes} ${votes.yes === 1 ? 'pessoa' : 'pessoas'}`,
+          className: 'bg-sage text-cream border border-sage',
+          detail: ''
+        };
+      }
+
+      if (votes.yes > 0) {
+        return {
+          text: `✅ Confirmado por ${votes.yes} ${votes.yes === 1 ? 'pessoa' : 'pessoas'}`,
+          className: 'bg-sage/10 text-sage border border-sage/15',
+          detail: ''
+        };
+      }
+
+      return {
+        text: `⚠️ ${total} ${total === 1 ? 'resposta' : 'respostas'} com restrições`,
+        className: 'bg-sand text-bark/80 border border-bark/10',
+        detail: ''
+      };
+    }
+
     function createCard(loc) {
       const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
       const confirmationCount = getConfirmationCount(loc.id);
-      const trustLevel = getTrustLevel(loc.id);
       const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
         ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>'
         : '';
@@ -2025,6 +2218,8 @@
       const lastUpdate = getLastUpdateText(loc.id);
       const locationLine = getCardLocationLine(loc);
       const smartDesc = getSmartShortDescription(loc);
+      const primaryFeature = getPrimaryFeatureBadge(loc);
+      const trustBadge = getCardTrustBadge(loc);
 
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
@@ -2040,7 +2235,7 @@
           </div>
 
           <div class="p-4">
-            <div class="mb-2">
+            <div class="mb-3">
               <h3 class="font-display font-bold text-xl leading-tight">${loc.name}</h3>
               <p class="text-bark/55 text-sm flex items-center gap-1 mt-1">
                 <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
@@ -2048,20 +2243,18 @@
               </p>
             </div>
 
-            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
-
-            <div class="mt-4 flex flex-wrap gap-2">
-              <span class="text-xs bg-sage/10 text-sage font-medium px-2.5 py-1 rounded-full">
-                ${confirmationCount} ${confirmationCount === 1 ? 'confirmação' : 'confirmações'}
-              </span>
-              ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-2.5 py-1 rounded-full">${trustLevel.shortLabel}</span>` : ''}
+            <div class="card-status-strip mb-3">
+              <div class="flex flex-wrap gap-2">
+                <span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>
+                <span class="card-trust-line ${trustBadge.className}">${trustBadge.text}</span>
+              </div>
+              ${lastUpdate ? `<p class="text-xs text-bark/50 mt-2">🕒 ${lastUpdate}</p>` : ''}
             </div>
 
-            <div class="mt-3 flex items-center justify-between gap-3">
-              <div class="text-xs text-bark/50">
-                ${lastUpdate ? `🕒 ${lastUpdate}` : 'Sem confirmações recentes'}
-              </div>
-              <span class="text-sm text-sage font-semibold">Ver local →</span>
+            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
+
+            <div class="mt-4 flex items-center justify-end">
+              <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
             </div>
           </div>
         </article>`;
@@ -2353,7 +2546,7 @@
 
             ${loc.notes ? `
               <div class="bg-white border border-sand rounded-xl p-4 space-y-2">
-                <p class="font-medium text-sm text-bark">Notas da comunidade</p>
+                <p class="font-medium text-sm text-bark">Notas úteis</p>
                 <p class="text-sm text-bark/70 leading-relaxed">${loc.notes}</p>
               </div>` : ''}
 
@@ -2368,7 +2561,7 @@
             <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
               <div class="flex items-center justify-between gap-3">
                 <div>
-                  <p class="font-medium text-sm text-bark">Respostas da comunidade</p>
+                  <p class="font-medium text-sm text-bark">Confirmações</p>
                   <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
                   ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
                   ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
@@ -2377,7 +2570,7 @@
               </div>
               <div class="flex items-center justify-between gap-3 flex-wrap">
                 ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
-                <p class="text-xs text-bark/55">Sem reviews. Só respostas práticas: sim, não ou com restrições.</p>
+                
               </div>
               <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
                 ${userState.helpText}
