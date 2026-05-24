@@ -320,7 +320,7 @@
 
     .list-filter-shell.collapsed {
       position: fixed;
-      top: 82px;
+      top: 80px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 2rem);
@@ -424,7 +424,7 @@
       }
 
       .list-filter-shell.collapsed + .list-filter-collapse-spacer {
-        height: 62px;
+        height: 74px;
       }
       .results-fixed-bar {
         top: 57px;
@@ -470,7 +470,7 @@
       }
 
       .list-filter-shell.collapsed {
-        top: 64px;
+        top: 78px;
       }
 
       .list-filter-body {
@@ -614,7 +614,7 @@
     /* Ajustes mobile: chips úteis visíveis + filtros abrem no sítio onde estás */
     .list-filter-shell.floating-open {
       position: fixed;
-      top: 82px;
+      top: 80px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 2rem);
@@ -644,13 +644,13 @@
 
     @media (max-width: 640px) {
       .list-filter-shell.floating-open {
-        top: 64px;
+        top: 78px;
         width: calc(100% - 1rem);
         max-height: calc(100vh - 88px);
       }
 
       .list-filter-shell.floating-open + .list-filter-collapse-spacer {
-        height: 62px;
+        height: 74px;
       }
 
       #feature-filter-bar {
@@ -674,7 +674,7 @@
 <body class="h-full bg-cream font-body text-bark">
   <div class="app-wrapper" id="app">
     <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand">
-      <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+      <div class="w-full px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-3">
         <button type="button" onclick="showView('home')" class="flex items-center">
   <img src="logo.svg" alt="Levo o Cão" class="h-12 sm:h-14 w-auto" />
 </button>
