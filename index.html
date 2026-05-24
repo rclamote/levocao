@@ -1226,6 +1226,22 @@
             <input id="edit-address" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
           </div>
 
+          <div>
+            <label for="edit-coordinates-paste" class="block text-sm font-medium mb-1">Colar coordenadas do Google Maps</label>
+            <input
+              id="edit-coordinates-paste"
+              type="text"
+              inputmode="decimal"
+              class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition"
+              placeholder="Ex: 37.11593148398241, -8.529349471164549"
+              oninput="handleCoordinatesPasteInput()"
+              onpaste="setTimeout(handleCoordinatesPasteInput, 0)"
+            />
+            <p id="edit-coordinates-help" class="text-xs text-bark/45 mt-1">
+              Cola aqui as duas coordenadas copiadas do Google Maps. O site preenche latitude e longitude automaticamente.
+            </p>
+          </div>
+
           <div class="grid sm:grid-cols-2 gap-3">
             <div>
               <label for="edit-latitude" class="block text-sm font-medium mb-1">Latitude</label>
@@ -1238,7 +1254,7 @@
           </div>
 
           <p class="text-xs text-bark/45 -mt-2">
-            Para o futuro “Perto de mim”. Podes copiar as coordenadas do Google Maps e colar aqui.
+            Para o futuro “Perto de mim”. O botão do Google Maps abre a morada; depois copia as coordenadas e cola no campo acima.
           </p>
 
           <div>
@@ -3203,8 +3219,10 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       document.getElementById('edit-locality').value = item.locality || '';
       document.getElementById('edit-city').value = item.city || '';
       document.getElementById('edit-address').value = item.address || '';
+      document.getElementById('edit-coordinates-paste').value = '';
       document.getElementById('edit-latitude').value = item.latitude === null || item.latitude === undefined ? '' : item.latitude;
       document.getElementById('edit-longitude').value = item.longitude === null || item.longitude === undefined ? '' : item.longitude;
+      updateCoordinatesPasteHelp('');
       document.getElementById('edit-type').value = mapDisplayType(item.type) || 'Comer & Beber';
       document.getElementById('edit-dog-status').value = item.dog_status || 'yes';
       document.getElementById('edit-description').value = item.desc || item.description || '';
@@ -3283,6 +3301,54 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       }
 
       window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
+    }
+
+    function updateCoordinatesPasteHelp(message, isError = false) {
+      const help = document.getElementById('edit-coordinates-help');
+      if (!help) return;
+
+      help.textContent = message || 'Cola aqui as duas coordenadas copiadas do Google Maps. O site preenche latitude e longitude automaticamente.';
+      help.classList.toggle('text-red-600', isError);
+      help.classList.toggle('text-bark/45', !isError);
+    }
+
+    function parseCoordinatesText(value) {
+      const cleaned = String(value || '')
+        .trim()
+        .replace(/[()]/g, '')
+        .replace(/\s+/g, ' ');
+
+      const match = cleaned.match(/(-?\d+(?:[\.,]\d+)?)\s*,\s*(-?\d+(?:[\.,]\d+)?)/);
+      if (!match) return null;
+
+      const latitude = Number(match[1].replace(',', '.'));
+      const longitude = Number(match[2].replace(',', '.'));
+
+      if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+      if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) return null;
+
+      return { latitude, longitude };
+    }
+
+    function handleCoordinatesPasteInput() {
+      const input = document.getElementById('edit-coordinates-paste');
+      if (!input) return;
+
+      const value = input.value.trim();
+      if (!value) {
+        updateCoordinatesPasteHelp('');
+        return;
+      }
+
+      const coords = parseCoordinatesText(value);
+      if (!coords) {
+        updateCoordinatesPasteHelp('Não consegui ler as coordenadas. Usa o formato: 37.11593148398241, -8.529349471164549', true);
+        return;
+      }
+
+      document.getElementById('edit-latitude').value = coords.latitude;
+      document.getElementById('edit-longitude').value = coords.longitude;
+      updateCoordinatesPasteHelp(`Coordenadas detetadas: ${coords.latitude}, ${coords.longitude}`);
     }
 
     async function saveEditPlace(event) {
