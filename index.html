@@ -183,6 +183,37 @@
       border-color: #8BA67A;
     }
 
+    .nav-filter-pill {
+      background: rgba(255, 253, 247, 0.96);
+      border: 1px solid #F5F0E8;
+      border-radius: 9999px;
+      padding: 0.55rem 0.95rem;
+      box-shadow: 0 8px 22px rgba(61, 44, 30, 0.08);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.18s ease;
+    }
+
+    .nav-filter-pill:hover {
+      background: #fff;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(61, 44, 30, 0.1);
+    }
+
+    @media (max-width: 640px) {
+      .nav-filter-pill {
+        padding: 0.45rem 0.75rem;
+      }
+
+      .nav-filter-pill span:first-child {
+        font-size: 0.82rem;
+      }
+
+      .nav-filter-pill span:last-child {
+        font-size: 0.7rem;
+      }
+    }
+
 
     .feature-groups {
       display: grid;
@@ -319,19 +350,12 @@
 
 
     .list-filter-shell.collapsed {
-      position: fixed;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 2rem);
-      max-width: 48rem;
-      z-index: 48;
-      margin-bottom: 0;
+      display: none;
     }
 
     .list-filter-shell.collapsed + .list-filter-collapse-spacer {
-      display: block;
-      height: 78px;
+      display: none;
+      height: 0;
     }
 
     .list-filter-collapse-spacer {
@@ -418,14 +442,6 @@
       .list-filter-body {
         padding: 0 0.85rem 0.85rem;
       }
-      .list-filter-shell.collapsed {
-        top: 72px;
-        width: calc(100% - 1rem);
-      }
-
-      .list-filter-shell.collapsed + .list-filter-collapse-spacer {
-        height: 74px;
-      }
       .results-fixed-bar {
         top: 57px;
       }
@@ -443,9 +459,6 @@
       top: 88px;
     }
 
-    .list-filter-shell.collapsed {
-      top: 88px;
-    }
 
     #feature-filter-panel.hidden {
       display: none !important;
@@ -466,10 +479,6 @@
 
     @media (max-width: 640px) {
       .list-filter-shell {
-        top: 78px;
-      }
-
-      .list-filter-shell.collapsed {
         top: 78px;
       }
 
@@ -614,7 +623,7 @@
     /* Ajustes mobile: chips úteis visíveis + filtros abrem no sítio onde estás */
     .list-filter-shell.floating-open {
       position: fixed;
-      top: 80px;
+      top: 82px;
       left: 50%;
       transform: translateX(-50%);
       width: calc(100% - 2rem);
@@ -644,7 +653,7 @@
 
     @media (max-width: 640px) {
       .list-filter-shell.floating-open {
-        top: 78px;
+        top: 72px;
         width: calc(100% - 1rem);
         max-height: calc(100vh - 88px);
       }
@@ -675,11 +684,22 @@
   <div class="app-wrapper" id="app">
     <nav class="sticky top-0 z-50 bg-cream/90 backdrop-blur-md border-b border-sand">
       <div class="w-full px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between gap-3">
-        <button type="button" onclick="showView('home')" class="flex items-center">
+        <button type="button" onclick="showView('home')" class="flex items-center shrink-0">
   <img src="logo.svg" alt="Levo o Cão" class="h-12 sm:h-14 w-auto" />
 </button>
 
-        <div class="flex items-center gap-2">
+        <button
+          id="nav-filter-pill"
+          type="button"
+          onclick="openListFiltersFromHeader()"
+          class="nav-filter-pill hidden flex-1 min-w-0 max-w-md mx-1 sm:mx-4 text-left"
+          aria-label="Abrir filtros"
+        >
+          <span id="nav-filter-pill-title" class="block truncate text-sm font-semibold text-bark/85">Filtros</span>
+          <span id="nav-filter-pill-subtitle" class="block truncate text-xs text-bark/50">0 locais encontrados</span>
+        </button>
+
+        <div class="flex items-center gap-2 shrink-0">
           <button type="button" onclick="showView('list')" class="p-2 rounded-full hover:bg-sand transition" aria-label="Lista de locais">
             <i data-lucide="list" class="w-5 h-5"></i>
           </button>
@@ -1445,6 +1465,7 @@
     let currentFeatureFilters = [];
     let nearMeActive = false;
     let userLocation = null;
+    let currentView = 'home';
     let listFiltersExpanded = true;
     let lastListScrollY = 0;
 
@@ -2078,6 +2099,38 @@
         countBadge.textContent = String(count);
         countBadge.classList.toggle('hidden', count === 0);
       }
+
+      updateHeaderFilterPill(list);
+    }
+
+    function updateHeaderFilterPill(locs = null) {
+      const pill = document.getElementById('nav-filter-pill');
+      const title = document.getElementById('nav-filter-pill-title');
+      const subtitle = document.getElementById('nav-filter-pill-subtitle');
+      if (!pill || !title || !subtitle) return;
+
+      const list = locs || getFiltered();
+      const pieces = [];
+      if (currentFilter) pieces.push(currentFilter);
+      if (currentDistrictFilter) pieces.push(currentDistrictFilter);
+      if (currentMunicipalityFilter) pieces.push(currentMunicipalityFilter);
+      if (currentLocalityFilter) pieces.push(currentLocalityFilter);
+      currentFeatureFilters.forEach(key => {
+        if (FEATURE_FILTERS[key]) pieces.push(FEATURE_FILTERS[key].label);
+      });
+      if (nearMeActive) pieces.push('Perto de mim');
+
+      title.textContent = pieces.length ? pieces.join(' · ') : 'Filtros';
+      subtitle.textContent = `${list.length} ${list.length === 1 ? 'local encontrado' : 'locais encontrados'}`;
+
+      const shouldShow = currentView === 'list' && !listFiltersExpanded;
+      pill.classList.toggle('hidden', !shouldShow);
+      pill.classList.toggle('flex', shouldShow);
+    }
+
+    function openListFiltersFromHeader() {
+      if (currentView !== 'list') showView('list');
+      setListFiltersExpanded(true);
     }
 
     function setListFiltersExpanded(expanded) {
@@ -2094,6 +2147,7 @@
         }
       }
 
+      updateHeaderFilterPill();
       lucide.createIcons();
     }
 
@@ -3689,6 +3743,8 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
     }
 
 function showView(view) {
+  currentView = view;
+
   ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
     const el = document.getElementById(`view-${section}`);
     if (el) el.classList.toggle('hidden', section !== view);
@@ -3708,6 +3764,8 @@ function showView(view) {
       setListFiltersExpanded(true);
     }
   }
+
+  if (view !== 'list') updateHeaderFilterPill([]);
 
   if (view === 'home') renderHomeSections();
 
@@ -3763,6 +3821,7 @@ function showView(view) {
       getVisitorId();
       setMacImage();
       updateResultsBarVisibility('home');
+      updateHeaderFilterPill([]);
       lucide.createIcons();
       setupHorizontalCategoryScroll();
 
