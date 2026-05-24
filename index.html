@@ -914,6 +914,24 @@
               </div>
             </div>
 
+            <div class="rounded-2xl border border-sand bg-white/70 p-3">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <p class="text-sm font-semibold text-sage">📍 Perto de mim</p>
+                  <p id="near-me-help" class="text-xs text-bark/50 mt-0.5">Mostra primeiro os locais com coordenadas mais próximos de ti.</p>
+                </div>
+                <div class="flex gap-2">
+                  <button id="near-me-btn" type="button" onclick="enableNearMe()" class="inline-flex items-center justify-center gap-2 bg-white text-sage font-semibold px-4 py-2.5 rounded-full border border-sage hover:bg-sand transition text-sm">
+                    <i data-lucide="crosshair" class="w-4 h-4"></i>
+                    Usar localização
+                  </button>
+                  <button id="near-me-clear-btn" type="button" onclick="clearNearMe()" class="hidden inline-flex items-center justify-center gap-2 bg-sand text-bark font-semibold px-3 py-2.5 rounded-full border border-sand hover:bg-white transition text-sm">
+                    Limpar
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div class="grid sm:grid-cols-4 gap-2">
               <div>
                 <label for="filter-district" class="block text-xs font-semibold text-bark/55 mb-1">Distrito</label>
@@ -1425,6 +1443,8 @@
     let adminSearch = '';
     let adminCategoryFilter = '';
     let currentFeatureFilters = [];
+    let nearMeActive = false;
+    let userLocation = null;
     let listFiltersExpanded = true;
     let lastListScrollY = 0;
 
@@ -2026,6 +2046,7 @@
       if (currentMunicipalityFilter) count += 1;
       if (currentLocalityFilter) count += 1;
       count += currentFeatureFilters.length;
+      if (nearMeActive) count += 1;
       return count;
     }
 
@@ -2044,6 +2065,7 @@
         currentFeatureFilters.forEach(key => {
           if (FEATURE_FILTERS[key]) pieces.push(FEATURE_FILTERS[key].label);
         });
+        if (nearMeActive) pieces.push('Perto de mim');
         title.textContent = pieces.length ? pieces.join(' · ') : 'Filtros';
       }
 
@@ -2086,6 +2108,8 @@
     function clearAllListFilters() {
       currentFilter = null;
       currentFeatureFilters = [];
+      nearMeActive = false;
+      userLocation = null;
       currentDistrictFilter = '';
       currentMunicipalityFilter = '';
       currentLocalityFilter = '';
@@ -2094,6 +2118,7 @@
       updateHomeCategoryButtons(null);
       renderZoneFilters();
       updateFeatureFilterPanel();
+      updateNearMeUI();
       renderCards('cards-list', getFiltered());
     }
 
@@ -2111,8 +2136,110 @@
       lastListScrollY = currentY;
     }
 
+    function getDistanceKmFromUser(loc) {
+      if (!userLocation || !hasValidCoordinates(loc)) return null;
+
+      const toRadians = (value) => value * Math.PI / 180;
+      const earthRadiusKm = 6371;
+
+      const lat1 = toRadians(userLocation.latitude);
+      const lat2 = toRadians(Number(loc.latitude));
+      const deltaLat = toRadians(Number(loc.latitude) - userLocation.latitude);
+      const deltaLng = toRadians(Number(loc.longitude) - userLocation.longitude);
+
+      const a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
+        Math.cos(lat1) * Math.cos(lat2) *
+        Math.sin(deltaLng / 2) * Math.sin(deltaLng / 2);
+
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return earthRadiusKm * c;
+    }
+
+    function formatDistanceKm(distance) {
+      if (distance === null || distance === undefined) return '';
+      if (distance < 1) return `${Math.round(distance * 1000)} m`;
+      if (distance < 10) return `${distance.toFixed(1).replace('.', ',')} km`;
+      return `${Math.round(distance)} km`;
+    }
+
+    function getDistanceLabel(loc) {
+      if (!nearMeActive || !userLocation) return '';
+      const distance = getDistanceKmFromUser(loc);
+      if (distance === null) return '';
+      return formatDistanceKm(distance);
+    }
+
+    function updateNearMeUI() {
+      const btn = document.getElementById('near-me-btn');
+      const clearBtn = document.getElementById('near-me-clear-btn');
+      const help = document.getElementById('near-me-help');
+
+      if (btn) {
+        btn.classList.toggle('bg-sage', nearMeActive);
+        btn.classList.toggle('text-cream', nearMeActive);
+        btn.classList.toggle('bg-white', !nearMeActive);
+        btn.classList.toggle('text-sage', !nearMeActive);
+        btn.innerHTML = nearMeActive
+          ? '<i data-lucide="crosshair" class="w-4 h-4"></i> Perto de mim ativo'
+          : '<i data-lucide="crosshair" class="w-4 h-4"></i> Usar localização';
+      }
+
+      if (clearBtn) clearBtn.classList.toggle('hidden', !nearMeActive);
+
+      if (help) {
+        help.textContent = nearMeActive
+          ? 'A lista mostra apenas locais com coordenadas, ordenados por distância.'
+          : 'Mostra primeiro os locais com coordenadas mais próximos de ti.';
+      }
+
+      lucide.createIcons();
+    }
+
+    function enableNearMe() {
+      if (!navigator.geolocation) {
+        alert('O teu dispositivo/browser não permite usar localização.');
+        return;
+      }
+
+      const help = document.getElementById('near-me-help');
+      if (help) help.textContent = 'A pedir autorização de localização...';
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          userLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+
+          nearMeActive = true;
+          updateNearMeUI();
+          updateListFilterSummary();
+          renderCards('cards-list', getFiltered());
+        },
+        () => {
+          nearMeActive = false;
+          userLocation = null;
+          updateNearMeUI();
+          alert('Não foi possível obter a tua localização. Confirma se deste permissão ao browser.');
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        }
+      );
+    }
+
+    function clearNearMe() {
+      nearMeActive = false;
+      userLocation = null;
+      updateNearMeUI();
+      updateListFilterSummary();
+      renderCards('cards-list', getFiltered());
+    }
+
     function getFiltered() {
-      return locations.filter((loc) => {
+      let filtered = locations.filter((loc) => {
         const matchCat = !currentFilter || loc.displayType === currentFilter;
         const matchSearch = !currentSearch ||
           normalizedLower(loc.name).includes(currentSearch) ||
@@ -2127,8 +2254,20 @@
         const matchLocality = !currentLocalityFilter || loc.locality === currentLocalityFilter;
         const matchFeatures = currentFeatureFilters.length === 0 ||
           currentFeatureFilters.every(filterKey => locationHasFeatureFilter(loc, filterKey));
-        return matchCat && matchSearch && matchDistrict && matchMunicipality && matchLocality && matchFeatures;
+        const matchNearMe = !nearMeActive || hasValidCoordinates(loc);
+
+        return matchCat && matchSearch && matchDistrict && matchMunicipality && matchLocality && matchFeatures && matchNearMe;
       });
+
+      if (nearMeActive && userLocation) {
+        filtered = filtered.slice().sort((a, b) => {
+          const distanceA = getDistanceKmFromUser(a);
+          const distanceB = getDistanceKmFromUser(b);
+          return (distanceA ?? Infinity) - (distanceB ?? Infinity);
+        });
+      }
+
+      return filtered;
     }
 
     function updateFilterButtons(cat) {
@@ -2323,6 +2462,7 @@
                 <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
                 ${locationLine}
               </p>
+              ${getDistanceLabel(loc) ? `<p class="text-xs text-sage font-semibold mt-1">📍 ${getDistanceLabel(loc)} de ti</p>` : ''}
             </div>
 
             <div class="card-status-strip mb-3">
@@ -3560,6 +3700,7 @@ function showView(view) {
   if (view === 'list') {
     renderZoneFilters();
     updateFeatureFilterPanel();
+    updateNearMeUI();
     renderCards('cards-list', getFiltered());
     setupHorizontalCategoryScroll();
 
