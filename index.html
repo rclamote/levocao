@@ -757,9 +757,9 @@
           </div>
 
           <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
-            <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
-              <i data-lucide="map-pin" class="w-4 h-4"></i>
-              Onde posso ir com o meu cão?
+            <button type="button" onclick="startNearMeFromHome()" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              <i data-lucide="crosshair" class="w-4 h-4"></i>
+              Perto de mim
             </button>
             <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -2193,6 +2193,22 @@
       }
 
       lucide.createIcons();
+    }
+
+    function startNearMeFromHome() {
+      clearSearchState();
+      currentFilter = null;
+      currentFeatureFilters = [];
+      currentDistrictFilter = '';
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+      updateFilterButtons(null);
+      updateHomeCategoryButtons(null);
+      renderZoneFilters();
+      updateFeatureFilterPanel();
+      showView('list');
+      setListFiltersExpanded(false);
+      enableNearMe();
     }
 
     function enableNearMe() {
