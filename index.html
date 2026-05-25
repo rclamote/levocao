@@ -757,9 +757,9 @@
           </div>
 
           <div class="fade-in-d4 mt-5 flex flex-col sm:flex-row items-center justify-center gap-3 relative z-10">
-            <button type="button" onclick="showView('list')" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
-              <i data-lucide="map-pin" class="w-4 h-4"></i>
-              Onde posso ir com o meu cão?
+            <button type="button" onclick="startNearMeFromHome()" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-6 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              <i data-lucide="crosshair" class="w-4 h-4"></i>
+              Perto de mim
             </button>
             <button type="button" onclick="showView('suggest')" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-6 py-3 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95">
               <i data-lucide="plus-circle" class="w-4 h-4"></i>
@@ -1641,6 +1641,27 @@
       return map[type] || ['#8BA67A', '#D4C5A9', '#FFFDF7'];
     }
 
+    const TEMP_TEST_CARD_PHOTOS = [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+    ];
+
+    function getTestPhotoUrl(loc) {
+      if (!loc || !loc.id) return '';
+
+      const numericId = Number(loc.id);
+      if (!Number.isFinite(numericId)) return '';
+
+      // Teste temporário: só alguns locais recebem foto.
+      // Depois trocamos isto por loc.photo_url vindo do Supabase.
+      if (numericId % 7 === 0) return TEMP_TEST_CARD_PHOTOS[0];
+      if (numericId % 11 === 0) return TEMP_TEST_CARD_PHOTOS[1];
+      if (numericId % 13 === 0) return TEMP_TEST_CARD_PHOTOS[2];
+
+      return '';
+    }
+
     function getSmartShortDescription(loc) {
       const cleanNotes = (loc.notes || '').replace(/\s+/g, ' ').trim();
       if (cleanNotes && cleanNotes.length <= 90) {
@@ -2195,6 +2216,22 @@
       lucide.createIcons();
     }
 
+    function startNearMeFromHome() {
+      clearSearchState();
+      currentFilter = null;
+      currentFeatureFilters = [];
+      currentDistrictFilter = '';
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+      updateFilterButtons(null);
+      updateHomeCategoryButtons(null);
+      renderZoneFilters();
+      updateFeatureFilterPanel();
+      showView('list');
+      setListFiltersExpanded(false);
+      enableNearMe();
+    }
+
     function enableNearMe() {
       if (!navigator.geolocation) {
         alert('O teu dispositivo/browser não permite usar localização.');
@@ -2441,11 +2478,15 @@
       const smartDesc = getSmartShortDescription(loc);
       const primaryFeature = getPrimaryFeatureBadge(loc);
       const trustBadge = getCardTrustBadge(loc);
+      const photoUrl = getTestPhotoUrl(loc);
 
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
-          <div class="h-36 relative flex items-center justify-center" style="background:${grad}">
-            <span class="text-5xl">${loc.emoji}</span>
+          <div class="h-44 relative flex items-center justify-center overflow-hidden" style="background:${grad}">
+            ${photoUrl
+              ? `<img src="${photoUrl}" alt="${loc.name}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+                 <div class="absolute inset-0 bg-gradient-to-t from-bark/35 via-transparent to-bark/10"></div>`
+              : `<span class="text-5xl">${loc.emoji}</span>`}
             <div class="absolute top-3 left-3">
               <span class="text-xs bg-white/90 text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${loc.displayType}</span>
             </div>
@@ -2740,14 +2781,18 @@
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const userState = getUserVoteState(loc.id);
+      const photoUrl = getTestPhotoUrl(loc);
 
       document.getElementById('detail-content').innerHTML = `
         <button type="button" onclick="showView('list')" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
           <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
         </button>
         <div class="rounded-2xl overflow-hidden border border-sand shadow-sm bg-white">
-          <div class="h-48 flex items-center justify-center relative" style="background:${grad}">
-            <span class="text-6xl">${loc.emoji}</span>
+          <div class="h-56 flex items-center justify-center relative overflow-hidden" style="background:${grad}">
+            ${photoUrl
+              ? `<img src="${photoUrl}" alt="${loc.name}" class="absolute inset-0 w-full h-full object-cover" />
+                 <div class="absolute inset-0 bg-gradient-to-t from-bark/35 via-transparent to-bark/10"></div>`
+              : `<span class="text-6xl">${loc.emoji}</span>`}
             <span class="absolute top-4 right-4 ${dogMeta.className} text-sm font-medium px-3 py-1.5 rounded-full">${dogMeta.text}</span>
           </div>
           <div class="p-5 space-y-4">
