@@ -2381,9 +2381,22 @@
       return null;
     }
 
+    function getHomePath() {
+      const path = window.location.pathname || '/';
+      const marker = '/local/';
+      if (path.includes(marker)) return path.split(marker)[0] || '/';
+      return path || '/';
+    }
+
+    function getPlaceSlug(loc) {
+      if (!loc || !loc.name) return '';
+      return slugifyFilePart(loc.name || 'local');
+    }
+
     function getPlaceDirectUrl(loc) {
-      if (!loc || !loc.id) return window.location.origin + window.location.pathname;
-      return `${window.location.origin}${window.location.pathname}?local=${encodeURIComponent(loc.id)}`;
+      if (!loc || !loc.id) return `${window.location.origin}${getHomePath()}`;
+      const homePath = getHomePath().replace(/\/$/, '') || '';
+      return `${window.location.origin}${homePath}/local/${encodeURIComponent(getPlaceSlug(loc))}`;
     }
 
     async function copyPlaceDirectLink(id) {
@@ -2415,11 +2428,39 @@
       const params = new URLSearchParams(window.location.search);
       const localParam = params.get('local');
 
-      if (!localParam) return false;
+      let loc = null;
 
-      const loc = locations.find((item) => String(item.id) === String(localParam));
+      // Compatibilidade antiga: https://levocao.pt/?local=123
+      if (localParam) {
+        loc = locations.find((item) => String(item.id) === String(localParam));
+      } else {
+        const path = decodeURIComponent(window.location.pathname || '');
+        const match = path.match(/\/local\/([^/?#]+)/);
+        const slugFromPath = match ? slugifyFilePart(match[1]) : '';
+
+        if (!slugFromPath) return false;
+
+        // Link novo: /local/nome-do-local
+        loc = locations.find((item) => getPlaceSlug(item) === slugFromPath);
+
+        // Compatibilidade futura/antiga: /local/nome-do-local-123
+        if (!loc) {
+          const idMatch = slugFromPath.match(/-(\d+)$/);
+          const idFromSlug = idMatch ? idMatch[1] : '';
+
+          if (idFromSlug) {
+            loc = locations.find((item) => String(item.id) === String(idFromSlug));
+          }
+        }
+
+        // Fallback: caso algum slug venha só pelo nome limpo.
+        if (!loc) {
+          loc = locations.find((item) => slugifyFilePart(item.name || '') === slugFromPath);
+        }
+      }
+
       if (!loc) {
-        console.warn('Local não encontrado para o parâmetro local:', localParam);
+        console.warn('Local não encontrado no link:', localParam || window.location.pathname);
         return false;
       }
 
@@ -3937,8 +3978,8 @@ function showView(view) {
   updateResultsBarVisibility(view);
   window.scrollTo({ top: 0, behavior: 'auto' });
 
-  if (view !== 'detail' && window.location.search.includes('local=')) {
-    window.history.pushState({ view }, '', window.location.pathname);
+  if (view !== 'detail' && (window.location.search.includes('local=') || window.location.pathname.includes('/local/'))) {
+    window.history.pushState({ view }, '', `${getHomePath()}${window.location.hash || ''}`);
   }
 
   if (view === 'list') {
