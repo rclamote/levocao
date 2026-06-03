@@ -2381,6 +2381,52 @@
       return null;
     }
 
+    function getPlaceDirectUrl(loc) {
+      if (!loc || !loc.id) return window.location.origin + window.location.pathname;
+      return `${window.location.origin}${window.location.pathname}?local=${encodeURIComponent(loc.id)}`;
+    }
+
+    async function copyPlaceDirectLink(id) {
+      const loc = locations.find((item) => Number(item.id) === Number(id));
+      if (!loc) return;
+
+      const url = getPlaceDirectUrl(loc);
+
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(url);
+        } else {
+          const tempInput = document.createElement('input');
+          tempInput.value = url;
+          document.body.appendChild(tempInput);
+          tempInput.select();
+          document.execCommand('copy');
+          document.body.removeChild(tempInput);
+        }
+
+        alert('Link do local copiado!');
+      } catch (error) {
+        console.error('Erro ao copiar link:', error);
+        prompt('Copia este link:', url);
+      }
+    }
+
+    function openLocalFromUrlParam() {
+      const params = new URLSearchParams(window.location.search);
+      const localParam = params.get('local');
+
+      if (!localParam) return false;
+
+      const loc = locations.find((item) => String(item.id) === String(localParam));
+      if (!loc) {
+        console.warn('Local não encontrado para o parâmetro local:', localParam);
+        return false;
+      }
+
+      showDetail(loc.id, { keepUrl: true });
+      return true;
+    }
+
     function getCardLocationLine(loc) {
       const parts = [];
       if (loc.locality) parts.push(loc.locality);
@@ -2792,7 +2838,7 @@
       renderCards('cards-list', getFiltered());
     }
 
-    function showDetail(id) {
+    function showDetail(id, options = {}) {
       const loc = locations.find((item) => item.id === id);
       if (!loc) return;
 
@@ -2806,6 +2852,14 @@
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const userState = getUserVoteState(loc.id);
       const photoUrl = loc.photo_url || '';
+      const directUrl = getPlaceDirectUrl(loc);
+
+      if (!options.keepUrl) {
+        const currentUrl = window.location.href;
+        if (currentUrl !== directUrl) {
+          window.history.pushState({ view: 'detail', id: loc.id }, '', directUrl);
+        }
+      }
 
       document.getElementById('detail-content').innerHTML = `
         <button type="button" onclick="showView('list')" class="text-sage font-medium text-sm flex items-center gap-1 mb-4">
@@ -2878,6 +2932,9 @@
               <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
                 <i data-lucide="map" class="w-5 h-5"></i> Abrir no Google Maps
               </a>
+              <button type="button" onclick="copyPlaceDirectLink(${loc.id})" class="flex items-center justify-center gap-2 w-full bg-white text-sage font-semibold py-4 rounded-full shadow-md border border-sage hover:bg-sand transition active:scale-95 text-lg">
+                <i data-lucide="link" class="w-5 h-5"></i> Copiar link
+              </button>
             </div>
           </div>
         </div>
@@ -3242,6 +3299,10 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
           <i data-lucide="pencil" class="w-4 h-4"></i>
           Editar
+        </button>
+        <button type="button" onclick="copyPlaceDirectLink(${item.id})" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-4 py-2 rounded-full border border-sage shadow-sm hover:bg-sand transition">
+          <i data-lucide="link" class="w-4 h-4"></i>
+          Copiar link
         </button>
         <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
           <i data-lucide="eye-off" class="w-4 h-4"></i>
@@ -3876,6 +3937,10 @@ function showView(view) {
   updateResultsBarVisibility(view);
   window.scrollTo({ top: 0, behavior: 'auto' });
 
+  if (view !== 'detail' && window.location.search.includes('local=')) {
+    window.history.pushState({ view }, '', window.location.pathname);
+  }
+
   if (view === 'list') {
     renderZoneFilters();
     updateFeatureFilterPanel();
@@ -3933,6 +3998,12 @@ function showView(view) {
 
     window.addEventListener('scroll', handleListScrollCollapse, { passive: true });
 
+    window.addEventListener('popstate', () => {
+      if (!openLocalFromUrlParam()) {
+        showView('home');
+      }
+    });
+
     async function initApp() {
       document.getElementById('year').textContent = String(new Date().getFullYear());
 
@@ -3982,6 +4053,7 @@ function showView(view) {
       }
 
       await loadPlacesFromSupabase();
+      openLocalFromUrlParam();
     }
 
     initApp();
