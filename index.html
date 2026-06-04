@@ -2352,7 +2352,7 @@
       if (btn) btn.classList.add('active');
     }
 
-    function getRecentLocations(limit = 4) {
+    function getRecentLocations(limit = 6) {
       return locations
         .slice()
         .sort((a, b) => {
@@ -2363,7 +2363,7 @@
         .slice(0, limit);
     }
 
-    function getTopConfirmedLocations(limit = 4) {
+    function getTopConfirmedLocations(limit = 6) {
       const recentIds = new Set(getRecentLocations(limit).map(l => l.id));
 
       return locations
