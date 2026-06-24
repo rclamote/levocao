@@ -1,7 +1,7 @@
 {
   "rewrites": [
     {
-      "source": "/local/:slug",
+      "source": "/:path*",
       "destination": "/index.html"
     }
   ]

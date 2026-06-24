@@ -865,6 +865,36 @@
         </div>
       </section>
 
+
+
+      <section class="max-w-6xl mx-auto px-5 pb-8">
+        <div class="rounded-3xl bg-white border border-sand shadow-sm p-5">
+          <div class="flex items-center justify-between mb-4 gap-3">
+            <div>
+              <h2 class="font-display text-xl font-bold">Guias por zona</h2>
+              <p class="text-sm text-bark/55 mt-1">Começa por uma região e descobre locais para ires com o teu cão.</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-3 gap-3">
+            <button type="button" onclick="openGuideBySlug('onde-levar-o-cao-no-algarve')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">🌊</p>
+              <p class="font-semibold text-bark">Onde levar o cão no Algarve</p>
+              <p class="text-sm text-bark/55 mt-1">Praias, restaurantes, alojamentos e passeios.</p>
+            </button>
+            <button type="button" onclick="openGuideBySlug('onde-levar-o-cao-no-alentejo')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">🌿</p>
+              <p class="font-semibold text-bark">Onde levar o cão no Alentejo</p>
+              <p class="text-sm text-bark/55 mt-1">Escapadinhas, alojamentos e espaços tranquilos.</p>
+            </button>
+            <button type="button" onclick="showView('list')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">📍</p>
+              <p class="font-semibold text-bark">Ver todos os locais</p>
+              <p class="text-sm text-bark/55 mt-1">Filtra por distrito, concelho, localidade e categoria.</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section class="max-w-6xl mx-auto px-5 pb-12">
         <div class="flex items-center justify-between mb-4 gap-3">
           <h2 class="font-display text-xl font-bold">Mais confirmados pela comunidade</h2>
@@ -1019,6 +1049,59 @@
           </button>
         </div>
       </div>
+    </div>
+
+
+
+    <div id="view-region" class="hidden">
+      <section class="bg-gradient-to-br from-sand via-cream to-sand border-b border-sand">
+        <div class="max-w-6xl mx-auto px-5 py-8 sm:py-10 view-transition">
+          <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm inline-flex items-center gap-1 mb-5">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+          </button>
+          <div class="max-w-3xl">
+            <p id="region-eyebrow" class="text-sm font-semibold text-sage mb-2">Guia por zona</p>
+            <h1 id="region-title" class="font-display text-3xl sm:text-4xl font-bold text-bark leading-tight mb-3">Onde levar o cão?</h1>
+            <p id="region-intro" class="text-bark/70 text-lg max-w-2xl">Descobre locais pet-friendly, com informação prática para ires com o teu cão sem surpresas.</p>
+            <div class="mt-5 flex flex-wrap gap-2 text-sm">
+              <span id="region-count-pill" class="bg-white/85 border border-sand rounded-full px-3 py-1.5 text-bark/70">0 locais</span>
+              <span class="bg-white/85 border border-sand rounded-full px-3 py-1.5 text-bark/70">📍 Com coordenadas</span>
+              <span class="bg-white/85 border border-sand rounded-full px-3 py-1.5 text-bark/70">🐾 Feito pela comunidade</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="max-w-6xl mx-auto px-5 py-6">
+        <div class="rounded-3xl bg-white border border-sand shadow-sm p-4 sm:p-5 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="font-display text-xl font-bold">Filtrar nesta zona</h2>
+              <p class="text-sm text-bark/55 mt-1">Escolhe uma categoria ou vê todos os locais desta página.</p>
+            </div>
+            <button type="button" onclick="openCurrentGuideInList()" class="inline-flex items-center justify-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+              <i data-lucide="list" class="w-4 h-4"></i>
+              Ver com filtros completos
+            </button>
+          </div>
+          <div id="region-category-chips" class="filter-chip-row mt-4"></div>
+        </div>
+
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <div>
+            <h2 id="region-results-title" class="font-display text-xl font-bold">Locais nesta zona</h2>
+            <p id="region-results-subtitle" class="text-sm text-bark/55 mt-1">Locais encontrados no Levo o Cão.</p>
+          </div>
+        </div>
+
+        <div id="cards-region" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+        <div id="region-no-results" class="hidden text-center py-12 px-4">
+          <p class="text-bark/60 text-lg mb-3">Ainda não temos locais nesta combinação 😕</p>
+          <button type="button" onclick="clearGuideCategory()" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-5 py-3 rounded-full border border-sage hover:bg-sand transition active:scale-95">
+            Ver todos nesta zona
+          </button>
+        </div>
+      </section>
     </div>
 
     <div id="view-detail" class="hidden">
@@ -1487,6 +1570,8 @@
     let adminSearch = '';
     let adminCategoryFilter = '';
     let currentFeatureFilters = [];
+    let currentGuide = null;
+    let currentGuideCategory = '';
     let nearMeActive = false;
     let userLocation = null;
     let listFiltersExpanded = true;
@@ -1764,6 +1849,181 @@
       if (loc.dog_status === 'maybe') return 'Local que pode aceitar cães, com algumas restrições.';
       if (loc.dog_status === 'yes') return 'Local pet-friendly.';
       return 'Convém confirmar antes de ir com o cão.';
+    }
+
+
+    const GUIDE_ROUTES = [
+      {
+        slug: 'onde-levar-o-cao-no-algarve',
+        title: 'Onde levar o cão no Algarve',
+        eyebrow: 'Guia pet-friendly no Algarve',
+        intro: 'Descobre restaurantes, praias, alojamentos, passeios e experiências onde podes ir com o teu cão no Algarve. Informação prática, simples e pensada para evitar surpresas.',
+        districts: ['Faro']
+      },
+      {
+        slug: 'onde-levar-o-cao-no-alentejo',
+        title: 'Onde levar o cão no Alentejo',
+        eyebrow: 'Guia pet-friendly no Alentejo',
+        intro: 'Descobre alojamentos, restaurantes, passeios e experiências para ires com o teu cão no Alentejo, com informação prática reunida pela comunidade.',
+        districts: ['Beja', 'Évora', 'Portalegre']
+      }
+    ];
+
+    function getGuidePathSlug() {
+      const path = decodeURIComponent(window.location.pathname || '').replace(/\/+$/, '');
+      const parts = path.split('/').filter(Boolean);
+      return parts.length ? slugifyFilePart(parts[parts.length - 1]) : '';
+    }
+
+    function getGuideBySlug(slug) {
+      const cleanSlug = slugifyFilePart(slug || '');
+      const fixedGuide = GUIDE_ROUTES.find((guide) => guide.slug === cleanSlug);
+      if (fixedGuide) return fixedGuide;
+
+      const districtPrefixes = [
+        'onde-levar-o-cao-em-',
+        'onde-levar-o-cao-no-',
+        'onde-levar-o-cao-na-'
+      ];
+
+      const prefix = districtPrefixes.find((item) => cleanSlug.startsWith(item));
+      if (!prefix) return null;
+
+      const districtSlug = cleanSlug.replace(prefix, '');
+      const district = getDistrictOptions().find((item) => slugifyFilePart(item) === districtSlug);
+      if (!district) return null;
+
+      const article = prefix.endsWith('no-') ? 'no' : prefix.endsWith('na-') ? 'na' : 'em';
+      return {
+        slug: cleanSlug,
+        title: `Onde levar o cão ${article} ${district}`,
+        eyebrow: `Guia pet-friendly · ${district}`,
+        intro: `Descobre locais pet-friendly no distrito de ${district}: restaurantes, alojamentos, passeios, praias, experiências e espaços onde os cães podem ser bem-vindos.`,
+        districts: [district]
+      };
+    }
+
+    function getGuideLocations(guide = currentGuide, category = currentGuideCategory) {
+      if (!guide) return [];
+      const districts = Array.isArray(guide.districts) ? guide.districts : [];
+
+      return locations
+        .filter((loc) => districts.includes(loc.district))
+        .filter((loc) => !category || loc.displayType === category)
+        .slice()
+        .sort((a, b) => {
+          const confirmations = getConfirmationCount(b.id) - getConfirmationCount(a.id);
+          if (confirmations !== 0) return confirmations;
+          return Number(b.id || 0) - Number(a.id || 0);
+        });
+    }
+
+    function renderGuideCategoryChips(guide) {
+      const container = document.getElementById('region-category-chips');
+      if (!container) return;
+
+      const baseLocations = getGuideLocations(guide, '');
+      const categories = ['Comer & Beber', 'Praia', 'Alojamento', 'Espaços comerciais', 'Soltar o cão', 'Passear com o cão', 'Experiências'];
+
+      const chips = [
+        `<button type="button" onclick="setGuideCategory('')" class="cat-btn text-sm px-4 py-2 rounded-full ${!currentGuideCategory ? 'bg-sage text-cream border border-sage' : 'bg-white border border-sand'} font-medium">Todos <span class="opacity-70">${baseLocations.length}</span></button>`
+      ];
+
+      categories.forEach((category) => {
+        const count = baseLocations.filter((loc) => loc.displayType === category).length;
+        if (!count) return;
+        chips.push(`<button type="button" onclick="setGuideCategory('${category.replace(/'/g, "\\'")}')" class="cat-btn text-sm px-4 py-2 rounded-full ${currentGuideCategory === category ? 'bg-sage text-cream border border-sage' : 'bg-white border border-sand'} font-medium">${category} <span class="opacity-70">${count}</span></button>`);
+      });
+
+      container.innerHTML = chips.join('');
+    }
+
+    function renderGuidePage() {
+      if (!currentGuide) return false;
+
+      const locs = getGuideLocations(currentGuide, currentGuideCategory);
+      const allGuideLocs = getGuideLocations(currentGuide, '');
+
+      const title = document.getElementById('region-title');
+      const eyebrow = document.getElementById('region-eyebrow');
+      const intro = document.getElementById('region-intro');
+      const pill = document.getElementById('region-count-pill');
+      const resultsTitle = document.getElementById('region-results-title');
+      const resultsSubtitle = document.getElementById('region-results-subtitle');
+      const noResults = document.getElementById('region-no-results');
+
+      if (title) title.textContent = currentGuide.title;
+      if (eyebrow) eyebrow.textContent = currentGuide.eyebrow || 'Guia por zona';
+      if (intro) intro.textContent = currentGuide.intro || 'Descobre locais pet-friendly com informação prática para ires com o teu cão sem surpresas.';
+      if (pill) pill.textContent = `${allGuideLocs.length} ${allGuideLocs.length === 1 ? 'local' : 'locais'} nesta zona`;
+      if (resultsTitle) resultsTitle.textContent = currentGuideCategory ? `${currentGuideCategory} nesta zona` : 'Locais nesta zona';
+      if (resultsSubtitle) resultsSubtitle.textContent = `${locs.length} ${locs.length === 1 ? 'local encontrado' : 'locais encontrados'}`;
+      if (noResults) noResults.classList.toggle('hidden', locs.length > 0);
+
+      renderGuideCategoryChips(currentGuide);
+      renderCards('cards-region', locs);
+      showView('region');
+      return true;
+    }
+
+    function openGuideBySlug(slug, options = {}) {
+      const guide = getGuideBySlug(slug);
+      if (!guide) return false;
+
+      currentGuide = guide;
+      currentGuideCategory = '';
+      renderGuidePage();
+
+      if (!options.keepUrl) {
+        const homePath = getHomePath().replace(/\/$/, '') || '';
+        window.history.pushState({ view: 'region', slug: guide.slug }, '', `${homePath}/${guide.slug}`);
+      }
+
+      return true;
+    }
+
+    function openGuideFromUrlPath() {
+      const slug = getGuidePathSlug();
+      if (!slug) return false;
+      return openGuideBySlug(slug, { keepUrl: true });
+    }
+
+    function isGuidePath() {
+      return !!getGuideBySlug(getGuidePathSlug());
+    }
+
+    function setGuideCategory(category) {
+      currentGuideCategory = category || '';
+      renderGuidePage();
+    }
+
+    function clearGuideCategory() {
+      setGuideCategory('');
+    }
+
+    function openCurrentGuideInList() {
+      if (!currentGuide) return showView('list');
+
+      currentFilter = currentGuideCategory || null;
+      currentSearch = '';
+      currentFeatureFilters = [];
+      currentMunicipalityFilter = '';
+      currentLocalityFilter = '';
+      nearMeActive = false;
+
+      if (Array.isArray(currentGuide.districts) && currentGuide.districts.length === 1) {
+        currentDistrictFilter = currentGuide.districts[0];
+      } else {
+        currentDistrictFilter = '';
+        currentSearch = currentGuide.title.toLowerCase().includes('alentejo') ? 'alentejo' : '';
+      }
+
+      const input = document.getElementById('search-input');
+      if (input) input.value = currentSearch;
+      renderZoneFilters();
+      updateFilterButtons(currentFilter);
+      updateFeatureFilterPanel();
+      showView('list');
     }
 
     function clearSearchState() {
@@ -3970,7 +4230,7 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
     }
 
 function showView(view) {
-  ['home', 'list', 'detail', 'suggest', 'admin'].forEach((section) => {
+  ['home', 'list', 'region', 'detail', 'suggest', 'admin'].forEach((section) => {
     const el = document.getElementById(`view-${section}`);
     if (el) el.classList.toggle('hidden', section !== view);
   });
@@ -3978,7 +4238,7 @@ function showView(view) {
   updateResultsBarVisibility(view);
   window.scrollTo({ top: 0, behavior: 'auto' });
 
-  if (view !== 'detail' && (window.location.search.includes('local=') || window.location.pathname.includes('/local/'))) {
+  if (view !== 'detail' && view !== 'region' && (window.location.search.includes('local=') || window.location.pathname.includes('/local/') || isGuidePath())) {
     window.history.pushState({ view }, '', `${getHomePath()}${window.location.hash || ''}`);
   }
 
@@ -4040,7 +4300,7 @@ function showView(view) {
     window.addEventListener('scroll', handleListScrollCollapse, { passive: true });
 
     window.addEventListener('popstate', () => {
-      if (!openLocalFromUrlParam()) {
+      if (!openLocalFromUrlParam() && !openGuideFromUrlPath()) {
         showView('home');
       }
     });
@@ -4094,7 +4354,9 @@ function showView(view) {
       }
 
       await loadPlacesFromSupabase();
-      openLocalFromUrlParam();
+      if (!openLocalFromUrlParam()) {
+        openGuideFromUrlPath();
+      }
     }
 
     initApp();
