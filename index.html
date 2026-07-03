@@ -2642,10 +2642,7 @@
     }
 
     function getHomePath() {
-      const path = window.location.pathname || '/';
-      const marker = '/local/';
-      if (path.includes(marker)) return path.split(marker)[0] || '/';
-      return path || '/';
+      return '/';
     }
 
     function getPlaceSlug(loc) {
@@ -2654,9 +2651,8 @@
     }
 
     function getPlaceDirectUrl(loc) {
-      if (!loc || !loc.id) return `${window.location.origin}${getHomePath()}`;
-      const homePath = getHomePath().replace(/\/$/, '') || '';
-      return `${window.location.origin}${homePath}/local/${encodeURIComponent(getPlaceSlug(loc))}`;
+      if (!loc || !loc.id) return `${window.location.origin}/`;
+      return `${window.location.origin}/local/${encodeURIComponent(getPlaceSlug(loc))}`;
     }
 
     async function copyPlaceDirectLink(id) {
@@ -4229,7 +4225,34 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       bar.classList.add('hidden');
     }
 
+function resetHomeState() {
+  currentSearch = '';
+  currentFilter = null;
+  currentDistrictFilter = '';
+  currentMunicipalityFilter = '';
+  currentLocalityFilter = '';
+  currentFeatureFilters = [];
+  currentGuide = null;
+  currentGuideCategory = '';
+  nearMeActive = false;
+  userLocation = null;
+
+  const input = document.getElementById('search-input');
+  if (input) input.value = '';
+
+  hideSuggestions();
+  updateFilterButtons(null);
+  updateHomeCategoryButtons(null);
+  renderZoneFilters();
+  updateFeatureFilterPanel();
+  updateNearMeUI();
+}
+
 function showView(view) {
+  if (view === 'home') {
+    resetHomeState();
+  }
+
   ['home', 'list', 'region', 'detail', 'suggest', 'admin'].forEach((section) => {
     const el = document.getElementById(`view-${section}`);
     if (el) el.classList.toggle('hidden', section !== view);
