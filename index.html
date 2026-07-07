@@ -39,6 +39,14 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.initGooglePlaces = function () {
+      window.googlePlacesReady = true;
+      if (typeof window.setupGooglePlacesAutocomplete === 'function') {
+        window.setupGooglePlacesAutocomplete();
+      }
+    };
+  </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQnx3CcaZ5cCZDfyqp1ldOMVS72JEqM44&v=weekly&libraries=places&callback=initGooglePlaces"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -177,6 +185,28 @@
     .place-autocomplete-fallback {
       width: 100%;
     }
+
+    .pac-container {
+      z-index: 99999 !important;
+      border-radius: 16px;
+      border: 1px solid #F5F0E8;
+      box-shadow: 0 18px 35px rgba(61, 44, 30, 0.16);
+      font-family: 'DM Sans', system-ui, sans-serif;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .pac-item {
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .pac-item-query {
+      font-size: 0.95rem;
+      color: #3D2C1E;
+    }
+
 
     .auth-btn {
       font-size: 0.875rem;
@@ -1140,11 +1170,10 @@
 
           <div class="rounded-2xl bg-sand/60 border border-sand p-4">
             <label for="sg-place-search" class="block text-sm font-semibold text-sage mb-1">Pesquisar local no Google</label>
-            <div id="sg-place-widget" class="place-autocomplete-wrap"></div>
             <input
               id="sg-place-search"
               type="search"
-              class="place-autocomplete-fallback hidden w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-bark placeholder:text-bark/35"
+              class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-bark placeholder:text-bark/35"
               placeholder="Ex: Dungle Club, restaurante, praia, parque..."
               autocomplete="off"
               autocorrect="off"
@@ -1354,7 +1383,6 @@
         <form id="edit-place-form" class="p-5 space-y-4">
           <input type="hidden" id="edit-place-id" />
           <input type="hidden" id="edit-source" value="place" />
-          <input type="hidden" id="edit-google-place-id" />
 
           <div>
             <label for="edit-name" class="block text-sm font-medium mb-1">Nome do local</label>
@@ -1801,7 +1829,6 @@
         confirmations: Number(row.confirmations || 0),
         latitude: row.latitude === null || row.latitude === undefined ? null : Number(row.latitude),
         longitude: row.longitude === null || row.longitude === undefined ? null : Number(row.longitude),
-        google_place_id: row.google_place_id || '',
         photo_url: row.photo_url || '',
         createdAt: row.created_at || null,
         colors: getColorByType(mapDisplayType(row.type))
@@ -3185,19 +3212,6 @@
       renderCards('cards-list', getFiltered());
     }
 
-
-    function getGoogleMapsUrlForPlace(loc) {
-      if (!loc) return 'https://www.google.com/maps';
-      const query = loc.name || loc.address || loc.city || 'Portugal';
-      if (loc.google_place_id) {
-        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}&query_place_id=${encodeURIComponent(loc.google_place_id)}`;
-      }
-      if (hasValidCoordinates(loc)) {
-        return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${loc.latitude},${loc.longitude}`)}`;
-      }
-      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address || query)}`;
-    }
-
     function showDetail(id, options = {}) {
       const loc = locations.find((item) => item.id === id);
       if (!loc) return;
@@ -3208,7 +3222,7 @@
       const lastUpdate = getLastUpdateText(loc.id);
       const lastUpdateExact = getLastUpdateExactText(loc.id);
       const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
-      const mapsUrl = getGoogleMapsUrlForPlace(loc);
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.address)}`;
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const userState = getUserVoteState(loc.id);
       const photoUrl = loc.photo_url || '';
@@ -3385,6 +3399,7 @@
 
 
 
+
     function getGoogleAddressComponent(components, types) {
       if (!Array.isArray(components)) return '';
       const match = components.find((component) => {
@@ -3392,7 +3407,7 @@
         return types.every((type) => componentTypes.includes(type));
       });
       if (!match) return '';
-      return match.longText || match.long_name || match.shortText || match.short_name || '';
+      return match.long_name || match.short_name || match.longText || match.shortText || '';
     }
 
     function setSuggestPlaceHelp(message, isError = false) {
@@ -3410,13 +3425,6 @@
       });
     }
 
-    function setSuggestionFallbackVisible(visible) {
-      const fallback = document.getElementById('sg-place-search');
-      const widget = document.getElementById('sg-place-widget');
-      if (fallback) fallback.classList.toggle('hidden', !visible);
-      if (widget) widget.classList.toggle('hidden', visible);
-    }
-
     function getPlaceTextValue(place) {
       if (!place) return '';
       if (typeof place.displayName === 'string') return place.displayName;
@@ -3426,11 +3434,11 @@
 
     function getGooglePlaceId(place) {
       if (!place) return '';
-      return place.id || place.place_id || place.placeId || '';
+      return place.place_id || place.id || place.placeId || '';
     }
 
     function getPlaceLatLng(place) {
-      const location = place?.location || place?.geometry?.location;
+      const location = place?.geometry?.location || place?.location;
       if (!location) return null;
 
       const lat = typeof location.lat === 'function' ? location.lat() : location.lat;
@@ -3445,11 +3453,17 @@
       const nameInput = document.getElementById('sg-name');
 
       if (!place || !latLng) {
+        const searchInput = document.getElementById('sg-place-search');
+        const typedValue = searchInput ? searchInput.value.trim() : '';
+        if (nameInput && typedValue && !nameInput.value) {
+          nameInput.value = typedValue;
+        }
+
         setSuggestPlaceHelp('Para preencher automaticamente, escolhe uma sugestão da lista do Google. Se não aparecer, podes continuar manualmente.', false);
         return;
       }
 
-      const components = place.addressComponents || place.address_components || [];
+      const components = place.address_components || place.addressComponents || [];
       const district = getGoogleAddressComponent(components, ['administrative_area_level_1']);
       const municipality = getGoogleAddressComponent(components, ['administrative_area_level_2']);
       const locality =
@@ -3463,8 +3477,8 @@
       const websiteInput = document.getElementById('sg-website');
 
       const placeName = getPlaceTextValue(place);
-      const formattedAddress = place.formattedAddress || place.formatted_address || '';
-      const website = place.websiteURI || place.website || '';
+      const formattedAddress = place.formatted_address || place.formattedAddress || '';
+      const website = place.website || place.websiteURI || '';
 
       if (nameInput && placeName) nameInput.value = placeName;
       if (addressInput && formattedAddress) addressInput.value = formattedAddress;
@@ -3491,64 +3505,39 @@
       setSuggestPlaceHelp('Local encontrado. Nome, morada e coordenadas foram preenchidos automaticamente.');
     }
 
-    async function setupGooglePlacesAutocomplete() {
-      const container = document.getElementById('sg-place-widget');
-      if (!container || !window.google || !google.maps || !google.maps.importLibrary) return;
+    function setupGooglePlacesAutocomplete() {
+      const input = document.getElementById('sg-place-search');
+      if (!input || !window.google || !google.maps || !google.maps.places) return;
       if (googlePlacesAutocomplete) return;
 
       try {
-        const placesLibrary = await google.maps.importLibrary('places');
-
-        if (!placesLibrary.PlaceAutocompleteElement) {
-          throw new Error('PlaceAutocompleteElement não está disponível.');
-        }
-
-        container.innerHTML = '';
-        setSuggestionFallbackVisible(false);
-
-        const autocompleteElement = new placesLibrary.PlaceAutocompleteElement({
-          includedRegionCodes: ['pt']
+        googlePlacesAutocomplete = new google.maps.places.Autocomplete(input, {
+          componentRestrictions: { country: 'pt' },
+          fields: ['place_id', 'name', 'formatted_address', 'geometry', 'address_components', 'website']
         });
 
-        autocompleteElement.setAttribute('aria-label', 'Pesquisar local no Google');
-        autocompleteElement.setAttribute('placeholder', 'Ex: Dungle Club, restaurante, praia, parque...');
+        googlePlacesAutocomplete.addListener('place_changed', () => {
+          const place = googlePlacesAutocomplete.getPlace();
+          fillSuggestionFromGooglePlace(place);
+        });
 
-        autocompleteElement.addEventListener('gmp-select', async (event) => {
-          try {
-            const prediction = event.placePrediction || event.detail?.placePrediction || event.detail?.prediction;
-            if (!prediction || !prediction.toPlace) {
-              setSuggestPlaceHelp('Não consegui ler esta sugestão. Podes preencher manualmente.', true);
-              return;
-            }
+        input.addEventListener('input', () => {
+          clearGooglePlaceHiddenFields();
+          setSuggestPlaceHelp('Escolhe uma sugestão da lista do Google para preencher automaticamente. Se não aparecer, podes preencher manualmente.');
+        });
 
-            const place = prediction.toPlace();
-            await place.fetchFields({
-              fields: ['id', 'displayName', 'formattedAddress', 'location', 'addressComponents', 'websiteURI']
-            });
-
-            fillSuggestionFromGooglePlace(place);
-          } catch (error) {
-            console.error('Erro ao obter detalhes do local:', error);
-            setSuggestPlaceHelp('Não consegui obter os detalhes deste local. Podes preencher manualmente.', true);
+        input.addEventListener('blur', () => {
+          const nameInput = document.getElementById('sg-name');
+          const value = input.value.trim();
+          if (nameInput && value && !nameInput.value) {
+            nameInput.value = value;
           }
         });
 
-        container.appendChild(autocompleteElement);
-        googlePlacesAutocomplete = autocompleteElement;
         setSuggestPlaceHelp('Começa a escrever e escolhe uma sugestão da lista do Google. Se não aparecer, preenche manualmente.');
       } catch (error) {
         console.error('Erro ao iniciar Google Places:', error);
-        setSuggestionFallbackVisible(true);
         setSuggestPlaceHelp('A pesquisa automática não carregou. Podes preencher o local manualmente.', true);
-
-        const fallback = document.getElementById('sg-place-search');
-        if (fallback) {
-          fallback.addEventListener('blur', () => {
-            const nameInput = document.getElementById('sg-name');
-            const value = fallback.value.trim();
-            if (nameInput && value && !nameInput.value) nameInput.value = value;
-          }, { once: false });
-        }
       }
     }
 
@@ -3560,49 +3549,57 @@
     };
 
 
-    async function checkDuplicateSuggestion(name, city, type, googlePlaceId = null) {
+    function normalizeDuplicateKey(value) {
+      return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/&/g, ' e ')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .replace(/\b(restaurante|restaurant|cafe|bar|pastelaria|loja|praia|parque|hotel|alojamento)\b/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    async function checkDuplicateSuggestion(name, city, type, googlePlaceId = '') {
       const cleanName = name.trim();
       const cleanCity = city.trim();
       const cleanGooglePlaceId = String(googlePlaceId || '').trim();
       const typeAliases = getTypeAliases(type);
 
       if (cleanGooglePlaceId) {
-        const [placesByGoogleResult, suggestionsByGoogleResult] = await Promise.all([
+        const [placesByGoogleId, suggestionsByGoogleId] = await Promise.all([
           supabaseClient
             .from('places')
-            .select('id,name,city,google_place_id')
-            .eq('is_active', true)
+            .select('id,name,city,type,google_place_id')
             .eq('google_place_id', cleanGooglePlaceId)
+            .eq('is_active', true)
             .limit(1),
 
           supabaseClient
             .from('suggestions')
-            .select('id,name,city,google_place_id')
-            .eq('status', 'pending')
+            .select('id,name,city,type,google_place_id')
             .eq('google_place_id', cleanGooglePlaceId)
+            .eq('status', 'pending')
             .limit(1)
         ]);
 
-        if (placesByGoogleResult.error) throw placesByGoogleResult.error;
-        if (suggestionsByGoogleResult.error) throw suggestionsByGoogleResult.error;
+        if (placesByGoogleId.error) throw placesByGoogleId.error;
+        if (suggestionsByGoogleId.error) throw suggestionsByGoogleId.error;
 
-        const existsInPlacesByGoogle = Array.isArray(placesByGoogleResult.data) && placesByGoogleResult.data.length > 0;
-        const existsInSuggestionsByGoogle = Array.isArray(suggestionsByGoogleResult.data) && suggestionsByGoogleResult.data.length > 0;
+        if ((placesByGoogleId.data || []).length) {
+          return { exists: true, existsInPlaces: true, existsInSuggestions: false, reason: 'google_place_id' };
+        }
 
-        if (existsInPlacesByGoogle || existsInSuggestionsByGoogle) {
-          return {
-            exists: true,
-            existsInPlaces: existsInPlacesByGoogle,
-            existsInSuggestions: existsInSuggestionsByGoogle,
-            existsByGooglePlaceId: true
-          };
+        if ((suggestionsByGoogleId.data || []).length) {
+          return { exists: true, existsInPlaces: false, existsInSuggestions: true, reason: 'google_place_id' };
         }
       }
 
       const [placesResult, suggestionsResult] = await Promise.all([
         supabaseClient
           .from('places')
-          .select('id,type')
+          .select('id,name,city,type,google_place_id')
           .in('type', typeAliases)
           .eq('is_active', true)
           .ilike('name', cleanName)
@@ -3611,7 +3608,7 @@
 
         supabaseClient
           .from('suggestions')
-          .select('id,type')
+          .select('id,name,city,type,google_place_id')
           .in('type', typeAliases)
           .eq('status', 'pending')
           .ilike('name', cleanName)
@@ -3622,15 +3619,58 @@
       if (placesResult.error) throw placesResult.error;
       if (suggestionsResult.error) throw suggestionsResult.error;
 
-      const existsInPlaces = Array.isArray(placesResult.data) && placesResult.data.length > 0;
-      const existsInSuggestions = Array.isArray(suggestionsResult.data) && suggestionsResult.data.length > 0;
+      if ((placesResult.data || []).length || (suggestionsResult.data || []).length) {
+        return {
+          exists: true,
+          existsInPlaces: (placesResult.data || []).length > 0,
+          existsInSuggestions: (suggestionsResult.data || []).length > 0,
+          reason: 'exact_name_city_type'
+        };
+      }
 
-      return {
-        exists: existsInPlaces || existsInSuggestions,
-        existsInPlaces,
-        existsInSuggestions,
-        existsByGooglePlaceId: false
-      };
+      // Verificação extra por nomes parecidos na mesma cidade/categoria.
+      if (cleanCity && cleanName) {
+        const [placesSimilarResult, suggestionsSimilarResult] = await Promise.all([
+          supabaseClient
+            .from('places')
+            .select('id,name,city,type,google_place_id')
+            .in('type', typeAliases)
+            .eq('is_active', true)
+            .ilike('city', cleanCity)
+            .limit(100),
+
+          supabaseClient
+            .from('suggestions')
+            .select('id,name,city,type,google_place_id')
+            .in('type', typeAliases)
+            .eq('status', 'pending')
+            .ilike('city', cleanCity)
+            .limit(100)
+        ]);
+
+        if (placesSimilarResult.error) throw placesSimilarResult.error;
+        if (suggestionsSimilarResult.error) throw suggestionsSimilarResult.error;
+
+        const newKey = normalizeDuplicateKey(cleanName);
+        const isSimilar = (row) => {
+          const rowKey = normalizeDuplicateKey(row.name);
+          return rowKey && newKey && (rowKey === newKey || rowKey.includes(newKey) || newKey.includes(rowKey));
+        };
+
+        const similarPlace = (placesSimilarResult.data || []).find(isSimilar);
+        const similarSuggestion = (suggestionsSimilarResult.data || []).find(isSimilar);
+
+        if (similarPlace || similarSuggestion) {
+          return {
+            exists: true,
+            existsInPlaces: !!similarPlace,
+            existsInSuggestions: !!similarSuggestion,
+            reason: 'similar_name_city_type'
+          };
+        }
+      }
+
+      return { exists: false, existsInPlaces: false, existsInSuggestions: false, reason: null };
     }
 
     async function submitSuggestion() {
@@ -3665,14 +3705,12 @@
       const duplicateCheck = await checkDuplicateSuggestion(name, city, type, google_place_id);
 
       if (duplicateCheck.exists) {
-        if (duplicateCheck.existsByGooglePlaceId) {
-          alert('Este local já existe ou já foi sugerido com o mesmo Google Place ID.');
-        } else if (duplicateCheck.existsInPlaces) {
-          alert('Este local já existe nos locais ativos.');
+        if (duplicateCheck.existsInPlaces) {
+          alert('Este local parece já existir nos locais ativos.');
         } else if (duplicateCheck.existsInSuggestions) {
           alert('Este local já foi sugerido e está pendente de revisão.');
         } else {
-          alert('Este local já existe.');
+          alert('Este local parece já existir.');
         }
         return;
       }
@@ -3800,7 +3838,6 @@
                 <p><strong>Morada:</strong> ${item.address || '—'}</p>
                 <p><strong>Notas:</strong> ${item.notes || '—'}</p>
                 <p><strong>Website:</strong> ${item.website || '—'}</p>
-                <p><strong>Google Place ID:</strong> ${item.google_place_id ? 'Sim' : '—'}</p>
                 ${Array.isArray(item.features) && item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-white text-sage font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
               </div>
               <div class="flex flex-wrap gap-2">
@@ -3879,7 +3916,6 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         <p><strong>Morada:</strong> ${item.address || '—'}</p>
         <p><strong>Coordenadas:</strong> ${hasValidCoordinates(item) ? `${item.latitude}, ${item.longitude}` : '—'}</p>
         <p><strong>Website:</strong> ${item.website || '—'}</p>
-        <p><strong>Google Place ID:</strong> ${item.google_place_id ? 'Sim' : '—'}</p>
         ${isIncomplete ? `<p><strong>Falta preencher:</strong> ${missingFields.join(' · ')}</p>` : ''}
         ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
       </div>
@@ -3988,6 +4024,23 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         if (error) throw error;
         if (!data) return;
 
+        // Verificação final de duplicado por Google Place ID antes de aprovar.
+        if (data.google_place_id) {
+          const { data: existingGooglePlace, error: existingGooglePlaceError } = await supabaseClient
+            .from('places')
+            .select('id,name')
+            .eq('google_place_id', data.google_place_id)
+            .eq('is_active', true)
+            .limit(1);
+
+          if (existingGooglePlaceError) throw existingGooglePlaceError;
+
+          if (Array.isArray(existingGooglePlace) && existingGooglePlace.length > 0) {
+            alert(`Este local parece já existir nos locais ativos: ${existingGooglePlace[0].name || 'local existente'}.`);
+            return;
+          }
+        }
+
         const payload = {
           name: data.name,
           city: data.city,
@@ -4014,7 +4067,7 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         const { error: insertError } = await supabaseClient.from('places').insert([payload]);
         if (insertError) {
           if (insertError.code === '23505') {
-            alert('Este local já existe nos locais ativos.');
+            alert('Este local parece já existir nos locais ativos.');
             return;
           }
           throw insertError;
@@ -4080,8 +4133,6 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       document.getElementById('edit-locality').value = item.locality || '';
       document.getElementById('edit-city').value = item.city || '';
       document.getElementById('edit-address').value = item.address || '';
-      const editGooglePlaceId = document.getElementById('edit-google-place-id');
-      if (editGooglePlaceId) editGooglePlaceId.value = item.google_place_id || '';
       document.getElementById('edit-coordinates-paste').value = '';
       document.getElementById('edit-latitude').value = item.latitude === null || item.latitude === undefined ? '' : item.latitude;
       document.getElementById('edit-longitude').value = item.longitude === null || item.longitude === undefined ? '' : item.longitude;
@@ -4317,7 +4368,6 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
       const address = document.getElementById('edit-address').value.trim();
       const latitudeRaw = document.getElementById('edit-latitude').value.trim().replace(',', '.');
       const longitudeRaw = document.getElementById('edit-longitude').value.trim().replace(',', '.');
-      const google_place_id = document.getElementById('edit-google-place-id')?.value?.trim() || null;
       const latitude = latitudeRaw ? Number(latitudeRaw) : null;
       const longitude = longitudeRaw ? Number(longitudeRaw) : null;
       const type = document.getElementById('edit-type').value;
@@ -4338,7 +4388,6 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         address: address || city,
         latitude,
         longitude,
-        google_place_id,
         type,
         dog_status,
         dogs: dog_status !== 'no',
@@ -4370,7 +4419,7 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
 
           if (insertError) {
             if (insertError.code === '23505') {
-              alert('Este local já existe nos locais ativos.');
+              alert('Este local parece já existir nos locais ativos.');
               return;
             }
             throw insertError;
