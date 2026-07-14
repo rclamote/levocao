@@ -39,6 +39,19 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.googlePlacesReady = false;
+    window.googlePlacesAutocomplete = null;
+    window.googlePlacesLibrary = null;
+    window.googleAutocompleteSessionToken = null;
+
+    window.initGooglePlaces = function () {
+      window.googlePlacesReady = true;
+      if (typeof window.setupGooglePlacesAutocomplete === 'function') {
+        window.setupGooglePlacesAutocomplete();
+      }
+    };
+  </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQnx3CcaZ5cCZDfyqp1ldOMVS72JEqM44&v=weekly&libraries=places&callback=initGooglePlaces"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -176,6 +189,64 @@
 
     .place-autocomplete-fallback {
       width: 100%;
+    }
+
+
+    .google-place-search-shell {
+      position: relative;
+      width: 100%;
+    }
+
+    .google-place-suggestions {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 1px solid #F5F0E8;
+      border-radius: 16px;
+      box-shadow: 0 18px 35px rgba(61, 44, 30, 0.16);
+      overflow: hidden;
+      z-index: 99999;
+      max-height: 260px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    .google-place-suggestion-item {
+      width: 100%;
+      display: block;
+      padding: 11px 13px;
+      background: #fff;
+      border: 0;
+      border-bottom: 1px solid #F5F0E8;
+      cursor: pointer;
+      text-align: left;
+      color: #3D2C1E;
+      font-family: 'DM Sans', system-ui, sans-serif;
+    }
+
+    .google-place-suggestion-item:last-child {
+      border-bottom: 0;
+    }
+
+    .google-place-suggestion-item:hover,
+    .google-place-suggestion-item.active {
+      background: #F5F0E8;
+    }
+
+    .google-place-suggestion-main {
+      display: block;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .google-place-suggestion-secondary {
+      display: block;
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: rgba(61, 44, 30, 0.55);
+      line-height: 1.25;
     }
 
     .auth-btn {
@@ -1140,18 +1211,20 @@
 
           <div class="rounded-2xl bg-sand/60 border border-sand p-4">
             <label for="sg-place-search" class="block text-sm font-semibold text-sage mb-1">Pesquisar local no Google</label>
-            <div id="sg-place-widget" class="place-autocomplete-wrap"></div>
-            <input
-              id="sg-place-search"
-              type="search"
-              class="place-autocomplete-fallback hidden w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-bark placeholder:text-bark/35"
-              placeholder="Ex: Dungle Club, restaurante, praia, parque..."
-              autocomplete="off"
-              autocorrect="off"
-              autocapitalize="none"
-              spellcheck="false"
-              onkeydown="if(event.key === 'Enter') event.preventDefault();"
-            />
+            <div class="google-place-search-shell">
+              <input
+                id="sg-place-search"
+                type="search"
+                class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-bark placeholder:text-bark/35"
+                placeholder="Ex: Dungle Club, restaurante, praia, parque..."
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="none"
+                spellcheck="false"
+                onkeydown="if(event.key === 'Enter') event.preventDefault();"
+              />
+              <div id="sg-google-suggestions" class="google-place-suggestions hidden"></div>
+            </div>
             <p id="sg-place-help" class="text-xs text-bark/50 mt-2">
               Começa a escrever e escolhe uma sugestão da lista do Google. Se não aparecer, preenche manualmente.
             </p>
@@ -3410,11 +3483,11 @@
       });
     }
 
-    function setSuggestionFallbackVisible(visible) {
-      const fallback = document.getElementById('sg-place-search');
-      const widget = document.getElementById('sg-place-widget');
-      if (fallback) fallback.classList.toggle('hidden', !visible);
-      if (widget) widget.classList.toggle('hidden', visible);
+    function hideGooglePlaceSuggestions() {
+      const box = document.getElementById('sg-google-suggestions');
+      if (!box) return;
+      box.classList.add('hidden');
+      box.innerHTML = '';
     }
 
     function getPlaceTextValue(place) {
@@ -3440,11 +3513,31 @@
       return { lat: Number(lat), lng: Number(lng) };
     }
 
+    function getPredictionMainText(placePrediction) {
+      if (!placePrediction) return '';
+      if (placePrediction.mainText) return String(placePrediction.mainText);
+      if (placePrediction.structuredFormat?.mainText) return String(placePrediction.structuredFormat.mainText);
+      if (placePrediction.text) return String(placePrediction.text);
+      return '';
+    }
+
+    function getPredictionSecondaryText(placePrediction) {
+      if (!placePrediction) return '';
+      if (placePrediction.secondaryText) return String(placePrediction.secondaryText);
+      if (placePrediction.structuredFormat?.secondaryText) return String(placePrediction.structuredFormat.secondaryText);
+      const fullText = placePrediction.text ? String(placePrediction.text) : '';
+      const mainText = getPredictionMainText(placePrediction);
+      return fullText && mainText && fullText !== mainText ? fullText.replace(mainText, '').replace(/^\s*[,.·-]\s*/, '') : '';
+    }
+
     function fillSuggestionFromGooglePlace(place) {
       const latLng = getPlaceLatLng(place);
       const nameInput = document.getElementById('sg-name');
 
       if (!place || !latLng) {
+        const searchInput = document.getElementById('sg-place-search');
+        const typedValue = searchInput ? searchInput.value.trim() : '';
+        if (nameInput && typedValue && !nameInput.value) nameInput.value = typedValue;
         setSuggestPlaceHelp('Para preencher automaticamente, escolhe uma sugestão da lista do Google. Se não aparecer, podes continuar manualmente.', false);
         return;
       }
@@ -3461,11 +3554,13 @@
       const cityInput = document.getElementById('sg-city');
       const addressInput = document.getElementById('sg-address');
       const websiteInput = document.getElementById('sg-website');
+      const searchInput = document.getElementById('sg-place-search');
 
       const placeName = getPlaceTextValue(place);
       const formattedAddress = place.formattedAddress || place.formatted_address || '';
       const website = place.websiteURI || place.website || '';
 
+      if (searchInput && placeName) searchInput.value = placeName;
       if (nameInput && placeName) nameInput.value = placeName;
       if (addressInput && formattedAddress) addressInput.value = formattedAddress;
       if (cityInput) cityInput.value = locality || municipality || district || cityInput.value || '';
@@ -3488,77 +3583,159 @@
         websiteInput.value = website;
       }
 
+      hideGooglePlaceSuggestions();
       setSuggestPlaceHelp('Local encontrado. Nome, morada e coordenadas foram preenchidos automaticamente.');
     }
 
-    async function setupGooglePlacesAutocomplete() {
-      const container = document.getElementById('sg-place-widget');
-      if (!container || !window.google || !google.maps || !google.maps.importLibrary) return;
-      if (googlePlacesAutocomplete) return;
+    async function fetchGooglePlaceSuggestions(inputValue) {
+      const value = String(inputValue || '').trim();
+      if (value.length < 2) return [];
 
-      try {
-        const placesLibrary = await google.maps.importLibrary('places');
+      if (!window.googlePlacesLibrary?.AutocompleteSuggestion) {
+        return [];
+      }
 
-        if (!placesLibrary.PlaceAutocompleteElement) {
-          throw new Error('PlaceAutocompleteElement não está disponível.');
-        }
+      if (!window.googleAutocompleteSessionToken && window.googlePlacesLibrary.AutocompleteSessionToken) {
+        window.googleAutocompleteSessionToken = new window.googlePlacesLibrary.AutocompleteSessionToken();
+      }
 
-        container.innerHTML = '';
-        setSuggestionFallbackVisible(false);
+      const request = {
+        input: value,
+        includedRegionCodes: ['pt']
+      };
 
-        const autocompleteElement = new placesLibrary.PlaceAutocompleteElement({
-          includedRegionCodes: ['pt']
-        });
+      if (window.googleAutocompleteSessionToken) {
+        request.sessionToken = window.googleAutocompleteSessionToken;
+      }
 
-        autocompleteElement.setAttribute('aria-label', 'Pesquisar local no Google');
-        autocompleteElement.setAttribute('placeholder', 'Ex: Dungle Club, restaurante, praia, parque...');
+      const { suggestions } = await window.googlePlacesLibrary.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+      return Array.isArray(suggestions) ? suggestions : [];
+    }
 
-        autocompleteElement.addEventListener('gmp-select', async (event) => {
+    function renderGooglePlaceSuggestions(suggestions) {
+      const box = document.getElementById('sg-google-suggestions');
+      if (!box) return;
+
+      const placeSuggestions = suggestions
+        .map((suggestion) => ({ suggestion, prediction: suggestion.placePrediction }))
+        .filter((item) => item.prediction);
+
+      if (!placeSuggestions.length) {
+        hideGooglePlaceSuggestions();
+        return;
+      }
+
+      box.innerHTML = placeSuggestions.slice(0, 6).map((item, index) => {
+        const main = getPredictionMainText(item.prediction) || 'Local';
+        const secondary = getPredictionSecondaryText(item.prediction);
+        return `
+          <button type="button" class="google-place-suggestion-item" data-index="${index}">
+            <span class="google-place-suggestion-main">${main}</span>
+            ${secondary ? `<span class="google-place-suggestion-secondary">${secondary}</span>` : ''}
+          </button>
+        `;
+      }).join('');
+
+      box.querySelectorAll('.google-place-suggestion-item').forEach((button) => {
+        button.addEventListener('mousedown', (event) => event.preventDefault());
+        button.addEventListener('click', async () => {
+          const index = Number(button.dataset.index || 0);
+          const item = placeSuggestions[index];
+          if (!item?.prediction?.toPlace) return;
+
           try {
-            const prediction = event.placePrediction || event.detail?.placePrediction || event.detail?.prediction;
-            if (!prediction || !prediction.toPlace) {
-              setSuggestPlaceHelp('Não consegui ler esta sugestão. Podes preencher manualmente.', true);
-              return;
-            }
-
-            const place = prediction.toPlace();
+            setSuggestPlaceHelp('A obter detalhes do local...');
+            const place = item.prediction.toPlace();
             await place.fetchFields({
               fields: ['id', 'displayName', 'formattedAddress', 'location', 'addressComponents', 'websiteURI']
             });
-
             fillSuggestionFromGooglePlace(place);
+            window.googleAutocompleteSessionToken = null;
           } catch (error) {
             console.error('Erro ao obter detalhes do local:', error);
             setSuggestPlaceHelp('Não consegui obter os detalhes deste local. Podes preencher manualmente.', true);
           }
         });
+      });
 
-        container.appendChild(autocompleteElement);
-        googlePlacesAutocomplete = autocompleteElement;
+      box.classList.remove('hidden');
+    }
+
+    async function setupGooglePlacesAutocomplete() {
+      const input = document.getElementById('sg-place-search');
+      if (!input) return;
+      if (input.dataset.googlePlacesReady === 'true') return;
+
+      if (!window.google || !google.maps || !google.maps.importLibrary) {
+        setSuggestPlaceHelp('A pesquisa automática ainda está a carregar. Espera uns segundos ou preenche manualmente.', false);
+        return;
+      }
+
+      try {
+        window.googlePlacesLibrary = await google.maps.importLibrary('places');
+
+        if (!window.googlePlacesLibrary?.AutocompleteSuggestion) {
+          throw new Error('AutocompleteSuggestion não está disponível neste projeto/API.');
+        }
+
+        let debounceTimer = null;
+        let lastRequestId = 0;
+
+        input.addEventListener('input', () => {
+          clearGooglePlaceHiddenFields();
+          const value = input.value.trim();
+
+          if (debounceTimer) clearTimeout(debounceTimer);
+
+          if (value.length < 2) {
+            hideGooglePlaceSuggestions();
+            setSuggestPlaceHelp('Começa a escrever e escolhe uma sugestão da lista do Google. Se não aparecer, preenche manualmente.');
+            return;
+          }
+
+          setSuggestPlaceHelp('A procurar sugestões do Google...');
+
+          debounceTimer = setTimeout(async () => {
+            const requestId = ++lastRequestId;
+            try {
+              const suggestions = await fetchGooglePlaceSuggestions(value);
+              if (requestId !== lastRequestId) return;
+              renderGooglePlaceSuggestions(suggestions);
+              if (!suggestions.length) {
+                setSuggestPlaceHelp('Não encontrei sugestões. Podes preencher manualmente.');
+              } else {
+                setSuggestPlaceHelp('Escolhe uma sugestão da lista para preencher automaticamente.');
+              }
+            } catch (error) {
+              console.error('Erro ao procurar sugestões:', error);
+              hideGooglePlaceSuggestions();
+              setSuggestPlaceHelp('A pesquisa automática não carregou. Podes preencher o local manualmente.', true);
+            }
+          }, 250);
+        });
+
+        input.addEventListener('blur', () => {
+          setTimeout(hideGooglePlaceSuggestions, 180);
+          const nameInput = document.getElementById('sg-name');
+          const value = input.value.trim();
+          if (nameInput && value && !nameInput.value) nameInput.value = value;
+        });
+
+        input.addEventListener('focus', () => {
+          if (input.value.trim().length >= 2) {
+            input.dispatchEvent(new Event('input'));
+          }
+        });
+
+        input.dataset.googlePlacesReady = 'true';
         setSuggestPlaceHelp('Começa a escrever e escolhe uma sugestão da lista do Google. Se não aparecer, preenche manualmente.');
       } catch (error) {
         console.error('Erro ao iniciar Google Places:', error);
-        setSuggestionFallbackVisible(true);
-        setSuggestPlaceHelp('A pesquisa automática não carregou. Podes preencher o local manualmente.', true);
-
-        const fallback = document.getElementById('sg-place-search');
-        if (fallback) {
-          fallback.addEventListener('blur', () => {
-            const nameInput = document.getElementById('sg-name');
-            const value = fallback.value.trim();
-            if (nameInput && value && !nameInput.value) nameInput.value = value;
-          }, { once: false });
-        }
+        setSuggestPlaceHelp('A pesquisa automática não carregou. Confirma se a Places API (New) está ativa e se este domínio está autorizado.', true);
       }
     }
 
     window.setupGooglePlacesAutocomplete = setupGooglePlacesAutocomplete;
-
-    window.initGooglePlaces = function initGooglePlaces() {
-      googlePlacesReady = true;
-      setupGooglePlacesAutocomplete();
-    };
-
 
     async function checkDuplicateSuggestion(name, city, type, googlePlaceId = null) {
       const cleanName = name.trim();
@@ -4601,9 +4778,15 @@ function showView(view) {
       const input = document.getElementById('search-input');
       const box = document.getElementById('search-suggestions');
       const loginModal = document.getElementById('login-modal');
+      const googleInput = document.getElementById('sg-place-search');
+      const googleSuggestions = document.getElementById('sg-google-suggestions');
 
       if (input && box && !box.contains(e.target) && e.target !== input) {
         hideSuggestions();
+      }
+
+      if (googleInput && googleSuggestions && !googleSuggestions.contains(e.target) && e.target !== googleInput) {
+        hideGooglePlaceSuggestions();
       }
 
       if (loginModal && e.target === loginModal) {
