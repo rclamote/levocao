@@ -2770,7 +2770,8 @@
 
     function getPlaceSlug(loc) {
       if (!loc || !loc.name) return '';
-      return slugifyFilePart(loc.name || 'local');
+      const nameSlug = slugifyFilePart(loc.name || 'local');
+      return loc.id ? `${nameSlug}-${loc.id}` : nameSlug;
     }
 
     function getPlaceDirectUrl(loc) {
@@ -2971,7 +2972,8 @@
       const photoUrl = loc.photo_url || '';
 
       return `
-        <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="showDetail(${loc.id})">
+        <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="if (!event.target.closest('a')) showDetail(${loc.id})">
+          <a href="/local/${encodeURIComponent(getPlaceSlug(loc))}" onclick="event.preventDefault(); showDetail(${loc.id})" class="block text-inherit no-underline" aria-label="Ver detalhes de ${loc.name}">
           <div class="h-44 relative flex items-center justify-center overflow-hidden" style="background:${grad}">
             ${photoUrl
               ? `<img src="${photoUrl}" alt="${loc.name}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
@@ -3010,6 +3012,7 @@
               <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
             </div>
           </div>
+          </a>
         </article>`;
     }
 
