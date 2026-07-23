@@ -871,6 +871,30 @@
               Adicionar local
             </button>
           </div>
+
+          <div class="sm:hidden fade-in-d4 mt-4 -mx-5">
+            <p class="px-5 mb-2 text-left text-xs font-semibold uppercase tracking-wider text-bark/45">Explorar por categoria</p>
+            <div class="flex gap-2 overflow-x-auto px-5 pb-2 snap-x snap-proximity [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <button type="button" onclick="filterByCategory('Comer & Beber')" class="shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full border border-sand bg-white px-3.5 py-2 text-sm font-medium text-bark shadow-sm active:scale-95">
+                <span aria-hidden="true">🍽️</span> Comer
+              </button>
+              <button type="button" onclick="filterByCategory('Praia')" class="shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full border border-sand bg-white px-3.5 py-2 text-sm font-medium text-bark shadow-sm active:scale-95">
+                <span aria-hidden="true">🏖️</span> Praias
+              </button>
+              <button type="button" onclick="filterByCategory('Alojamento')" class="shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full border border-sand bg-white px-3.5 py-2 text-sm font-medium text-bark shadow-sm active:scale-95">
+                <span aria-hidden="true">🏡</span> Alojamentos
+              </button>
+              <button type="button" onclick="filterByCategory('Espaços comerciais')" class="shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full border border-sand bg-white px-3.5 py-2 text-sm font-medium text-bark shadow-sm active:scale-95">
+                <span aria-hidden="true">🛍️</span> Compras
+              </button>
+              <button type="button" onclick="filterByCategory('Soltar o cão')" class="shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full border border-sand bg-white px-3.5 py-2 text-sm font-medium text-bark shadow-sm active:scale-95">
+                <span aria-hidden="true">🦮</span> Soltar
+              </button>
+              <button type="button" onclick="filterByCategory('Passear com o cão')" class="shrink-0 snap-start inline-flex items-center gap-1.5 rounded-full border border-sand bg-white px-3.5 py-2 text-sm font-medium text-bark shadow-sm active:scale-95">
+                <span aria-hidden="true">🚶</span> Passear
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
