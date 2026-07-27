@@ -1,6 +1,7 @@
 (() => {
   let selectedChoice = '';
   let enhancementTimer = null;
+  const observedCardContainers = new WeakSet();
 
   function refreshIcons() {
     try {
@@ -79,6 +80,20 @@
     return changed;
   }
 
+  function observeCardContainers() {
+    ['cards-recent', 'cards-top', 'cards-list', 'cards-region'].forEach((containerId) => {
+      const container = document.getElementById(containerId);
+      if (!container || observedCardContainers.has(container)) return;
+
+      const observer = new MutationObserver(() => {
+        if (enhanceCards()) refreshIcons();
+      });
+
+      observer.observe(container, { childList: true });
+      observedCardContainers.add(container);
+    });
+  }
+
   function extractPlaceId(button) {
     const raw = button?.getAttribute('onclick') || '';
     const match = raw.match(/confirmPlace\((\d+)/);
@@ -124,6 +139,7 @@
   }
 
   function runEnhancements() {
+    observeCardContainers();
     const modalAdded = ensureModal();
     const cardsChanged = enhanceCards();
     const detailChanged = enhanceDetail();
