@@ -1,5 +1,6 @@
 (() => {
   let selectedChoice = '';
+  let enhancementTimer = null;
 
   function refreshIcons() {
     try {
@@ -8,7 +9,7 @@
   }
 
   function ensureModal() {
-    if (document.getElementById('confirmation-preview-modal')) return;
+    if (document.getElementById('confirmation-preview-modal')) return false;
 
     document.body.insertAdjacentHTML('beforeend', `
       <div id="confirmation-preview-modal" class="confirmation-preview-modal" role="dialog" aria-modal="true" aria-labelledby="confirmation-preview-modal-title">
@@ -44,10 +45,12 @@
       </div>
     `);
 
-    refreshIcons();
+    return true;
   }
 
   function enhanceCards() {
+    let changed = false;
+
     ['cards-recent', 'cards-top', 'cards-list', 'cards-region'].forEach((containerId) => {
       const container = document.getElementById(containerId);
       if (!container) return;
@@ -69,10 +72,11 @@
             </div>
           </div>
         `);
+        changed = true;
       });
     });
 
-    refreshIcons();
+    return changed;
   }
 
   function extractPlaceId(button) {
@@ -83,15 +87,15 @@
 
   function enhanceDetail() {
     const detail = document.getElementById('detail-content');
-    if (!detail || !detail.children.length || detail.querySelector('.confirmation-preview-panel')) return;
+    if (!detail || !detail.children.length || detail.querySelector('.confirmation-preview-panel')) return false;
 
     const confirmationHeading = [...detail.querySelectorAll('p')]
       .find((element) => element.textContent.trim() === 'Confirmações');
 
-    if (!confirmationHeading) return;
+    if (!confirmationHeading) return false;
 
     const oldPanel = confirmationHeading.closest('div.bg-white.border');
-    if (!oldPanel) return;
+    if (!oldPanel) return false;
 
     const oldSummary = oldPanel.querySelector('p.text-sm')?.textContent?.trim()
       || 'Ainda sem confirmações recentes.';
@@ -116,22 +120,30 @@
     `;
 
     if (oldButtonGrid) oldButtonGrid.remove();
-    refreshIcons();
+    return true;
+  }
+
+  function runEnhancements() {
+    const modalAdded = ensureModal();
+    const cardsChanged = enhanceCards();
+    const detailChanged = enhanceDetail();
+
+    if (modalAdded || cardsChanged || detailChanged) refreshIcons();
+  }
+
+  function scheduleEnhancements() {
+    window.clearTimeout(enhancementTimer);
+    enhancementTimer = window.setTimeout(runEnhancements, 60);
   }
 
   function resetModal() {
-    selectedChoice = '';
-
-    const modal = document.getElementById('confirmation-preview-modal');
-    const dialog = modal?.querySelector('.confirmation-preview-dialog');
-    if (!dialog) return;
-
-    modal.remove();
+    document.getElementById('confirmation-preview-modal')?.remove();
     ensureModal();
+    refreshIcons();
   }
 
   function openModal(placeId) {
-    ensureModal();
+    if (ensureModal()) refreshIcons();
 
     selectedChoice = '';
     const modal = document.getElementById('confirmation-preview-modal');
@@ -231,7 +243,11 @@
 
     if (event.target.id === 'confirmation-preview-submit') {
       submitDemo();
+      return;
     }
+
+    scheduleEnhancements();
+    window.setTimeout(runEnhancements, 250);
   });
 
   document.addEventListener('keydown', (event) => {
@@ -240,18 +256,9 @@
 
   const previewConfirmPlace = (id) => openModal(id);
   try { window.confirmPlace = previewConfirmPlace; } catch (_) {}
-  try { confirmPlace = previewConfirmPlace; } catch (_) {}
 
-  const observer = new MutationObserver(() => {
-    enhanceCards();
-    enhanceDetail();
-  });
-
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-
-  ensureModal();
-  enhanceCards();
-  enhanceDetail();
-  window.setTimeout(() => { enhanceCards(); enhanceDetail(); }, 800);
-  window.setTimeout(() => { enhanceCards(); enhanceDetail(); }, 1800);
+  runEnhancements();
+  window.setTimeout(runEnhancements, 500);
+  window.setTimeout(runEnhancements, 1500);
+  window.setTimeout(runEnhancements, 3000);
 })();
