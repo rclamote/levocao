@@ -7,7 +7,7 @@
   "rewrites": [
     {
       "source": "/local/:slug",
-      "destination": "/api/local?slug=:slug"
+      "destination": "/api/preview?path=/local/:slug"
     },
     {
       "source": "/sitemap.xml",
