@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="pt-PT" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Protótipo de confirmações | Levo o Cão</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sage: '#5B7553',
+            sand: '#F5F0E8',
+            bark: '#3D2C1E',
+            cream: '#FFFDF7',
+            moss: '#8BA67A'
+          },
+          fontFamily: {
+            display: ['Fraunces', 'Georgia', 'serif'],
+            body: ['DM Sans', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            soft: '0 18px 50px rgba(61,44,30,.10)'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background: #FFFDF7; color: #3D2C1E; }
+    * { box-sizing: border-box; }
+    .demo-hero {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.95) 0 8%, transparent 9%),
+        radial-gradient(circle at 86% 28%, rgba(255,255,255,.55) 0 7%, transparent 8%),
+        linear-gradient(135deg, #8BA67A 0%, #5B7553 62%, #3D2C1E 140%);
+    }
+    .place-photo {
+      background:
+        linear-gradient(180deg, rgba(61,44,30,.05), rgba(61,44,30,.34)),
+        radial-gradient(circle at 74% 22%, rgba(255,253,247,.65) 0 7%, transparent 8%),
+        linear-gradient(140deg, #c6d0b8 0 26%, #8BA67A 27% 45%, #5B7553 46% 64%, #77604c 65% 100%);
+    }
+    .modal-backdrop { backdrop-filter: blur(7px); }
+    .state-button.active { background: #5B7553; color: #FFFDF7; border-color: #5B7553; }
+    .choice-card.selected { border-color: #5B7553; box-shadow: 0 0 0 3px rgba(91,117,83,.12); background: rgba(245,240,232,.58); }
+    .pulse-soft { animation: pulseSoft 1.8s ease-in-out infinite; }
+    @keyframes pulseSoft { 0%,100% { box-shadow: 0 0 0 0 rgba(91,117,83,.18); } 50% { box-shadow: 0 0 0 8px rgba(91,117,83,0); } }
+  </style>
+</head>
+<body class="min-h-full font-body antialiased">
+  <header class="sticky top-0 z-30 border-b border-sand bg-cream/95 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <a href="/" class="font-display text-2xl font-bold tracking-tight text-bark">levocão</a>
+      <span class="rounded-full bg-sand px-3 py-1.5 text-xs font-bold uppercase tracking-[.12em] text-sage">Protótipo · não publica dados</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="demo-hero overflow-hidden text-cream">
+      <div class="mx-auto grid max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.15fr_.85fr] md:items-center md:py-16">
+        <div>
+          <p class="mb-3 text-sm font-bold uppercase tracking-[.16em] text-cream/75">Confirmações da comunidade</p>
+          <h1 class="max-w-2xl font-display text-4xl font-bold leading-tight sm:text-5xl">Uma confirmação com contexto, não apenas mais um clique.</h1>
+          <p class="mt-5 max-w-xl text-base leading-7 text-cream/85 sm:text-lg">O card convida. A página do local mostra as condições completas. Só depois a pessoa confirma se a informação continua correta.</p>
+        </div>
+        <div class="rounded-[28px] border border-white/15 bg-white/10 p-5 shadow-soft backdrop-blur-sm">
+          <div class="flex gap-3">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-cream text-sage"><i data-lucide="shield-check" class="h-5 w-5"></i></div>
+            <div>
+              <p class="font-bold">Neste primeiro protótipo</p>
+              <p class="mt-1 text-sm leading-6 text-cream/75">Não existe gravação no Supabase. Serve para validar o aspeto, os textos e o percurso antes de mexermos na base de dados real.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="border-b border-sand bg-white">
+      <div class="mx-auto max-w-6xl px-4 py-7 sm:px-6">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p class="text-sm font-bold text-sage">Comparar estados da página</p>
+            <p class="mt-1 text-sm text-bark/60">Experimenta como a mesma área fica antes e depois das confirmações.</p>
+          </div>
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Estado da confirmação">
+            <button class="state-button active rounded-full border border-sand px-4 py-2 text-sm font-bold transition" data-state="initial">Sem confirmações</button>
+            <button class="state-button rounded-full border border-sand bg-cream px-4 py-2 text-sm font-bold transition hover:border-moss" data-state="community">Comunidade</button>
+            <button class="state-button rounded-full border border-sand bg-cream px-4 py-2 text-sm font-bold transition hover:border-moss" data-state="business">Estabelecimento</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <div class="mb-6 flex items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[.13em] text-sage">1 · No card</p>
+          <h2 class="mt-2 font-display text-3xl font-bold">Um convite, não uma confirmação</h2>
+        </div>
+      </div>
+
+      <div class="max-w-sm overflow-hidden rounded-[26px] border border-sand bg-white shadow-soft">
+        <button type="button" class="block w-full text-left" id="cardOpenPlace" aria-label="Abrir página do local">
+          <div class="place-photo relative h-48 overflow-hidden">
+            <div class="absolute left-4 top-4 rounded-full bg-cream/95 px-3 py-1.5 text-xs font-bold text-sage shadow">Comer & beber</div>
+            <div class="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-cream text-sage shadow"><i data-lucide="arrow-up-right" class="h-5 w-5"></i></div>
+          </div>
+          <div class="p-5">
+            <p class="text-xs font-bold uppercase tracking-[.12em] text-sage">Albufeira · Algarve</p>
+            <h3 class="mt-2 font-display text-2xl font-bold">Liberty Food Coffee Wine</h3>
+            <p class="mt-2 line-clamp-2 text-sm leading-6 text-bark/65">Um espaço acolhedor onde os cães são bem-vindos, com condições indicadas na página do local.</p>
+          </div>
+        </button>
+        <div class="border-t border-sand bg-sand/35 p-4">
+          <button type="button" id="cardPrompt" class="flex w-full items-center justify-between gap-4 rounded-2xl bg-white px-4 py-3 text-left transition hover:-translate-y-0.5 hover:shadow-md">
+            <span>
+              <span class="block text-sm font-bold text-bark">Já estiveste aqui com o teu cão?</span>
+              <span class="mt-0.5 block text-xs text-bark/55">Vê as condições antes de confirmar</span>
+            </span>
+            <i data-lucide="chevron-right" class="h-5 w-5 shrink-0 text-sage"></i>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="placePage" class="border-y border-sand bg-sand/35 scroll-mt-20">
+      <div class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+        <div class="mb-6">
+          <p class="text-sm font-bold uppercase tracking-[.13em] text-sage">2 · Na página do local</p>
+          <h2 class="mt-2 font-display text-3xl font-bold">A confirmação aparece depois da informação</h2>
+        </div>
+
+        <article class="overflow-hidden rounded-[30px] border border-sand bg-white shadow-soft">
+          <div class="place-photo relative h-64 sm:h-80">
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-bark/75 to-transparent px-5 pb-6 pt-20 text-cream sm:px-8">
+              <p class="text-xs font-bold uppercase tracking-[.14em] text-cream/75">Albufeira · Algarve</p>
+              <h3 class="mt-2 font-display text-3xl font-bold sm:text-4xl">Liberty Food Coffee Wine</h3>
+            </div>
+          </div>
+
+          <div class="grid gap-8 p-5 sm:p-8 lg:grid-cols-[1fr_360px]">
+            <div>
+              <div class="flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-2 rounded-full bg-sand px-3 py-2 text-sm font-semibold"><i data-lucide="utensils" class="h-4 w-4 text-sage"></i> Comer & beber</span>
+                <span class="inline-flex items-center gap-2 rounded-full bg-sand px-3 py-2 text-sm font-semibold"><i data-lucide="dog" class="h-4 w-4 text-sage"></i> Aceita cães</span>
+              </div>
+
+              <section class="mt-8">
+                <h4 class="font-display text-2xl font-bold">Condições para levares o cão</h4>
+                <div class="mt-4 divide-y divide-sand rounded-2xl border border-sand">
+                  <div class="flex items-center justify-between gap-4 px-4 py-3.5"><span class="text-sm text-bark/60">Cães no interior</span><strong class="text-sm">Sim</strong></div>
+                  <div class="flex items-center justify-between gap-4 px-4 py-3.5"><span class="text-sm text-bark/60">Esplanada</span><strong class="text-sm">Sim</strong></div>
+                  <div class="flex items-center justify-between gap-4 px-4 py-3.5"><span class="text-sm text-bark/60">Porte</span><strong class="text-sm">Sem restrição</strong></div>
+                  <div class="flex items-center justify-between gap-4 px-4 py-3.5"><span class="text-sm text-bark/60">Número máximo</span><strong class="text-sm">Não indicado</strong></div>
+                </div>
+              </section>
+
+              <section class="mt-8">
+                <h4 class="font-display text-2xl font-bold">Notas</h4>
+                <p class="mt-3 max-w-2xl text-sm leading-7 text-bark/65">Os cães são bem-vindos no espaço. Devem permanecer acompanhados e sem incomodar as outras pessoas. Informação apresentada apenas para demonstrar o protótipo.</p>
+              </section>
+            </div>
+
+            <aside>
+              <div id="confirmationPanel" class="rounded-[24px] border border-sand bg-cream p-5 sm:p-6">
+                <div id="stateIcon" class="flex h-11 w-11 items-center justify-center rounded-2xl bg-sand text-sage"><i data-lucide="circle-help" class="h-5 w-5"></i></div>
+                <p id="stateEyebrow" class="mt-5 text-xs font-bold uppercase tracking-[.12em] text-sage">Ajuda a manter atualizado</p>
+                <h4 id="stateTitle" class="mt-2 font-display text-2xl font-bold">Esta informação continua correta?</h4>
+                <p id="stateDescription" class="mt-3 text-sm leading-6 text-bark/60">Confirma apenas se estiveste recentemente neste local com o teu cão.</p>
+
+                <div id="stateMeta" class="mt-4 hidden rounded-2xl bg-white px-4 py-3 text-sm"></div>
+
+                <button id="openConfirmation" type="button" class="pulse-soft mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-sage px-5 py-3.5 text-sm font-bold text-cream transition hover:bg-moss">
+                  <i data-lucide="check-circle-2" class="h-5 w-5"></i>
+                  Confirmar informação
+                </button>
+                <p id="stateFootnote" class="mt-3 text-center text-xs leading-5 text-bark/45">Não é preciso criar conta neste protótipo.</p>
+              </div>
+
+              <div class="mt-4 rounded-[22px] border border-dashed border-moss/60 bg-white p-4">
+                <p class="text-xs font-bold uppercase tracking-[.12em] text-sage">Regra importante</p>
+                <p class="mt-2 text-sm leading-6 text-bark/60">Uma indicação de informação diferente não altera automaticamente o local. Fica pendente para verificação.</p>
+              </div>
+            </aside>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+      <div class="rounded-[30px] bg-bark p-6 text-cream sm:p-9">
+        <div class="grid gap-6 md:grid-cols-[1fr_auto] md:items-center">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[.14em] text-cream/55">Percurso acordado</p>
+            <h2 class="mt-2 font-display text-3xl font-bold">Card → página do local → confirmação</h2>
+            <p class="mt-3 max-w-2xl text-sm leading-6 text-cream/70">Sem avaliações, estrelas ou comentários públicos. A pergunta é apenas se a informação continua verdadeira.</p>
+          </div>
+          <button id="tryAgain" class="rounded-full bg-cream px-5 py-3 text-sm font-bold text-bark transition hover:bg-sand">Experimentar confirmação</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-sand bg-white">
+    <div class="mx-auto max-w-6xl px-4 py-7 text-center text-xs text-bark/45 sm:px-6">Protótipo visual do Levo o Cão · Nenhuma confirmação é guardada</div>
+  </footer>
+
+  <div id="confirmationModal" class="modal-backdrop fixed inset-0 z-50 hidden items-end justify-center bg-bark/50 p-0 sm:items-center sm:p-5" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-[28px] bg-cream p-5 shadow-2xl sm:rounded-[28px] sm:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[.12em] text-sage">Liberty Food Coffee Wine</p>
+          <h2 id="modalTitle" class="mt-2 font-display text-2xl font-bold">Estiveste aqui recentemente com o teu cão?</h2>
+        </div>
+        <button id="closeModal" type="button" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-sand bg-white transition hover:bg-sand" aria-label="Fechar"><i data-lucide="x" class="h-5 w-5"></i></button>
+      </div>
+
+      <p class="mt-3 text-sm leading-6 text-bark/60">Escolhe a opção que melhor corresponde à tua experiência. Não estamos a pedir uma avaliação do local.</p>
+
+      <div id="choiceStep" class="mt-6 space-y-3">
+        <button type="button" class="choice-card flex w-full items-start gap-4 rounded-2xl border-2 border-sand bg-white p-4 text-left transition hover:border-moss" data-choice="correct">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sand text-sage"><i data-lucide="check" class="h-5 w-5"></i></span>
+          <span><strong class="block text-sm">Sim, a informação está correta</strong><span class="mt-1 block text-xs leading-5 text-bark/55">As condições publicadas correspondem ao que encontrei.</span></span>
+        </button>
+        <button type="button" class="choice-card flex w-full items-start gap-4 rounded-2xl border-2 border-sand bg-white p-4 text-left transition hover:border-moss" data-choice="different">
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sand text-sage"><i data-lucide="message-square-warning" class="h-5 w-5"></i></span>
+          <span><strong class="block text-sm">Não, encontrei informação diferente</strong><span class="mt-1 block text-xs leading-5 text-bark/55">Indica-nos o que mudou para podermos verificar.</span></span>
+        </button>
+
+        <div id="differentDetails" class="hidden rounded-2xl border border-sand bg-white p-4">
+          <label for="differenceText" class="text-sm font-bold">O que encontraste de diferente?</label>
+          <textarea id="differenceText" rows="4" maxlength="500" class="mt-2 w-full resize-none rounded-xl border border-sand bg-cream px-3 py-3 text-sm outline-none transition focus:border-moss focus:ring-2 focus:ring-moss/15" placeholder="Ex.: agora só aceitam cães na esplanada..."></textarea>
+          <p class="mt-1 text-right text-xs text-bark/40"><span id="charCount">0</span>/500</p>
+        </div>
+
+        <button id="submitConfirmation" type="button" disabled class="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-sage px-5 py-3.5 text-sm font-bold text-cream opacity-45 transition enabled:hover:bg-moss enabled:opacity-100">
+          Enviar confirmação
+          <i data-lucide="arrow-right" class="h-4 w-4"></i>
+        </button>
+        <p class="text-center text-xs leading-5 text-bark/45">Na versão real, a mesma pessoa só poderá confirmar este local uma vez em cada período definido.</p>
+      </div>
+
+      <div id="thanksStep" class="hidden py-7 text-center">
+        <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-sand text-sage"><i data-lucide="heart-handshake" class="h-8 w-8"></i></div>
+        <h3 class="mt-5 font-display text-2xl font-bold">Obrigado por ajudares.</h3>
+        <p class="mx-auto mt-3 max-w-sm text-sm leading-6 text-bark/60">A tua confirmação ajuda outras pessoas a saberem onde podem ir com o cão.</p>
+        <button id="finishConfirmation" type="button" class="mt-6 rounded-full bg-sage px-6 py-3 text-sm font-bold text-cream transition hover:bg-moss">Concluir</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('confirmationModal');
+    const choiceStep = document.getElementById('choiceStep');
+    const thanksStep = document.getElementById('thanksStep');
+    const submitButton = document.getElementById('submitConfirmation');
+    const differentDetails = document.getElementById('differentDetails');
+    const differenceText = document.getElementById('differenceText');
+    const charCount = document.getElementById('charCount');
+    let selectedChoice = null;
+
+    const stateConfig = {
+      initial: {
+        icon: 'circle-help',
+        eyebrow: 'Ajuda a manter atualizado',
+        title: 'Esta informação continua correta?',
+        description: 'Confirma apenas se estiveste recentemente neste local com o teu cão.',
+        meta: '',
+        button: 'Confirmar informação',
+        footnote: 'Não é preciso criar conta neste protótipo.'
+      },
+      community: {
+        icon: 'users',
+        eyebrow: 'Confirmado pela comunidade',
+        title: '3 pessoas confirmaram esta informação',
+        description: 'A última confirmação da comunidade foi feita em julho de 2026.',
+        meta: '<strong class="text-sage">Confirmação recente</strong><span class="mt-1 block text-xs text-bark/50">Ainda podes confirmar a tua experiência.</span>',
+        button: 'Também estive aqui',
+        footnote: 'Cada confirmação fica registada separadamente.'
+      },
+      business: {
+        icon: 'badge-check',
+        eyebrow: 'Informação confirmada',
+        title: 'Confirmada pelo estabelecimento',
+        description: 'As condições foram confirmadas diretamente pelo próprio espaço.',
+        meta: '<strong class="text-sage">Atualizada em julho de 2026</strong><span class="mt-1 block text-xs text-bark/50">A confirmação do estabelecimento tem maior destaque.</span>',
+        button: 'Confirmar pela comunidade',
+        footnote: 'As confirmações da comunidade continuam disponíveis.'
+      }
+    };
+
+    function refreshIcons() {
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function openModal() {
+      resetModal();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      refreshIcons();
+    }
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function resetModal() {
+      selectedChoice = null;
+      choiceStep.classList.remove('hidden');
+      thanksStep.classList.add('hidden');
+      submitButton.disabled = true;
+      differentDetails.classList.add('hidden');
+      differenceText.value = '';
+      charCount.textContent = '0';
+      document.querySelectorAll('.choice-card').forEach(card => card.classList.remove('selected'));
+    }
+
+    function scrollToPlace() {
+      document.getElementById('placePage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.setTimeout(() => document.getElementById('confirmationPanel').classList.add('ring-4', 'ring-moss/15'), 350);
+      window.setTimeout(() => document.getElementById('confirmationPanel').classList.remove('ring-4', 'ring-moss/15'), 1550);
+    }
+
+    document.getElementById('cardOpenPlace').addEventListener('click', scrollToPlace);
+    document.getElementById('cardPrompt').addEventListener('click', scrollToPlace);
+    document.getElementById('openConfirmation').addEventListener('click', openModal);
+    document.getElementById('tryAgain').addEventListener('click', openModal);
+    document.getElementById('closeModal').addEventListener('click', closeModal);
+    document.getElementById('finishConfirmation').addEventListener('click', () => {
+      closeModal();
+      setState('community');
+      document.getElementById('confirmationPanel').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.classList.contains('hidden')) closeModal(); });
+
+    document.querySelectorAll('.choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        selectedChoice = card.dataset.choice;
+        document.querySelectorAll('.choice-card').forEach(item => item.classList.toggle('selected', item === card));
+        differentDetails.classList.toggle('hidden', selectedChoice !== 'different');
+        submitButton.disabled = false;
+        if (selectedChoice === 'different') window.setTimeout(() => differenceText.focus(), 80);
+      });
+    });
+
+    differenceText.addEventListener('input', () => { charCount.textContent = String(differenceText.value.length); });
+
+    submitButton.addEventListener('click', () => {
+      if (!selectedChoice) return;
+      choiceStep.classList.add('hidden');
+      thanksStep.classList.remove('hidden');
+      refreshIcons();
+    });
+
+    function setState(state) {
+      const config = stateConfig[state];
+      document.querySelectorAll('.state-button').forEach(button => button.classList.toggle('active', button.dataset.state === state));
+      document.getElementById('stateIcon').innerHTML = `<i data-lucide="${config.icon}" class="h-5 w-5"></i>`;
+      document.getElementById('stateEyebrow').textContent = config.eyebrow;
+      document.getElementById('stateTitle').textContent = config.title;
+      document.getElementById('stateDescription').textContent = config.description;
+      const meta = document.getElementById('stateMeta');
+      meta.innerHTML = config.meta;
+      meta.classList.toggle('hidden', !config.meta);
+      document.getElementById('openConfirmation').innerHTML = `<i data-lucide="check-circle-2" class="h-5 w-5"></i>${config.button}`;
+      document.getElementById('stateFootnote').textContent = config.footnote;
+      refreshIcons();
+    }
+
+    document.querySelectorAll('.state-button').forEach(button => button.addEventListener('click', () => setState(button.dataset.state)));
+
+    refreshIcons();
+  </script>
+</body>
+</html>
