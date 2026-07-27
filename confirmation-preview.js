@@ -9,6 +9,29 @@
     } catch (_) {}
   }
 
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>'"]/g, (character) => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[character]));
+  }
+
+  function getPreviewLocations() {
+    try {
+      if (typeof locations !== 'undefined' && Array.isArray(locations)) return locations;
+    } catch (_) {}
+    return [];
+  }
+
+  function getCardLocation(card) {
+    const name = card.querySelector('h3')?.textContent?.trim() || '';
+    if (!name) return null;
+    return getPreviewLocations().find((location) => String(location?.name || '').trim() === name) || null;
+  }
+
   function ensureModal() {
     if (document.getElementById('confirmation-preview-modal')) return false;
 
@@ -49,6 +72,39 @@
     return true;
   }
 
+  function removeCardNotes(card) {
+    const statusStrip = card.querySelector('.card-status-strip');
+    const statusSibling = statusStrip?.nextElementSibling;
+
+    if (statusSibling?.tagName === 'P') {
+      statusSibling.remove();
+      return true;
+    }
+
+    const clampedDescription = card.querySelector('p.line-clamp-2');
+    if (clampedDescription) {
+      clampedDescription.remove();
+      return true;
+    }
+
+    return false;
+  }
+
+  function ensureCardPhoto(card, link) {
+    if (link.querySelector('img') || link.querySelector('.confirmation-card-photo')) return false;
+
+    const location = getCardLocation(card);
+    if (!location?.photo_url) return false;
+
+    link.insertAdjacentHTML('afterbegin', `
+      <div class="confirmation-card-photo">
+        <img src="${escapeHtml(location.photo_url)}" alt="${escapeHtml(location.name)}" loading="lazy" />
+      </div>
+    `);
+
+    return true;
+  }
+
   function enhanceCards() {
     let changed = false;
 
@@ -57,23 +113,26 @@
       if (!container) return;
 
       container.querySelectorAll('article.card-hover').forEach((card) => {
-        if (card.querySelector('.confirmation-card-prompt')) return;
-
         const link = card.querySelector(':scope > a') || card.querySelector('a');
         if (!link) return;
 
-        link.insertAdjacentHTML('beforeend', `
-          <div class="confirmation-card-prompt">
-            <div class="confirmation-card-prompt-inner">
-              <span>
+        let cardChanged = false;
+        cardChanged = removeCardNotes(card) || cardChanged;
+        cardChanged = ensureCardPhoto(card, link) || cardChanged;
+
+        if (!card.querySelector('.confirmation-card-prompt')) {
+          link.insertAdjacentHTML('beforeend', `
+            <div class="confirmation-card-prompt">
+              <div class="confirmation-card-prompt-inner">
                 <span class="confirmation-card-prompt-title">Já estiveste aqui com o teu cão?</span>
-                <span class="confirmation-card-prompt-help">Vê as condições antes de confirmar</span>
-              </span>
-              <i data-lucide="chevron-right" style="width:1rem;height:1rem;color:#5B7553;flex:none;"></i>
+                <i data-lucide="chevron-right" style="width:1rem;height:1rem;color:#5B7553;flex:none;"></i>
+              </div>
             </div>
-          </div>
-        `);
-        changed = true;
+          `);
+          cardChanged = true;
+        }
+
+        changed = cardChanged || changed;
       });
     });
 
@@ -131,7 +190,6 @@
         <i data-lucide="check-circle-2" style="width:1.05rem;height:1.05rem;"></i>
         Confirmar informação
       </button>
-      <p class="confirmation-preview-footnote">A confirmação é feita aqui, depois de veres as condições do local.</p>
     `;
 
     if (oldButtonGrid) oldButtonGrid.remove();
