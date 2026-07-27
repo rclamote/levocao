@@ -1,3 +1,15 @@
+.confirmation-card-photo {
+  aspect-ratio: 21 / 9;
+  background: #F5F0E8;
+  overflow: hidden;
+  width: 100%;
+}
+.confirmation-card-photo img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
 .confirmation-card-prompt {
   border-top: 1px solid #F5F0E8;
   background: rgba(245, 240, 232, 0.38);
