@@ -429,14 +429,15 @@
 
 
     .card-trust-line {
-      display: inline-flex;
+      display: flex;
+      width: 100%;
       align-items: center;
-      gap: 0.35rem;
-      border-radius: 9999px;
-      padding: 0.45rem 0.7rem;
+      gap: 0.55rem;
+      border-radius: 14px;
+      padding: 0.65rem 0.75rem;
       font-size: 0.78rem;
       font-weight: 700;
-      line-height: 1;
+      line-height: 1.25;
     }
 
     .card-feature-line {
@@ -2940,7 +2941,7 @@
         if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
         if (has('☀️ Esplanada permitida') || has('☀️ Só esplanada')) return { text: '☀️ Esplanada', className: 'bg-sand text-bark/75 border border-bark/10' };
         if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return { text: '🐕 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+        return null;
       }
 
       if (type === 'Alojamento') {
@@ -2949,7 +2950,7 @@
         if (has('🔒 Espaço exterior vedado') || has('🔒 Vedado')) return { text: '🔒 Espaço exterior vedado', className: 'bg-sage/10 text-sage border border-sage/15' };
         if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço exterior', className: 'bg-sand text-bark/75 border border-bark/10' };
         if (loc.dog_status === 'maybe') return { text: '⚠️ Pode ter restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return { text: '🏡 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+        return null;
       }
 
       if (type === 'Soltar o cão') {
@@ -2964,78 +2965,54 @@
 
       if (type === 'Praia') {
         if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return { text: '🏖️ Pet-friendly', className: 'bg-sage/10 text-sage border border-sage/15' };
+        return null;
       }
 
       if (type === 'Experiências') {
         if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return { text: '🎯 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+        return null;
       }
 
       if (loc.dog_status === 'maybe') return { text: '⚠️ Com restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
       if (loc.dog_status === 'no') return { text: '❌ Não aceita cães', className: 'bg-bark text-cream border border-bark' };
 
-      return { text: '🐕 Aceita cães', className: 'bg-sage/10 text-sage border border-sage/15' };
+      return null;
     }
 
     function getCardTrustBadge(loc) {
       const votes = getStoredPlaceVotes(loc.id);
-      const total = getConfirmationCount(loc.id);
 
-      if (total <= 0) {
+      if (loc.establishment_confirmed) {
+        const date = formatMonthYear(loc.establishment_confirmed_at);
         return {
-          text: '🕒 Ainda por confirmar',
-          className: 'bg-sand text-bark/70 border border-bark/10',
-          detail: ''
-        };
-      }
-
-      if (votes.no > votes.yes && votes.no >= 2) {
-        return {
-          text: `❌ Informação duvidosa · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
-          className: 'bg-bark text-cream border border-bark',
-          detail: ''
-        };
-      }
-
-      if (votes.maybe > 0 && votes.maybe >= votes.yes) {
-        return {
-          text: `⚠️ Há restrições · ${total} ${total === 1 ? 'resposta' : 'respostas'}`,
-          className: 'bg-sand text-bark/80 border border-bark/10',
-          detail: ''
-        };
-      }
-
-      if (votes.yes >= 3) {
-        return {
-          text: `👍 Confirmado por ${votes.yes} ${votes.yes === 1 ? 'pessoa' : 'pessoas'}`,
-          className: 'bg-sage text-cream border border-sage',
-          detail: ''
+          text: 'Confirmado pelo estabelecimento' + (date ? ' · ' + date : ''),
+          icon: 'store',
+          className: 'bg-sage/10 text-sage border border-sage/15'
         };
       }
 
       if (votes.yes > 0) {
         return {
-          text: `✅ Confirmado por ${votes.yes} ${votes.yes === 1 ? 'pessoa' : 'pessoas'}`,
-          className: 'bg-sage/10 text-sage border border-sage/15',
-          detail: ''
+          text: votes.yes === 1
+            ? 'Confirmado pela comunidade'
+            : 'Confirmado pela comunidade · ' + votes.yes + ' pessoas',
+          icon: 'badge-check',
+          className: 'bg-sage/10 text-sage border border-sage/15'
         };
       }
 
       return {
-        text: `⚠️ ${total} ${total === 1 ? 'resposta' : 'respostas'} com restrições`,
-        className: 'bg-sand text-bark/80 border border-bark/10',
-        detail: ''
+        text: 'A aguardar confirmação — já estiveste aqui?',
+        icon: 'clock-3',
+        className: 'bg-sand/75 text-bark/70 border border-bark/10'
       };
     }
 
     function createCard(loc) {
       const grad = `linear-gradient(135deg, ${loc.colors[0]}44, ${loc.colors[1]}33, ${loc.colors[2]}22)`;
-      const confirmationCount = getConfirmationCount(loc.id);
       const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
         ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>'
         : '';
-      const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
       const lastUpdate = getLastUpdateText(loc.id);
       const locationLine = getCardLocationLine(loc);
       const smartDesc = getSmartShortDescription(loc);
@@ -3046,7 +3023,7 @@
       return `
         <article class="card-hover bg-white rounded-2xl border border-sand shadow-sm overflow-hidden cursor-pointer" onclick="if (!event.target.closest('a')) showDetail(${loc.id})">
           <a href="/local/${encodeURIComponent(getPlaceSlug(loc))}" onclick="event.preventDefault(); showDetail(${loc.id})" class="block text-inherit no-underline" aria-label="Ver detalhes de ${loc.name}">
-          <div class="h-44 relative flex items-center justify-center overflow-hidden" style="background:${grad}">
+          <div class="h-40 relative flex items-center justify-center overflow-hidden" style="background:${grad}">
             ${photoUrl
               ? `<img src="${photoUrl}" alt="${loc.name}" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
                  <div class="absolute inset-0 bg-gradient-to-t from-bark/35 via-transparent to-bark/10"></div>`
@@ -3054,10 +3031,7 @@
             <div class="absolute top-3 left-3">
               <span class="text-xs bg-white/90 text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${loc.displayType}</span>
             </div>
-            <div class="absolute top-3 right-3 flex items-center gap-2 flex-wrap justify-end">
-              ${recentBadge}
-              <span class="${dogMeta.className} text-xs font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
-            </div>
+            ${recentBadge ? `<div class="absolute top-3 right-3">${recentBadge}</div>` : ''}
           </div>
 
           <div class="p-4">
@@ -3070,19 +3044,22 @@
               ${getDistanceLabel(loc) ? `<p class="text-xs text-sage font-semibold mt-1">📍 ${getDistanceLabel(loc)} de ti</p>` : ''}
             </div>
 
-            <div class="card-status-strip mb-3">
-              <div class="flex flex-wrap gap-2">
+            ${primaryFeature ? `
+              <div class="mb-2">
                 <span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>
-                <span class="card-trust-line ${trustBadge.className}">${trustBadge.text}</span>
-              </div>
-              ${lastUpdate ? `<p class="text-xs text-bark/50 mt-2">🕒 ${lastUpdate}</p>` : ''}
+              </div>` : ''}
+
+            <div class="card-trust-line ${trustBadge.className} mb-3">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/75">
+                <i data-lucide="${trustBadge.icon}" class="h-3.5 w-3.5"></i>
+              </span>
+              <span>${trustBadge.text}</span>
             </div>
 
             <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
-
-            <div class="mt-4 flex items-center justify-end">
-              <span class="text-sm text-sage font-semibold">Ver detalhes →</span>
-            </div>
+            ${lastUpdate && !loc.establishment_confirmed
+              ? `<p class="mt-2 text-[11px] text-bark/45">${lastUpdate}</p>`
+              : ''}
           </div>
           </a>
         </article>`;
