@@ -3332,30 +3332,51 @@
                 </div>
               </div>` : ''}
 
-            <div class="bg-white border border-sand rounded-xl p-4 space-y-3">
-              <div class="flex items-center justify-between gap-3">
-                <div>
-                  <p class="font-medium text-sm text-bark">Confirmações</p>
-                  <p class="text-sm text-bark/60">${confirmationCount} confirmações · ✅ ${votes.yes} · ❌ ${votes.no} · ⚠️ ${votes.maybe}</p>
-                  ${lastUpdate ? `<p class="text-xs text-bark/50 mt-1">🕒 ${lastUpdate}</p>` : ''}
-                  ${lastUpdateExact ? `<p class="text-xs text-bark/45 mt-1">📅 ${lastUpdateExact}</p>` : ''}
+            <div id="confirmation-panel-${loc.id}" class="overflow-hidden rounded-2xl border border-sand bg-cream shadow-sm">
+              <div class="bg-sand/55 px-4 py-4 sm:px-5">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-start gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${Number(loc.id) === 230 || votes.yes > 0 ? 'bg-sage text-cream' : 'bg-white text-bark/45'}">
+                      <i data-lucide="${Number(loc.id) === 230 || votes.yes > 0 ? 'badge-check' : 'clock-3'}" class="h-5 w-5"></i>
+                    </span>
+                    <div>
+                      <p class="text-xs font-bold uppercase tracking-wider text-bark/45">Estado da informação</p>
+                      <p class="mt-1 font-display text-lg font-bold text-bark">
+                        ${Number(loc.id) === 230 ? 'Confirmada pelo estabelecimento' : votes.yes > 0 ? 'Confirmada pela comunidade' : 'A aguardar confirmação'}
+                      </p>
+                    </div>
+                  </div>
+                  ${Number(loc.id) === 230 ? '<span class="shrink-0 rounded-full bg-white px-2.5 py-1 text-[10px] font-bold text-sage">DEMONSTRAÇÃO</span>' : ''}
                 </div>
-                <span class="text-xs ${userState.hasVote ? 'bg-moss/20 text-sage' : 'bg-sand text-bark/70'} font-medium px-3 py-1.5 rounded-full">${userState.hasVote ? 'Já respondeste' : 'Ainda não respondeste'}</span>
-              </div>
-              <div class="flex items-center justify-between gap-3 flex-wrap">
-                ${trustLevel ? `<span class="text-xs ${trustLevel.className} font-medium px-3 py-1.5 rounded-full">${trustLevel.shortLabel}</span>` : ''}
-                
-              </div>
-              <div class="rounded-xl bg-sand/50 px-3 py-2 text-xs text-bark/70">
-                ${userState.helpText}
-                ${userState.dateText ? ` · ${userState.dateText}` : ''}
-              </div>
-            </div>
 
-            <div class="grid grid-cols-3 gap-2">
-              <button type="button" onclick="confirmPlace(${loc.id}, 'yes')" class="bg-sage text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">✅ Sim</button>
-              <button type="button" onclick="confirmPlace(${loc.id}, 'no')" class="bg-bark/80 text-cream font-semibold py-3 rounded-full text-sm shadow-sm hover:opacity-90 transition">❌ Não</button>
-              <button type="button" onclick="confirmPlace(${loc.id}, 'maybe')" class="bg-sand text-bark font-semibold py-3 rounded-full text-sm border border-bark/10 shadow-sm hover:bg-white transition">⚠️ Restr.</button>
+                <div class="mt-4 space-y-2 border-t border-bark/10 pt-4">
+                  ${Number(loc.id) === 230
+                    ? '<p class="flex items-start gap-2 text-sm text-bark/75"><i data-lucide="store" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i><span><strong class="text-bark">Informação confirmada pelo estabelecimento</strong><br><span class="text-xs text-bark/55">Exemplo visual · julho de 2026</span></span></p>'
+                    : '<p class="flex items-start gap-2 text-sm text-bark/65"><i data-lucide="store" class="mt-0.5 h-4 w-4 shrink-0 text-bark/40"></i><span>O estabelecimento ainda não confirmou estes dados.</span></p>'}
+                  <p class="flex items-start gap-2 text-sm text-bark/75">
+                    <i data-lucide="users" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i>
+                    <span>${votes.yes > 0
+                      ? '<strong class="text-bark">' + votes.yes + ' ' + (votes.yes === 1 ? 'pessoa confirmou' : 'pessoas confirmaram') + '</strong> que a informação continua correta' + (lastUpdate ? '<br><span class="text-xs text-bark/55">' + lastUpdate + '</span>' : '')
+                      : 'Ainda ninguém confirmou esta informação pela comunidade.'}</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="space-y-3 bg-white px-4 py-4 sm:px-5">
+                <div>
+                  <p class="font-display text-lg font-bold text-bark">Já visitaste este local com o teu cão?</p>
+                  <p class="mt-1 text-sm text-bark/60">Ajuda-nos a manter a informação útil e atualizada.</p>
+                </div>
+                <div class="grid gap-2 sm:grid-cols-2">
+                  <button type="button" onclick="previewConfirmationAction(${loc.id}, 'confirm')" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-sage px-4 py-3 text-sm font-semibold text-cream shadow-sm transition hover:bg-moss active:scale-95">
+                    <i data-lucide="check" class="h-4 w-4"></i> Sim, continua correta
+                  </button>
+                  <button type="button" onclick="previewConfirmationAction(${loc.id}, 'change')" class="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-sage bg-white px-4 py-3 text-sm font-semibold text-sage transition hover:bg-sand active:scale-95">
+                    <i data-lucide="pencil-line" class="h-4 w-4"></i> Indicar uma alteração
+                  </button>
+                </div>
+                <p class="text-center text-[11px] leading-relaxed text-bark/40">Pré-visualização: nenhuma resposta é guardada nesta fase.</p>
+              </div>
             </div>
 
             <div class="grid sm:grid-cols-2 gap-3">
@@ -3374,6 +3395,27 @@
       showView('detail');
       lucide.createIcons();
     }
+
+    function previewConfirmationAction(id, action) {
+      const panel = document.getElementById('confirmation-panel-' + id);
+      if (!panel) return;
+
+      if (action === 'confirm') {
+        panel.querySelector('.bg-white.px-4.py-4').innerHTML =
+          '<div class="py-4 text-center">' +
+            '<span class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-sage/10 text-sage">' +
+              '<i data-lucide="heart" class="h-5 w-5"></i>' +
+            '</span>' +
+            '<p class="mt-3 font-display text-lg font-bold text-bark">Obrigado por ajudares a comunidade!</p>' +
+            '<p class="mt-1 text-sm text-bark/60">Na versão final, esta confirmação ficará registada.</p>' +
+          '</div>';
+        lucide.createIcons();
+        return;
+      }
+
+      alert('Na versão final, este botão abrirá um formulário curto para indicares o que mudou. Nesta demonstração nada é guardado.');
+    }
+
 
     async function confirmPlace(id, type = 'yes') {
       const loc = locations.find((item) => item.id === id);
