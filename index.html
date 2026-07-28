@@ -3001,11 +3001,7 @@
         };
       }
 
-      return {
-        text: 'A aguardar confirmação — já estiveste aqui?',
-        icon: 'clock-3',
-        className: 'bg-sand/75 text-bark/70 border border-bark/10'
-      };
+      return null;
     }
 
     function createCard(loc) {
@@ -3049,12 +3045,13 @@
                 <span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>
               </div>` : ''}
 
-            <div class="card-trust-line ${trustBadge.className} mb-3">
-              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/75">
-                <i data-lucide="${trustBadge.icon}" class="h-3.5 w-3.5"></i>
-              </span>
-              <span>${trustBadge.text}</span>
-            </div>
+            ${trustBadge ? `
+              <div class="card-trust-line ${trustBadge.className} mb-3">
+                <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/75">
+                  <i data-lucide="${trustBadge.icon}" class="h-3.5 w-3.5"></i>
+                </span>
+                <span>${trustBadge.text}</span>
+              </div>` : ''}
 
             <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
             ${lastUpdate && !loc.establishment_confirmed
