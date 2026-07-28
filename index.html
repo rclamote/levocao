@@ -2986,6 +2986,9 @@
         const date = formatMonthYear(loc.establishment_confirmed_at);
         return {
           text: 'Confirmado pelo estabelecimento' + (date ? ' · ' + date : ''),
+          communityText: votes.yes > 0
+            ? (votes.yes === 1 ? '👤 1 pessoa confirmou' : '👥 ' + votes.yes + ' pessoas confirmaram')
+            : '',
           icon: 'store',
           className: 'bg-sage/10 text-sage border border-sage/15'
         };
@@ -3050,7 +3053,10 @@
                 <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/75">
                   <i data-lucide="${trustBadge.icon}" class="h-3.5 w-3.5"></i>
                 </span>
-                <span>${trustBadge.text}</span>
+                <span class="min-w-0">
+                <span class="block">${trustBadge.text}</span>
+                ${trustBadge.communityText ? `<span class="mt-0.5 block text-xs font-medium text-bark/55">${trustBadge.communityText}</span>` : ''}
+              </span>
               </div>` : ''}
 
           </div>
