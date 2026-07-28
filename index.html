@@ -3053,10 +3053,6 @@
                 <span>${trustBadge.text}</span>
               </div>` : ''}
 
-            <p class="text-bark/72 text-sm line-clamp-2">${smartDesc}</p>
-            ${lastUpdate && !loc.establishment_confirmed
-              ? `<p class="mt-2 text-[11px] text-bark/45">${lastUpdate}</p>`
-              : ''}
           </div>
           </a>
         </article>`;
@@ -3403,7 +3399,7 @@
                 <div class="mt-4 space-y-2 border-t border-bark/10 pt-4">
                   ${loc.establishment_confirmed
                     ? '<p class="flex items-start gap-2 text-sm text-bark/75"><i data-lucide="store" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i><span><strong class="text-bark">Informação confirmada pelo estabelecimento</strong><br><span class="text-xs text-bark/55">' + formatMonthYear(loc.establishment_confirmed_at) + '</span></span></p>'
-                    : '<p class="flex items-start gap-2 text-sm text-bark/65"><i data-lucide="store" class="mt-0.5 h-4 w-4 shrink-0 text-bark/40"></i><span>O estabelecimento ainda não confirmou estes dados.</span></p>'}
+                    : ''}
                   <p class="flex items-start gap-2 text-sm text-bark/75">
                     <i data-lucide="users" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i>
                     <span>${votes.yes > 0
