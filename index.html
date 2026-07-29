@@ -3576,7 +3576,7 @@
             <button
               type="button"
               onclick="navigateDetail(-1)"
-              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white text-sage shadow-sm transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-30"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white text-sage shadow-sm transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-30 lg:hidden"
               aria-label="${previousPlace ? `Ver local anterior: ${escapeHtml(previousPlace.name)}` : 'Não há local anterior'}"
               title="${previousPlace ? `Anterior: ${escapeHtml(previousPlace.name)}` : 'Primeiro local'}"
               ${previousPlace ? '' : 'disabled'}
@@ -3587,7 +3587,7 @@
             <button
               type="button"
               onclick="navigateDetail(1)"
-              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white text-sage shadow-sm transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-30"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sand bg-white text-sage shadow-sm transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-30 lg:hidden"
               aria-label="${nextPlace ? `Ver local seguinte: ${escapeHtml(nextPlace.name)}` : 'Não há local seguinte'}"
               title="${nextPlace ? `Seguinte: ${escapeHtml(nextPlace.name)}` : 'Último local'}"
               ${nextPlace ? '' : 'disabled'}
