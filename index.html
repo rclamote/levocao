@@ -440,6 +440,11 @@
       line-height: 1.25;
     }
 
+    .card-feature-slot {
+      min-height: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
     .card-feature-line {
       display: inline-flex;
       align-items: center;
@@ -2935,47 +2940,78 @@
     function getPrimaryFeatureBadge(loc) {
       const features = Array.isArray(loc.features) ? loc.features : [];
       const type = loc.displayType;
-      const has = (value) => features.includes(value);
+      const has = (...values) => values.some((value) => features.includes(value));
+      const sage = 'bg-sage/10 text-sage border border-sage/15';
+      const sand = 'bg-sand text-bark/75 border border-bark/10';
+      const badge = (text, className = sand) => ({ text, className });
 
-      if (type === 'Comer & Beber') {
-        if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
-        if (has('☀️ Esplanada permitida') || has('☀️ Só esplanada')) return { text: '☀️ Esplanada', className: 'bg-sand text-bark/75 border border-bark/10' };
-        if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return null;
+      const prioritiesByType = {
+        'Comer & Beber': [
+          () => has('🏠 Interior permitido') && badge('🏠 Interior permitido', sage),
+          () => has('☀️ Esplanada permitida', '☀️ Só esplanada') && badge('☀️ Esplanada'),
+          () => has('💧 Água disponível') && badge('💧 Água disponível', sage),
+          () => has('🐾 Muito pet-friendly') && badge('🐾 Muito pet-friendly', sage)
+        ],
+        'Espaços comerciais': [
+          () => has('🏠 Interior permitido') && badge('🏠 Interior permitido', sage),
+          () => has('🦮 Trela obrigatória') && badge('🦮 Trela obrigatória'),
+          () => has('💧 Água disponível') && badge('💧 Água disponível', sage),
+          () => has('🐾 Muito pet-friendly') && badge('🐾 Muito pet-friendly', sage)
+        ],
+        'Alojamento': [
+          () => has('🛏️ Pode ficar no quarto') && badge('🛏️ Pode ficar no quarto', sage),
+          () => has('🔒 Espaço exterior vedado', '🔒 Vedado') && badge('🔒 Espaço exterior vedado', sage),
+          () => has('🏠 Interior permitido') && badge('🏠 Interior permitido', sage),
+          () => has('🌳 Espaço aberto') && badge('🌳 Espaço exterior')
+        ],
+        'Soltar o cão': [
+          () => has('🔒 Vedado', '🔒 Espaço exterior vedado') && badge('🔒 Vedado', sage),
+          () => has('🌳 Espaço aberto') && badge('🌳 Espaço aberto'),
+          () => has('🦮 Trela obrigatória') && badge('🦮 Trela obrigatória')
+        ],
+        'Passear com o cão': [
+          () => has('🌳 Espaço aberto') && badge('🌳 Espaço aberto'),
+          () => has('🦮 Trela obrigatória') && badge('🦮 Trela obrigatória'),
+          () => has('🔒 Vedado', '🔒 Espaço exterior vedado') && badge('🔒 Vedado', sage)
+        ],
+        'Praia': [
+          () => has('🦮 Trela obrigatória') && badge('🦮 Trela obrigatória'),
+          () => has('🌳 Espaço aberto') && badge('🌳 Espaço aberto'),
+          () => has('🔒 Vedado', '🔒 Espaço exterior vedado') && badge('🔒 Vedado', sage)
+        ],
+        'Experiências': [
+          () => has('🏠 Interior permitido') && badge('🏠 Interior permitido', sage),
+          () => has('🌳 Espaço aberto') && badge('🌳 Espaço aberto'),
+          () => has('🦮 Trela obrigatória') && badge('🦮 Trela obrigatória'),
+          () => has('💧 Água disponível') && badge('💧 Água disponível', sage),
+          () => has('🐾 Muito pet-friendly') && badge('🐾 Muito pet-friendly', sage)
+        ]
+      };
+
+      const categoryPriorities = prioritiesByType[type] || [];
+      for (const getBadge of categoryPriorities) {
+        const result = getBadge();
+        if (result) return result;
       }
 
-      if (type === 'Alojamento') {
-        if (has('🛏️ Pode ficar no quarto')) return { text: '🛏️ Pode ficar no quarto', className: 'bg-sage/10 text-sage border border-sage/15' };
-        if (has('🏠 Interior permitido')) return { text: '🏠 Interior permitido', className: 'bg-sage/10 text-sage border border-sage/15' };
-        if (has('🔒 Espaço exterior vedado') || has('🔒 Vedado')) return { text: '🔒 Espaço exterior vedado', className: 'bg-sage/10 text-sage border border-sage/15' };
-        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço exterior', className: 'bg-sand text-bark/75 border border-bark/10' };
-        if (loc.dog_status === 'maybe') return { text: '⚠️ Pode ter restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return null;
+      const genericPriorities = [
+        () => has('🏠 Interior permitido') && badge('🏠 Interior permitido', sage),
+        () => has('🛏️ Pode ficar no quarto') && badge('🛏️ Pode ficar no quarto', sage),
+        () => has('☀️ Esplanada permitida', '☀️ Só esplanada') && badge('☀️ Esplanada'),
+        () => has('🔒 Vedado', '🔒 Espaço exterior vedado') && badge('🔒 Vedado', sage),
+        () => has('🌳 Espaço aberto') && badge('🌳 Espaço aberto'),
+        () => has('🦮 Trela obrigatória') && badge('🦮 Trela obrigatória'),
+        () => has('💧 Água disponível') && badge('💧 Água disponível', sage),
+        () => has('🐾 Muito pet-friendly') && badge('🐾 Muito pet-friendly', sage)
+      ];
+
+      for (const getBadge of genericPriorities) {
+        const result = getBadge();
+        if (result) return result;
       }
 
-      if (type === 'Soltar o cão') {
-        if (has('🔒 Vedado')) return { text: '🔒 Vedado', className: 'bg-sage/10 text-sage border border-sage/15' };
-        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço aberto', className: 'bg-sand text-bark/75 border border-bark/10' };
-      }
-
-      if (type === 'Passear com o cão') {
-        if (has('🌳 Espaço aberto')) return { text: '🌳 Espaço aberto', className: 'bg-sand text-bark/75 border border-bark/10' };
-        if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
-      }
-
-      if (type === 'Praia') {
-        if (has('🦮 Trela obrigatória')) return { text: '🦮 Trela obrigatória', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return null;
-      }
-
-      if (type === 'Experiências') {
-        if (loc.dog_status === 'maybe') return { text: '⚠️ Confirmar condições', className: 'bg-sand text-bark/75 border border-bark/10' };
-        return null;
-      }
-
-      if (loc.dog_status === 'maybe') return { text: '⚠️ Com restrições', className: 'bg-sand text-bark/75 border border-bark/10' };
-      if (loc.dog_status === 'no') return { text: '❌ Não aceita cães', className: 'bg-bark text-cream border border-bark' };
-
+      if (loc.dog_status === 'maybe') return badge('⚠️ Confirmar condições');
+      if (loc.dog_status === 'no') return badge('❌ Não aceita cães', 'bg-bark text-cream border border-bark');
       return null;
     }
 
@@ -3014,7 +3050,6 @@
         : '';
       const lastUpdate = getLastUpdateText(loc.id);
       const locationLine = getCardLocationLine(loc);
-      const smartDesc = getSmartShortDescription(loc);
       const primaryFeature = getPrimaryFeatureBadge(loc);
       const trustBadge = getCardTrustBadge(loc);
       const photoUrl = loc.photo_url || '';
@@ -3043,10 +3078,9 @@
               ${getDistanceLabel(loc) ? `<p class="text-xs text-sage font-semibold mt-1">📍 ${getDistanceLabel(loc)} de ti</p>` : ''}
             </div>
 
-            ${primaryFeature ? `
-              <div class="mb-2">
-                <span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>
-              </div>` : ''}
+            <div class="card-feature-slot">
+              ${primaryFeature ? `<span class="card-feature-line ${primaryFeature.className}">${primaryFeature.text}</span>` : ''}
+            </div>
 
             ${trustBadge ? `
               <div class="card-trust-line ${trustBadge.className} mb-3">
