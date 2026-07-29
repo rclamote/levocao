@@ -112,6 +112,55 @@
     .view-transition { animation: slideUp 0.35s ease both; }
     #view-detail { touch-action: pan-y; }
 
+    .detail-side-nav {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .detail-side-nav {
+        position: fixed;
+        top: 50%;
+        z-index: 45;
+        width: 3rem;
+        height: 3rem;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #F5F0E8;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.94);
+        color: #5B7553;
+        box-shadow: 0 10px 28px rgba(61, 44, 30, 0.14);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transform: translateY(-50%);
+        transition: background 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      .detail-side-nav:hover:not(:disabled) {
+        background: #F5F0E8;
+        box-shadow: 0 14px 34px rgba(61, 44, 30, 0.18);
+        transform: translateY(-50%) scale(1.06);
+      }
+
+      .detail-side-nav:focus-visible {
+        outline: 3px solid rgba(139, 166, 122, 0.42);
+        outline-offset: 3px;
+      }
+
+      .detail-side-nav:disabled {
+        cursor: not-allowed;
+        opacity: 0.24;
+      }
+
+      .detail-side-nav-previous {
+        left: max(1.25rem, calc(50vw - 27.5rem));
+      }
+
+      .detail-side-nav-next {
+        right: max(1.25rem, calc(50vw - 27.5rem));
+      }
+    }
+
     @keyframes slideUp {
       from { opacity: 0; transform: translateY(24px); }
       to { opacity: 1; transform: translateY(0); }
@@ -3495,6 +3544,28 @@
             </button>
           </div>
         </div>
+
+        <button
+          type="button"
+          onclick="navigateDetail(-1)"
+          class="detail-side-nav detail-side-nav-previous"
+          aria-label="${previousPlace ? `Ver local anterior: ${escapeHtml(previousPlace.name)}` : `Não há local anterior`}"
+          title="${previousPlace ? `Anterior: ${escapeHtml(previousPlace.name)}` : `Primeiro local`}"
+          ${previousPlace ? `` : `disabled`}
+        >
+          <i data-lucide="chevron-left" class="h-6 w-6"></i>
+        </button>
+        <button
+          type="button"
+          onclick="navigateDetail(1)"
+          class="detail-side-nav detail-side-nav-next"
+          aria-label="${nextPlace ? `Ver local seguinte: ${escapeHtml(nextPlace.name)}` : `Não há local seguinte`}"
+          title="${nextPlace ? `Seguinte: ${escapeHtml(nextPlace.name)}` : `Último local`}"
+          ${nextPlace ? `` : `disabled`}
+        >
+          <i data-lucide="chevron-right" class="h-6 w-6"></i>
+        </button>
+
         <div class="rounded-2xl overflow-hidden border border-sand shadow-sm bg-white">
           <div class="h-56 flex items-center justify-center relative overflow-hidden" style="background:${grad}">
             ${photoUrl
