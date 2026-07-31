@@ -1543,7 +1543,6 @@
         <form id="edit-place-form" class="p-5 space-y-4">
           <input type="hidden" id="edit-place-id" />
           <input type="hidden" id="edit-source" value="place" />
-          <input type="hidden" id="edit-google-place-id" />
 
           <div>
             <label for="edit-name" class="block text-sm font-medium mb-1">Nome do local</label>
@@ -1583,6 +1582,29 @@
               </button>
             </div>
             <input id="edit-address" type="text" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between gap-3 mb-1">
+              <label for="edit-google-place-id" class="block text-sm font-medium">Google Place ID</label>
+              <button
+                type="button"
+                onclick="openEditGooglePlaceIdInMaps()"
+                class="inline-flex items-center gap-1 text-xs text-sage font-semibold hover:underline"
+              >
+                <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                Testar no Google Maps
+              </button>
+            </div>
+            <input
+              id="edit-google-place-id"
+              type="text"
+              autocomplete="off"
+              spellcheck="false"
+              class="w-full px-4 py-3 rounded-xl border border-sand bg-white font-mono text-sm outline-none focus:border-sage transition"
+              placeholder="Ex: ChIJ..."
+            />
+            <p class="text-xs text-bark/45 mt-1">Podes introduzir, corrigir ou apagar o identificador manualmente.</p>
           </div>
 
           <div>
@@ -3606,7 +3628,18 @@
           </div>
           <div class="p-5 space-y-4">
             <div>
-              <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
+              <div class="flex flex-wrap items-start justify-between gap-3">
+                <h1 class="font-display text-2xl font-bold">${loc.name}</h1>
+                <button
+                  id="detail-admin-edit-button"
+                  type="button"
+                  onclick="openEditPlaceModal(${loc.id})"
+                  class="${currentUser ? 'inline-flex' : 'hidden'} shrink-0 items-center gap-2 rounded-full border border-sage bg-white px-3 py-2 text-xs font-semibold text-sage transition hover:bg-sand"
+                >
+                  <i data-lucide="pencil" class="h-3.5 w-3.5"></i>
+                  Editar no admin
+                </button>
+              </div>
               <p class="text-bark/50 flex items-center gap-1 mt-1"><i data-lucide="map-pin" class="w-4 h-4"></i>${loc.city} · ${loc.displayType}</p>
               <p class="text-sm text-bark/55 mt-2">${loc.district ? `${loc.district}` : ''}${loc.municipality ? ` · ${loc.municipality}` : ''}${loc.locality ? ` · ${loc.locality}` : ''}</p>
             </div>
@@ -4898,6 +4931,19 @@ async function reviewChangeReport(id, status) {
       window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`, '_blank', 'noopener,noreferrer');
     }
 
+    function openEditGooglePlaceIdInMaps() {
+      const placeId = document.getElementById('edit-google-place-id')?.value?.trim() || '';
+      const name = document.getElementById('edit-name')?.value?.trim() || 'Local';
+
+      if (!placeId) {
+        alert('Introduz primeiro o Google Place ID que queres testar.');
+        return;
+      }
+
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(name)}&query_place_id=${encodeURIComponent(placeId)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+
     function updateCoordinatesPasteHelp(message, isError = false) {
       const help = document.getElementById('edit-coordinates-help');
       if (!help) return;
@@ -5045,6 +5091,9 @@ async function reviewChangeReport(id, status) {
         await loadPlacesFromSupabase();
         await loadAdminSuggestions();
         await loadAdminPlaces();
+        if (source === 'place' && isDetailViewActive() && Number(currentDetailPlaceId) === id) {
+          showDetail(id, { keepUrl: true, navigationIds: currentDetailNavigationIds });
+        }
       } catch (error) {
         console.error('Erro ao guardar local:', error);
         alert(error?.message || (source === 'suggestion'
@@ -5073,6 +5122,7 @@ async function reviewChangeReport(id, status) {
       const loginBtn = document.getElementById('nav-login-btn');
       const logoutBtn = document.getElementById('nav-logout-btn');
       const adminBtn = document.getElementById('nav-admin-btn');
+      const detailEditBtn = document.getElementById('detail-admin-edit-button');
 
       if (!loginBtn || !logoutBtn || !adminBtn) return;
 
@@ -5080,10 +5130,18 @@ async function reviewChangeReport(id, status) {
         loginBtn.classList.add('hidden');
         logoutBtn.classList.remove('hidden');
         adminBtn.classList.remove('hidden');
+        if (detailEditBtn) {
+          detailEditBtn.classList.remove('hidden');
+          detailEditBtn.classList.add('inline-flex');
+        }
       } else {
         loginBtn.classList.remove('hidden');
         logoutBtn.classList.add('hidden');
         adminBtn.classList.add('hidden');
+        if (detailEditBtn) {
+          detailEditBtn.classList.add('hidden');
+          detailEditBtn.classList.remove('inline-flex');
+        }
 
         if (!document.getElementById('view-admin').classList.contains('hidden')) {
           showView('home');
