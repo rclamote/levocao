@@ -325,6 +325,41 @@
       border-color: #8BA67A;
     }
 
+    .community-prompt {
+      position: fixed;
+      left: 50%;
+      bottom: max(1rem, env(safe-area-inset-bottom));
+      z-index: 70;
+      width: min(calc(100% - 2rem), 30rem);
+      transform: translate(-50%, calc(100% + 2rem));
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.35s ease, opacity 0.25s ease;
+    }
+
+    .community-prompt.is-visible {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (min-width: 640px) {
+      .community-prompt {
+        left: auto;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        transform: translateY(calc(100% + 3rem));
+      }
+
+      .community-prompt.is-visible {
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .community-prompt { transition: opacity 0.15s ease; }
+    }
+
 
     .feature-groups {
       display: grid;
@@ -1489,6 +1524,39 @@
   </div>
 </div>
 
+    <aside
+      id="community-prompt"
+      class="community-prompt"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="community-prompt-title"
+      aria-describedby="community-prompt-description"
+      aria-hidden="true"
+      inert
+    >
+      <div class="rounded-3xl border border-sand bg-white p-5 shadow-[0_18px_50px_rgba(61,44,30,0.22)]">
+        <div class="flex items-start gap-3">
+          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sand text-2xl" aria-hidden="true">🐶</div>
+          <div class="min-w-0 flex-1">
+            <h2 id="community-prompt-title" class="font-display text-lg font-bold leading-tight">Conheces um sítio onde os cães são bem-vindos?</h2>
+            <p id="community-prompt-description" class="mt-1.5 text-sm leading-relaxed text-bark/65">Ajuda-nos a fazer crescer o mapa e partilha-o com a comunidade.</p>
+          </div>
+          <button type="button" onclick="dismissCommunityPrompt()" class="-mr-2 -mt-2 rounded-full p-2 text-bark/45 transition hover:bg-sand hover:text-bark" aria-label="Fechar">
+            <i data-lucide="x" class="h-5 w-5"></i>
+          </button>
+        </div>
+        <div class="mt-4 flex flex-col gap-2 sm:flex-row">
+          <button type="button" onclick="openSuggestFromCommunityPrompt()" class="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-full bg-sage px-5 py-2.5 font-semibold text-cream shadow-sm transition hover:bg-moss active:scale-95">
+            <i data-lucide="plus-circle" class="h-4 w-4"></i>
+            Adicionar um local
+          </button>
+          <button type="button" onclick="dismissCommunityPrompt()" class="inline-flex min-h-11 items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold text-bark/55 transition hover:bg-sand hover:text-bark">
+            Agora não
+          </button>
+        </div>
+      </div>
+    </aside>
+
 
     <div id="change-report-modal" class="hidden fixed inset-0 z-[90] bg-black/40 p-4">
       <div class="max-w-lg mx-auto bg-cream rounded-3xl border border-sand shadow-xl mt-16">
@@ -1815,6 +1883,9 @@
       correctionMinutes: 10,
       reconfirmDays: 30
     };
+    const COMMUNITY_PROMPT_STORAGE_KEY = 'levocao_community_prompt_dismissed_at';
+    const COMMUNITY_PROMPT_DELAY_MS = 40000;
+    const COMMUNITY_PROMPT_DISMISS_DAYS = 30;
 
     let supabaseClient = null;
     let locations = [];
@@ -1833,6 +1904,83 @@
     let adminActiveTab = 'action';
     let adminPendingCount = 0;
     let adminChangeReportsCount = 0;
+    let communityPromptTimer = null;
+    let communityPromptShown = false;
+
+    function getVisibleViewName() {
+      return ['home', 'list', 'region', 'detail', 'suggest', 'admin'].find((view) => {
+        const element = document.getElementById(`view-${view}`);
+        return element && !element.classList.contains('hidden');
+      }) || 'home';
+    }
+
+    function wasCommunityPromptRecentlyDismissed() {
+      try {
+        const dismissedAt = Number(localStorage.getItem(COMMUNITY_PROMPT_STORAGE_KEY));
+        if (!dismissedAt) return false;
+        const dismissDuration = COMMUNITY_PROMPT_DISMISS_DAYS * 24 * 60 * 60 * 1000;
+        return Date.now() - dismissedAt < dismissDuration;
+      } catch (_error) {
+        return false;
+      }
+    }
+
+    function rememberCommunityPromptDismissal() {
+      try {
+        localStorage.setItem(COMMUNITY_PROMPT_STORAGE_KEY, String(Date.now()));
+      } catch (_error) {
+        // O pedido continua a funcionar mesmo quando o armazenamento local está indisponível.
+      }
+    }
+
+    function canShowCommunityPrompt() {
+      const publicViews = ['home', 'list', 'region', 'detail'];
+      const loginModal = document.getElementById('login-modal');
+      const editModal = document.getElementById('edit-place-modal');
+      const changeReportModal = document.getElementById('change-report-modal');
+
+      return !currentUser
+        && document.visibilityState === 'visible'
+        && publicViews.includes(getVisibleViewName())
+        && (!loginModal || loginModal.classList.contains('hidden'))
+        && (!editModal || editModal.classList.contains('hidden'))
+        && (!changeReportModal || changeReportModal.classList.contains('hidden'));
+    }
+
+    function showCommunityPrompt() {
+      const prompt = document.getElementById('community-prompt');
+      if (!prompt || communityPromptShown || wasCommunityPromptRecentlyDismissed() || !canShowCommunityPrompt()) return;
+
+      communityPromptShown = true;
+      prompt.setAttribute('aria-hidden', 'false');
+      prompt.removeAttribute('inert');
+      prompt.classList.add('is-visible');
+      lucide.createIcons();
+    }
+
+    function hideCommunityPrompt() {
+      const prompt = document.getElementById('community-prompt');
+      if (!prompt) return;
+      prompt.classList.remove('is-visible');
+      prompt.setAttribute('aria-hidden', 'true');
+      prompt.setAttribute('inert', '');
+    }
+
+    function dismissCommunityPrompt() {
+      rememberCommunityPromptDismissal();
+      hideCommunityPrompt();
+    }
+
+    function openSuggestFromCommunityPrompt() {
+      dismissCommunityPrompt();
+      showView('suggest');
+    }
+
+    function scheduleCommunityPrompt() {
+      if (wasCommunityPromptRecentlyDismissed()) return;
+      window.clearTimeout(communityPromptTimer);
+      communityPromptTimer = window.setTimeout(showCommunityPrompt, COMMUNITY_PROMPT_DELAY_MS);
+    }
 
     function updateAdminActionCount() {
       const total = adminPendingCount + adminChangeReportsCount;
@@ -5151,6 +5299,7 @@ async function reviewChangeReport(id, status) {
     }
 
     function openLoginModal() {
+      hideCommunityPrompt();
       document.getElementById('login-modal').classList.remove('hidden');
       document.getElementById('login-error').classList.add('hidden');
       lucide.createIcons();
@@ -5296,6 +5445,10 @@ function resetHomeState() {
 }
 
 function showView(view) {
+  if (view === 'suggest' || view === 'admin') {
+    hideCommunityPrompt();
+  }
+
   if (view === 'home') {
     resetHomeState();
   }
@@ -5376,6 +5529,9 @@ function showView(view) {
 
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
+        if (document.getElementById('community-prompt')?.classList.contains('is-visible')) {
+          dismissCommunityPrompt();
+        }
         closeLoginModal();
         closeEditPlaceModal();
         closeChangeReportModal();
@@ -5407,6 +5563,7 @@ function showView(view) {
 
     async function initApp() {
       document.getElementById('year').textContent = String(new Date().getFullYear());
+      scheduleCommunityPrompt();
 
       const detailView = document.getElementById('view-detail');
       if (detailView) {
@@ -5446,6 +5603,7 @@ function showView(view) {
           e.preventDefault();
           try {
             await submitSuggestion();
+            rememberCommunityPromptDismissal();
             suggestForm.reset();
             clearGooglePlaceHiddenFields();
             setSuggestPlaceHelp('');
