@@ -1884,8 +1884,10 @@
       reconfirmDays: 30
     };
     const COMMUNITY_PROMPT_STORAGE_KEY = 'levocao_community_prompt_dismissed_at';
+    const COMMUNITY_PROMPT_CONTRIBUTED_STORAGE_KEY = 'levocao_community_prompt_contributed_at';
     const COMMUNITY_PROMPT_DELAY_MS = 40000;
-    const COMMUNITY_PROMPT_DISMISS_DAYS = 30;
+    const COMMUNITY_PROMPT_DISMISS_DAYS = 7;
+    const COMMUNITY_PROMPT_CONTRIBUTED_DAYS = 30;
 
     let supabaseClient = null;
     let locations = [];
@@ -1917,9 +1919,12 @@
     function wasCommunityPromptRecentlyDismissed() {
       try {
         const dismissedAt = Number(localStorage.getItem(COMMUNITY_PROMPT_STORAGE_KEY));
-        if (!dismissedAt) return false;
         const dismissDuration = COMMUNITY_PROMPT_DISMISS_DAYS * 24 * 60 * 60 * 1000;
-        return Date.now() - dismissedAt < dismissDuration;
+        const contributedAt = Number(localStorage.getItem(COMMUNITY_PROMPT_CONTRIBUTED_STORAGE_KEY));
+        const contributedDuration = COMMUNITY_PROMPT_CONTRIBUTED_DAYS * 24 * 60 * 60 * 1000;
+
+        return (dismissedAt && Date.now() - dismissedAt < dismissDuration)
+          || (contributedAt && Date.now() - contributedAt < contributedDuration);
       } catch (_error) {
         return false;
       }
@@ -1928,6 +1933,14 @@
     function rememberCommunityPromptDismissal() {
       try {
         localStorage.setItem(COMMUNITY_PROMPT_STORAGE_KEY, String(Date.now()));
+      } catch (_error) {
+        // O pedido continua a funcionar mesmo quando o armazenamento local está indisponível.
+      }
+    }
+
+    function rememberCommunityPromptContribution() {
+      try {
+        localStorage.setItem(COMMUNITY_PROMPT_CONTRIBUTED_STORAGE_KEY, String(Date.now()));
       } catch (_error) {
         // O pedido continua a funcionar mesmo quando o armazenamento local está indisponível.
       }
@@ -5603,7 +5616,7 @@ function showView(view) {
           e.preventDefault();
           try {
             await submitSuggestion();
-            rememberCommunityPromptDismissal();
+            rememberCommunityPromptContribution();
             suggestForm.reset();
             clearGooglePlaceHiddenFields();
             setSuggestPlaceHelp('');
