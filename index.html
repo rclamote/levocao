@@ -1389,67 +1389,47 @@
 
 <div id="view-admin" class="hidden">
   <div class="max-w-3xl mx-auto px-5 py-6 view-transition">
-    <div class="flex items-center justify-between mb-4">
+    <div class="flex items-start justify-between gap-4 mb-4">
       <div>
         <h2 class="font-display text-xl font-bold">Painel Admin</h2>
-        <p class="text-sm text-bark/55 mt-1">Revê, aprova, edita ou desativa locais.</p>
+        <p class="text-sm text-bark/55 mt-1">Tudo o que precisa da tua atenção, sem repetições.</p>
       </div>
-      <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
-      </button>
+      <div class="flex flex-col sm:flex-row items-end gap-2">
+        <button type="button" onclick="refreshAdmin()" class="text-sage font-medium text-sm flex items-center gap-1 whitespace-nowrap">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i> Atualizar tudo
+        </button>
+        <button type="button" onclick="showView('home')" class="text-sage font-medium text-sm flex items-center gap-1">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Voltar
+        </button>
+      </div>
     </div>
 
-    <div class="grid sm:grid-cols-4 gap-3 mb-6">
+    <div class="grid grid-cols-3 gap-3 mb-6">
       <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-        <p class="text-sm text-bark/55">Pendentes</p>
-        <p id="admin-pending-count" class="font-display text-2xl font-bold mt-1">0</p>
+        <p class="text-xs sm:text-sm text-bark/55">A tratar</p>
+        <p id="admin-action-count" class="font-display text-2xl font-bold mt-1">0</p>
       </div>
       <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-        <p class="text-sm text-bark/55">Locais ativos</p>
+        <p class="text-xs sm:text-sm text-bark/55">Ativos</p>
         <p id="admin-places-count" class="font-display text-2xl font-bold mt-1">0</p>
       </div>
       <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-        <p class="text-sm text-bark/55">Incompletos</p>
+        <p class="text-xs sm:text-sm text-bark/55">Com falhas</p>
         <p id="admin-incomplete-count" class="font-display text-2xl font-bold mt-1">0</p>
       </div>
-      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
-        <p class="text-sm text-bark/55">Estado</p>
-        <p class="font-display text-lg font-bold mt-1">Protegido</p>
+    </div>
+
+    <div class="mb-5 overflow-x-auto">
+      <div class="inline-flex min-w-full rounded-2xl border border-sand bg-white p-1 shadow-sm" role="tablist" aria-label="Áreas do painel admin">
+        <button id="admin-tab-action" type="button" role="tab" onclick="setAdminTab('action')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">A tratar <span id="admin-tab-action-count" class="ml-1 opacity-60">0</span></button>
+        <button id="admin-tab-places" type="button" role="tab" onclick="setAdminTab('places')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Locais ativos <span id="admin-tab-places-count" class="ml-1 opacity-60">0</span></button>
+        <button id="admin-tab-quality" type="button" role="tab" onclick="setAdminTab('quality')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Qualidade <span id="admin-tab-quality-count" class="ml-1 opacity-60">0</span></button>
       </div>
     </div>
 
-    <div class="mb-6 rounded-2xl bg-white border border-sand p-4 text-sm text-bark/65">
-      <span class="inline-flex items-center gap-2 bg-sand text-bark/70 font-medium px-3 py-1.5 rounded-full">🛡️ Admin protegida por login</span>
-      <p class="mt-3">Aprovar move a sugestão para os locais visíveis. Editar altera diretamente o local. Desativar tira-o do site sem apagar dados.</p>
-    </div>
-
-
-    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
-      <div class="flex items-center justify-between gap-3 mb-3">
-        <div>
-          <h3 class="font-display text-lg font-bold">Alterações comunicadas</h3>
-          <p class="text-sm text-bark/50 mt-1">Avisos da comunidade que ainda precisam de verificação.</p>
-        </div>
-        <span id="admin-change-reports-count" class="rounded-full bg-sand px-3 py-1 text-sm font-bold text-bark">0</span>
-      </div>
-      <div id="admin-change-reports" class="space-y-3"></div>
-      <p id="admin-change-reports-empty" class="hidden text-sm text-bark/50 py-5 text-center">Não há alterações por verificar.</p>
-    </div>
-
-    <div class="mb-6 grid sm:grid-cols-2 gap-3">
-      <input
-        id="admin-search"
-        type="text"
-        placeholder="Procurar por nome ou cidade..."
-        class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm"
-        oninput="handleAdminSearch()"
-      />
-
-      <select
-        id="admin-category-filter"
-        class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm"
-        onchange="handleAdminCategoryFilter()"
-      >
+    <div class="sticky top-2 z-30 mb-5 grid sm:grid-cols-2 gap-3 rounded-2xl border border-sand bg-cream/95 p-2 shadow-sm backdrop-blur">
+      <input id="admin-search" type="text" placeholder="Procurar por nome ou cidade..." class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm" oninput="handleAdminSearch()" />
+      <select id="admin-category-filter" class="w-full px-4 py-3 rounded-2xl border border-sand bg-white outline-none focus:border-sage transition shadow-sm" onchange="handleAdminCategoryFilter()">
         <option value="">Todas as categorias</option>
         <option value="Comer & Beber">Comer & Beber</option>
         <option value="Praia">Praias</option>
@@ -1461,44 +1441,51 @@
       </select>
     </div>
 
-    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm mb-6">
+    <section id="admin-panel-action" role="tabpanel" class="admin-panel space-y-6">
+    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <div>
+          <h3 class="font-display text-lg font-bold">Alterações comunicadas</h3>
+          <p class="text-sm text-bark/50 mt-1">Avisos da comunidade que ainda precisam de verificação.</p>
+        </div>
+        <span id="admin-change-reports-count" class="rounded-full bg-sand px-3 py-1 text-sm font-bold text-bark">0</span>
+      </div>
+      <div id="admin-change-reports" class="space-y-3"></div>
+      <p id="admin-change-reports-empty" class="hidden text-sm text-bark/50 py-5 text-center">Não há alterações por verificar.</p>
+    </div>
+
+    <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
       <div class="flex items-center justify-between gap-3 mb-3">
         <h3 class="font-display text-lg font-bold">Sugestões pendentes</h3>
-        <button type="button" onclick="loadAdminSuggestions()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
-          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-          Atualizar
-        </button>
+        <span id="admin-pending-count" class="rounded-full bg-sand px-3 py-1 text-sm font-bold text-bark">0</span>
       </div>
       <div id="admin-suggestions" class="space-y-3"></div>
       <p id="admin-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há sugestões pendentes neste momento.</p>
     </div>
+    </section>
 
-    <div class="bg-[#FFF8EE] border border-[#E8D9BB] rounded-2xl p-4 shadow-sm mb-6">
+    <section id="admin-panel-quality" role="tabpanel" class="admin-panel hidden">
+    <div class="bg-[#FFF8EE] border border-[#E8D9BB] rounded-2xl p-4 shadow-sm">
       <div class="flex items-center justify-between gap-3 mb-3">
         <div>
           <h3 class="font-display text-lg font-bold">Locais incompletos</h3>
           <p class="text-sm text-bark/55 mt-1">Sem zona completa e/ou coordenadas.</p>
         </div>
-        <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
-          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-          Atualizar
-        </button>
       </div>
       <div id="admin-incomplete-places" class="space-y-3"></div>
       <p id="admin-incomplete-empty" class="hidden text-sm text-bark/50 py-6 text-center">Todos os locais ativos já têm zona completa e coordenadas.</p>
     </div>
+    </section>
 
+    <section id="admin-panel-places" role="tabpanel" class="admin-panel hidden">
     <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
       <div class="flex items-center justify-between gap-3 mb-3">
         <h3 class="font-display text-lg font-bold">Locais ativos</h3>
-        <button type="button" onclick="loadAdminPlaces()" class="text-sm text-sage font-medium inline-flex items-center gap-1">
-          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-          Atualizar
-        </button>
       </div>
       <div id="admin-places" class="space-y-3"></div>
       <p id="admin-places-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há locais ativos.</p>
     </div>
+    </section>
   </div>
 </div>
 
@@ -1843,6 +1830,40 @@
     let currentChangeReportPlaceId = null;
     let adminSearch = '';
     let adminCategoryFilter = '';
+    let adminActiveTab = 'action';
+    let adminPendingCount = 0;
+    let adminChangeReportsCount = 0;
+
+    function updateAdminActionCount() {
+      const total = adminPendingCount + adminChangeReportsCount;
+      const actionCount = document.getElementById('admin-action-count');
+      const tabCount = document.getElementById('admin-tab-action-count');
+      if (actionCount) actionCount.textContent = String(total);
+      if (tabCount) tabCount.textContent = String(total);
+    }
+
+    function setAdminTab(tab) {
+      if (!['action', 'places', 'quality'].includes(tab)) return;
+      adminActiveTab = tab;
+
+      document.querySelectorAll('.admin-panel').forEach((panel) => panel.classList.add('hidden'));
+      const activePanel = document.getElementById(`admin-panel-${tab}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+
+      document.querySelectorAll('.admin-tab').forEach((button) => {
+        const isActive = button.id === `admin-tab-${tab}`;
+        button.classList.toggle('bg-sage', isActive);
+        button.classList.toggle('text-cream', isActive);
+        button.classList.toggle('text-bark/65', !isActive);
+        button.setAttribute('aria-selected', String(isActive));
+      });
+
+      lucide.createIcons();
+    }
+
+    async function refreshAdmin() {
+      await Promise.all([loadAdminSuggestions(), loadAdminChangeReports(), loadAdminPlaces()]);
+    }
     let currentFeatureFilters = [];
     let currentGuide = null;
     let currentGuideCategory = '';
@@ -4358,9 +4379,10 @@
         if (error) throw error;
 
         let rows = data || [];
+        adminPendingCount = rows.length;
+        document.getElementById('admin-pending-count').textContent = String(adminPendingCount);
+        updateAdminActionCount();
         rows = filterAdminItems(rows);
-
-        document.getElementById('admin-pending-count').textContent = String(rows.length);
 
         if (!rows.length) {
           container.innerHTML = '';
@@ -4450,19 +4472,27 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
   const isIncomplete = missingFields.length > 0;
 
   return `
-    <article class="border ${highlightIncomplete ? 'border-[#E8D9BB] bg-white' : 'border-sand bg-white'} rounded-2xl p-4">
-      <div class="flex items-start justify-between gap-3 mb-3">
-        <div>
+    <article class="border ${highlightIncomplete ? 'border-[#E8D9BB] bg-white' : 'border-sand bg-white'} rounded-2xl p-3 sm:p-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="min-w-0">
           <h4 class="font-display text-lg font-bold">${item.name}</h4>
-          <p class="text-sm text-bark/55 mt-1">${item.city} · ${item.displayType}</p>
+          <p class="text-sm text-bark/55 mt-0.5">${item.city} · ${item.displayType}</p>
+          ${isIncomplete ? `<p class="mt-1 text-xs font-semibold text-amber-900">Falta: ${missingFields.join(' · ')}</p>` : ''}
         </div>
-        <div class="flex flex-wrap gap-2 justify-end">
-          ${isIncomplete ? `<span class="text-xs bg-amber-100 text-amber-900 font-medium px-2.5 py-1 rounded-full">Incompleto</span>` : ''}
-          <span class="text-xs ${dogMeta.className} font-medium px-2.5 py-1 rounded-full">${dogMeta.short}</span>
+        <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+          <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-1.5 bg-sage text-cream text-sm font-semibold px-3 py-2 rounded-full shadow-sm hover:bg-moss transition">
+            <i data-lucide="pencil" class="w-4 h-4"></i> Editar
+          </button>
+          <a href="/local/${encodeURIComponent(getPlaceSlug(item))}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-white text-sage text-sm font-semibold px-3 py-2 rounded-full border border-sage hover:bg-sand transition">
+            <i data-lucide="external-link" class="w-4 h-4"></i> Ver no site
+          </a>
+          <button type="button" onclick="toggleAdminPlaceDetails(${item.id})" class="inline-flex items-center gap-1.5 bg-white text-bark/65 text-sm font-semibold px-3 py-2 rounded-full border border-sand hover:bg-sand transition" aria-expanded="false" aria-controls="admin-place-details-${item.id}">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i> Detalhes
+          </button>
         </div>
       </div>
 
-      <div class="space-y-2 text-sm text-bark/70 mb-4">
+      <div id="admin-place-details-${item.id}" class="hidden mt-4 border-t border-sand pt-4 space-y-2 text-sm text-bark/70">
         <p><strong>Distrito:</strong> ${item.district || '—'}</p>
         <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
         <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
@@ -4470,27 +4500,26 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         <p><strong>Coordenadas:</strong> ${hasValidCoordinates(item) ? `${item.latitude}, ${item.longitude}` : '—'}</p>
         <p><strong>Website:</strong> ${item.website || '—'}</p>
         <p><strong>Google Place ID:</strong> ${item.google_place_id ? 'Sim' : '—'}</p>
-        ${isIncomplete ? `<p><strong>Falta preencher:</strong> ${missingFields.join(' · ')}</p>` : ''}
         ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
-      </div>
-
-      <div class="flex flex-wrap gap-2">
-        <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-2 bg-sage text-cream font-semibold px-4 py-2 rounded-full shadow-sm hover:bg-moss transition">
-          <i data-lucide="pencil" class="w-4 h-4"></i>
-          Editar
-        </button>
-        <button type="button" onclick="copyPlaceDirectLink(${item.id})" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-4 py-2 rounded-full border border-sage shadow-sm hover:bg-sand transition">
-          <i data-lucide="link" class="w-4 h-4"></i>
-          Copiar link
-        </button>
-        <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand shadow-sm hover:bg-sand transition">
-          <i data-lucide="eye-off" class="w-4 h-4"></i>
-          Desativar
-        </button>
+        <div class="flex flex-wrap gap-2 pt-2">
+          <button type="button" onclick="copyPlaceDirectLink(${item.id})" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-4 py-2 rounded-full border border-sage hover:bg-sand transition"><i data-lucide="link" class="w-4 h-4"></i> Copiar link</button>
+          <button type="button" onclick="deactivatePlace(${item.id})" class="inline-flex items-center gap-2 bg-white text-bark font-semibold px-4 py-2 rounded-full border border-sand hover:bg-sand transition"><i data-lucide="eye-off" class="w-4 h-4"></i> Desativar</button>
+        </div>
       </div>
     </article>
   `;
 
+}
+
+function toggleAdminPlaceDetails(id) {
+  const details = document.getElementById(`admin-place-details-${id}`);
+  const button = document.querySelector(`[aria-controls="admin-place-details-${id}"]`);
+  if (!details || !button) return;
+  const willOpen = details.classList.contains('hidden');
+  details.classList.toggle('hidden', !willOpen);
+  button.setAttribute('aria-expanded', String(willOpen));
+  button.innerHTML = `<i data-lucide="${willOpen ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4"></i> ${willOpen ? 'Fechar' : 'Detalhes'}`;
+  lucide.createIcons();
 }
    async function loadAdminChangeReports() {
   if (!currentUser) return;
@@ -4509,7 +4538,9 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
 
     if (error) throw error;
     const rows = data || [];
-    count.textContent = String(rows.length);
+    adminChangeReportsCount = rows.length;
+    count.textContent = String(adminChangeReportsCount);
+    updateAdminActionCount();
 
     if (!rows.length) {
       container.innerHTML = '';
@@ -4584,13 +4615,20 @@ async function reviewChangeReport(id, status) {
 
     if (error) throw error;
 
-    let rows = (data || []).map(normalizePlace);
-    rows = filterAdminItems(rows);
+    const allRows = (data || []).map(normalizePlace);
+    let rows = filterAdminItems(allRows);
 
     const incompleteRows = rows.filter(isPlaceIncomplete);
     const completeRows = rows.filter(item => !isPlaceIncomplete(item));
+    const allIncompleteRows = allRows.filter(isPlaceIncomplete);
 
-    incompleteCountEl.textContent = String(incompleteRows.length);
+    incompleteCountEl.textContent = String(allIncompleteRows.length);
+    const placesCountEl = document.getElementById('admin-places-count');
+    const placesTabCount = document.getElementById('admin-tab-places-count');
+    const qualityTabCount = document.getElementById('admin-tab-quality-count');
+    if (placesCountEl) placesCountEl.textContent = String(allRows.length);
+    if (placesTabCount) placesTabCount.textContent = String(allRows.length - allIncompleteRows.length);
+    if (qualityTabCount) qualityTabCount.textContent = String(allIncompleteRows.length);
 
     if (!incompleteRows.length) {
       incompleteContainer.innerHTML = '';
@@ -4602,7 +4640,7 @@ async function reviewChangeReport(id, status) {
         .join('');
     }
 
-    if (!rows.length) {
+    if (!completeRows.length) {
       container.innerHTML = '';
       empty.classList.remove('hidden');
       lucide.createIcons();
@@ -4611,7 +4649,7 @@ async function reviewChangeReport(id, status) {
 
     empty.classList.add('hidden');
 
-    container.innerHTML = rows
+    container.innerHTML = completeRows
       .map(item => createAdminPlaceCard(item))
       .join('');
 
@@ -5299,6 +5337,7 @@ function showView(view) {
     }
 
     updateAdminCounts();
+    setAdminTab(adminActiveTab);
     loadAdminSuggestions();
     loadAdminChangeReports();
     loadAdminPlaces();
