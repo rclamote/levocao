@@ -2457,9 +2457,13 @@
         });
 
         locations.forEach((loc) => {
-          const fallbackYes = Number(loc.confirmations || 0);
-          confirmationSummaryMap[loc.id] = grouped[loc.id] || {
-            yes: fallbackYes,
+          const initialConfirmations = Number(loc.confirmations || 0);
+          const communityVotes = grouped[loc.id];
+          confirmationSummaryMap[loc.id] = communityVotes ? {
+            ...communityVotes,
+            yes: initialConfirmations + communityVotes.yes
+          } : {
+            yes: initialConfirmations,
             no: 0,
             maybe: 0,
             lastUpdated: null
