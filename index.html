@@ -1536,7 +1536,9 @@
     >
       <div class="rounded-3xl border border-sand bg-white p-5 shadow-[0_18px_50px_rgba(61,44,30,0.22)]">
         <div class="flex items-start gap-3">
-          <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-sand text-2xl" aria-hidden="true">🐶</div>
+          <div class="h-11 w-11 shrink-0 overflow-hidden rounded-full border-2 border-sand bg-sand" aria-hidden="true">
+            <img id="mac-community-prompt" alt="" class="h-full w-full object-cover">
+          </div>
           <div class="min-w-0 flex-1">
             <h2 id="community-prompt-title" class="font-display text-lg font-bold leading-tight">Conheces um sítio onde os cães são bem-vindos?</h2>
             <p id="community-prompt-description" class="mt-1.5 text-sm leading-relaxed text-bark/65">Ajuda-nos a fazer crescer o mapa e partilha-o com a comunidade.</p>
@@ -5414,6 +5416,7 @@ async function reviewChangeReport(id, status) {
     function setMacImage() {
       const nav = document.getElementById('mac-nav');
       const hero = document.getElementById('mac-hero');
+      const communityPrompt = document.getElementById('mac-community-prompt');
       const navWrap = document.getElementById('mac-nav-wrap');
       const heroWrap = document.getElementById('mac-hero-wrap');
 
@@ -5425,6 +5428,10 @@ async function reviewChangeReport(id, status) {
       if (hero) {
         hero.onerror = () => { if (heroWrap) heroWrap.textContent = '🐶'; };
         hero.src = MAC_IMAGE_DATA;
+      }
+
+      if (communityPrompt) {
+        communityPrompt.src = MAC_IMAGE_DATA;
       }
     }
 
