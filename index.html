@@ -1454,6 +1454,28 @@
       </div>
     </div>
 
+    <section class="mb-6 rounded-2xl border border-sand bg-white p-4 shadow-sm">
+      <div class="mb-4">
+        <h3 class="font-display text-lg font-bold">Convite para adicionar locais</h3>
+        <p class="mt-1 text-sm text-bark/50">Comparação simples das duas versões do texto.</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[560px] text-left text-sm">
+          <thead class="text-xs uppercase tracking-wide text-bark/45">
+            <tr>
+              <th class="pb-2 pr-4 font-semibold">Versão</th>
+              <th class="pb-2 px-3 text-right font-semibold">Apresentações</th>
+              <th class="pb-2 px-3 text-right font-semibold">Cliques</th>
+              <th class="pb-2 pl-3 text-right font-semibold">Locais enviados</th>
+            </tr>
+          </thead>
+          <tbody id="admin-prompt-stats" class="divide-y divide-sand">
+            <tr><td colspan="4" class="py-4 text-bark/45">A carregar resultados...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
     <div class="mb-5 overflow-x-auto">
       <div class="inline-flex min-w-full rounded-2xl border border-sand bg-white p-1 shadow-sm" role="tablist" aria-label="Áreas do painel admin">
         <button id="admin-tab-action" type="button" role="tab" onclick="setAdminTab('action')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">A tratar <span id="admin-tab-action-count" class="ml-1 opacity-60">0</span></button>
@@ -1540,8 +1562,8 @@
             <img id="mac-community-prompt" alt="" class="h-full w-full object-cover">
           </div>
           <div class="min-w-0 flex-1">
-            <h2 id="community-prompt-title" class="font-display text-lg font-bold leading-tight">Conheces um sítio onde os cães são bem-vindos?</h2>
-            <p id="community-prompt-description" class="mt-1.5 text-sm leading-relaxed text-bark/65">Ajuda-nos a fazer crescer o mapa e partilha-o com a comunidade.</p>
+            <h2 id="community-prompt-title" class="font-display text-lg font-bold leading-tight"></h2>
+            <p id="community-prompt-description" class="mt-1.5 text-sm leading-relaxed text-bark/65"></p>
           </div>
           <button type="button" onclick="dismissCommunityPrompt()" class="-mr-2 -mt-2 rounded-full p-2 text-bark/45 transition hover:bg-sand hover:text-bark" aria-label="Fechar">
             <i data-lucide="x" class="h-5 w-5"></i>
@@ -1887,6 +1909,8 @@
     };
     const COMMUNITY_PROMPT_STORAGE_KEY = 'levocao_community_prompt_dismissed_at';
     const COMMUNITY_PROMPT_CONTRIBUTED_STORAGE_KEY = 'levocao_community_prompt_contributed_at';
+    const COMMUNITY_PROMPT_VARIANT_STORAGE_KEY = 'levocao_community_prompt_variant';
+    const COMMUNITY_PROMPT_SOURCE_STORAGE_KEY = 'levocao_community_prompt_source_variant';
     const COMMUNITY_PROMPT_DELAY_MS = 40000;
     const COMMUNITY_PROMPT_DISMISS_DAYS = 7;
     const COMMUNITY_PROMPT_CONTRIBUTED_DAYS = 30;
@@ -1910,6 +1934,45 @@
     let adminChangeReportsCount = 0;
     let communityPromptTimer = null;
     let communityPromptShown = false;
+
+    const COMMUNITY_PROMPT_COPY = {
+      A: {
+        label: 'Simples',
+        title: 'Conheces um sítio onde os cães são bem-vindos?',
+        description: 'Ajuda-nos a fazer crescer o mapa e partilha-o com a comunidade.'
+      },
+      B: {
+        label: 'Emotiva',
+        title: 'Ajuda-nos a levar mais cães connosco 🐾',
+        description: 'Conheces um sítio onde eles são bem-vindos? Partilha-o e ajuda esta comunidade a crescer.'
+      }
+    };
+
+    function getCommunityPromptVariant() {
+      try {
+        const storedVariant = localStorage.getItem(COMMUNITY_PROMPT_VARIANT_STORAGE_KEY);
+        if (storedVariant === 'A' || storedVariant === 'B') return storedVariant;
+        const variant = Math.random() < 0.5 ? 'A' : 'B';
+        localStorage.setItem(COMMUNITY_PROMPT_VARIANT_STORAGE_KEY, variant);
+        return variant;
+      } catch (_error) {
+        return Math.random() < 0.5 ? 'A' : 'B';
+      }
+    }
+
+    async function trackCommunityPromptEvent(eventType, variant = getCommunityPromptVariant()) {
+      if (!supabaseClient || !['impression', 'click', 'submission'].includes(eventType)) return;
+      try {
+        const { error } = await supabaseClient.from('community_prompt_events').insert([{
+          visitor_id: getVisitorId(),
+          variant,
+          event_type: eventType
+        }]);
+        if (error) console.warn('Não foi possível registar o evento do convite:', error.message);
+      } catch (error) {
+        console.warn('Não foi possível registar o evento do convite:', error);
+      }
+    }
 
     function getVisibleViewName() {
       return ['home', 'list', 'region', 'detail', 'suggest', 'admin'].find((view) => {
@@ -1967,10 +2030,15 @@
       if (!prompt || communityPromptShown || wasCommunityPromptRecentlyDismissed() || !canShowCommunityPrompt()) return;
 
       communityPromptShown = true;
+      const variant = getCommunityPromptVariant();
+      const copy = COMMUNITY_PROMPT_COPY[variant];
+      document.getElementById('community-prompt-title').textContent = copy.title;
+      document.getElementById('community-prompt-description').textContent = copy.description;
       prompt.setAttribute('aria-hidden', 'false');
       prompt.removeAttribute('inert');
       prompt.classList.add('is-visible');
       lucide.createIcons();
+      trackCommunityPromptEvent('impression', variant);
     }
 
     function hideCommunityPrompt() {
@@ -1987,6 +2055,13 @@
     }
 
     function openSuggestFromCommunityPrompt() {
+      const variant = getCommunityPromptVariant();
+      try {
+        sessionStorage.setItem(COMMUNITY_PROMPT_SOURCE_STORAGE_KEY, variant);
+      } catch (_error) {
+        // O envio continua a funcionar mesmo quando o armazenamento está indisponível.
+      }
+      trackCommunityPromptEvent('click', variant);
       dismissCommunityPrompt();
       showView('suggest');
     }
@@ -2025,7 +2100,48 @@
     }
 
     async function refreshAdmin() {
-      await Promise.all([loadAdminSuggestions(), loadAdminChangeReports(), loadAdminPlaces()]);
+      await Promise.all([loadAdminSuggestions(), loadAdminChangeReports(), loadAdminPlaces(), loadCommunityPromptStats()]);
+    }
+
+    async function loadCommunityPromptStats() {
+      if (!currentUser) return;
+      const container = document.getElementById('admin-prompt-stats');
+      if (!container) return;
+
+      try {
+        const totals = {
+          A: { impression: 0, click: 0, submission: 0 },
+          B: { impression: 0, click: 0, submission: 0 }
+        };
+        const combinations = ['A', 'B'].flatMap((variant) =>
+          ['impression', 'click', 'submission'].map((eventType) => ({ variant, eventType }))
+        );
+        const results = await Promise.all(combinations.map(({ variant, eventType }) =>
+          supabaseClient
+            .from('community_prompt_events')
+            .select('id', { count: 'exact', head: true })
+            .eq('variant', variant)
+            .eq('event_type', eventType)
+        ));
+        results.forEach((result, index) => {
+          if (result.error) throw result.error;
+          const { variant, eventType } = combinations[index];
+          totals[variant][eventType] = result.count || 0;
+        });
+
+        container.innerHTML = ['A', 'B'].map((variant) => {
+          const result = totals[variant];
+          return `<tr>
+            <td class="py-3 pr-4 font-semibold text-bark">${variant} · ${COMMUNITY_PROMPT_COPY[variant].label}</td>
+            <td class="py-3 px-3 text-right tabular-nums">${result.impression}</td>
+            <td class="py-3 px-3 text-right tabular-nums">${result.click}</td>
+            <td class="py-3 pl-3 text-right font-semibold tabular-nums text-sage">${result.submission}</td>
+          </tr>`;
+        }).join('');
+      } catch (error) {
+        console.error('Erro ao carregar resultados do convite:', error);
+        container.innerHTML = '<tr><td colspan="4" class="py-4 text-red-600">Não foi possível carregar os resultados.</td></tr>';
+      }
     }
     let currentFeatureFilters = [];
     let currentGuide = null;
@@ -4485,6 +4601,7 @@
         }
         throw error;
       }
+      return true;
     }
 
     function resetSuggestForm() {
@@ -5518,6 +5635,7 @@ function showView(view) {
     loadAdminSuggestions();
     loadAdminChangeReports();
     loadAdminPlaces();
+    loadCommunityPromptStats();
   }
 
   lucide.createIcons();
@@ -5622,8 +5740,19 @@ function showView(view) {
         suggestForm.addEventListener('submit', async function (e) {
           e.preventDefault();
           try {
-            await submitSuggestion();
+            const submitted = await submitSuggestion();
+            if (!submitted) return;
             rememberCommunityPromptContribution();
+            let sourceVariant = null;
+            try {
+              sourceVariant = sessionStorage.getItem(COMMUNITY_PROMPT_SOURCE_STORAGE_KEY);
+              sessionStorage.removeItem(COMMUNITY_PROMPT_SOURCE_STORAGE_KEY);
+            } catch (_error) {
+              // A sugestão já foi enviada; o contador é apenas complementar.
+            }
+            if (sourceVariant === 'A' || sourceVariant === 'B') {
+              trackCommunityPromptEvent('submission', sourceVariant);
+            }
             suggestForm.reset();
             clearGooglePlaceHiddenFields();
             setSuggestPlaceHelp('');
