@@ -17,6 +17,10 @@
       "destination": "/api/guide?slug=onde-levar-o-cao-no-algarve"
     },
     {
+      "source": "/onde-levar-o-cao-no-alentejo",
+      "destination": "/api/guide?slug=onde-levar-o-cao-no-alentejo"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     },

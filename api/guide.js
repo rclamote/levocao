@@ -11,6 +11,14 @@ const GUIDES = {
     heading: 'Onde levar o cão no Algarve',
     intro: 'Descobre restaurantes, praias, alojamentos, passeios e experiências onde podes ir com o teu cão no Algarve. Informação prática, simples e pensada para evitar surpresas.',
     resultsTitle: 'Locais no Algarve'
+  },
+  'onde-levar-o-cao-no-alentejo': {
+    title: 'Onde levar o cão no Alentejo | Locais pet-friendly',
+    description: 'Descobre onde levar o cão no Alentejo: alojamentos, restaurantes, passeios e experiências pet-friendly, com informação prática da comunidade.',
+    eyebrow: 'Guia pet-friendly no Alentejo',
+    heading: 'Onde levar o cão no Alentejo',
+    intro: 'Descobre alojamentos, restaurantes, passeios e experiências para ires com o teu cão no Alentejo, com informação prática reunida pela comunidade.',
+    resultsTitle: 'Locais no Alentejo'
   }
 };
 
