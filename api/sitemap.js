@@ -42,6 +42,8 @@ module.exports = async function handler(_req, res) {
     const places = await fetchPlaces();
     const entries = [
       `  <url><loc>${SITE_URL}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
+      `  <url><loc>${SITE_URL}/onde-levar-o-cao-no-algarve</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+      `  <url><loc>${SITE_URL}/onde-levar-o-cao-no-alentejo</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
       ...places.map((place) => {
         const slug = `${slugify(place.name || 'local')}-${place.id}`;
         const lastmod = place.created_at ? `<lastmod>${escapeXml(String(place.created_at).slice(0, 10))}</lastmod>` : '';
