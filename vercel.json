@@ -2,12 +2,19 @@
   "functions": {
     "api/local.js": {
       "includeFiles": "index.html"
+    },
+    "api/guide.js": {
+      "includeFiles": "index.html"
     }
   },
   "rewrites": [
     {
       "source": "/local/:slug",
       "destination": "/api/local?slug=:slug"
+    },
+    {
+      "source": "/onde-levar-o-cao-no-algarve",
+      "destination": "/api/guide?slug=onde-levar-o-cao-no-algarve"
     },
     {
       "source": "/sitemap.xml",
