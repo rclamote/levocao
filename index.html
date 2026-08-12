@@ -1,15 +1,6 @@
 <!doctype html>
 <html lang="pt" class="h-full">
 <head>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0GW8S5DEE2"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-0GW8S5DEE2');
-  </script>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -39,20 +30,6 @@
   <script src="https://cdn.tailwindcss.com/3.4.17"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script>
-    window.googlePlacesReady = false;
-    window.googlePlacesAutocomplete = null;
-    window.googlePlacesLibrary = null;
-    window.googleAutocompleteSessionToken = null;
-
-    window.initGooglePlaces = function () {
-      window.googlePlacesReady = true;
-      if (typeof window.setupGooglePlacesAutocomplete === 'function') {
-        window.setupGooglePlacesAutocomplete();
-      }
-    };
-  </script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQnx3CcaZ5cCZDfyqp1ldOMVS72JEqM44&v=weekly&libraries=places&callback=initGooglePlaces"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet" />
@@ -1581,6 +1558,96 @@
       </div>
     </aside>
 
+    <aside
+      id="cookie-consent"
+      class="hidden fixed inset-x-3 bottom-3 z-[110] mx-auto max-w-3xl rounded-3xl border border-sand bg-white p-5 shadow-[0_18px_60px_rgba(61,44,30,0.28)] sm:bottom-5 sm:p-6"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="cookie-consent-title"
+      aria-describedby="cookie-consent-description"
+    >
+      <div class="flex items-start gap-3">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sand text-xl" aria-hidden="true">🐾</span>
+        <div class="min-w-0 flex-1">
+          <h2 id="cookie-consent-title" class="font-display text-lg font-bold text-bark">A tua privacidade importa</h2>
+          <p id="cookie-consent-description" class="mt-1.5 text-sm leading-relaxed text-bark/65">
+            Usamos armazenamento necessário para o site funcionar. Com a tua autorização, usamos Google Analytics e medição A/B para perceber como o Levo o Cão é utilizado e melhorar o projeto.
+          </p>
+        </div>
+      </div>
+      <div class="mt-4 grid grid-cols-2 gap-2 sm:flex sm:items-center sm:justify-end">
+        <button type="button" onclick="openPrivacyModal()" class="col-span-2 min-h-11 rounded-full px-4 py-2.5 text-sm font-semibold text-sage transition hover:bg-sand sm:col-span-1 sm:mr-auto">
+          Saber mais
+        </button>
+        <button type="button" onclick="setAnalyticsConsent(false)" class="min-h-11 rounded-full bg-sand px-5 py-2.5 text-sm font-semibold text-bark transition hover:bg-[#ebe2d5] active:scale-95">
+          Recusar
+        </button>
+        <button type="button" onclick="setAnalyticsConsent(true)" class="min-h-11 rounded-full bg-sage px-5 py-2.5 text-sm font-semibold text-cream transition hover:bg-moss active:scale-95">
+          Aceitar
+        </button>
+      </div>
+    </aside>
+
+    <div id="privacy-modal" class="hidden fixed inset-0 z-[120] bg-black/45 p-3 sm:p-5" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title" aria-hidden="true">
+      <div class="mx-auto flex max-h-[94vh] max-w-2xl flex-col overflow-hidden rounded-3xl border border-sand bg-cream shadow-2xl">
+        <div class="flex items-start justify-between gap-4 border-b border-sand bg-white p-5 sm:p-6">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.14em] text-sage">Levo o Cão</p>
+            <h2 id="privacy-modal-title" class="mt-1 font-display text-2xl font-bold text-bark">Cookies e Privacidade</h2>
+            <p class="mt-1 text-xs text-bark/45">Última atualização: 12 de agosto de 2026</p>
+          </div>
+          <button id="privacy-modal-close" type="button" onclick="closePrivacyModal()" class="-mr-2 -mt-2 rounded-full p-2 text-bark/50 transition hover:bg-sand hover:text-bark" aria-label="Fechar">
+            <i data-lucide="x" class="h-5 w-5"></i>
+          </button>
+        </div>
+
+        <div class="space-y-6 overflow-y-auto p-5 text-sm leading-relaxed text-bark/75 sm:p-6">
+          <section>
+            <h3 class="font-display text-lg font-bold text-bark">1. Quem é o responsável?</h3>
+            <p class="mt-2">O responsável pelo tratamento dos dados do Levo o Cão é <strong class="text-bark">Rui Clamote</strong>. Para qualquer questão sobre privacidade ou para exercer os teus direitos, escreve para <a href="mailto:levocao.pt@gmail.com" class="font-semibold text-sage underline decoration-sage/30 underline-offset-2">levocao.pt@gmail.com</a>.</p>
+          </section>
+
+          <section>
+            <h3 class="font-display text-lg font-bold text-bark">2. O que guardamos para o site funcionar?</h3>
+            <div class="mt-2 space-y-2">
+              <p><strong class="text-bark">Escolha de privacidade:</strong> guardamos no navegador se aceitaste ou recusaste a análise, durante 180 dias, para não repetirmos o aviso em cada visita.</p>
+              <p><strong class="text-bark">Confirmações da comunidade:</strong> quando confirmas um local, criamos um identificador aleatório no navegador. Não contém nome nem email e serve para impedir votos repetidos, permitir correções e novas confirmações.</p>
+              <p><strong class="text-bark">Convite para adicionar locais:</strong> guardamos durante 7 dias que dispensaste o convite ou durante 30 dias que contribuíste, para não te voltar a interromper demasiado cedo.</p>
+              <p><strong class="text-bark">Administração:</strong> a sessão de acesso ao painel é guardada apenas no navegador do administrador autenticado.</p>
+            </div>
+          </section>
+
+          <section>
+            <h3 class="font-display text-lg font-bold text-bark">3. Análise opcional</h3>
+            <p class="mt-2">Só depois de escolheres <strong class="text-bark">Aceitar</strong> carregamos o Google Analytics e medimos as versões A/B do convite para adicionar locais. Estes serviços podem tratar dados técnicos, como páginas consultadas, tipo de dispositivo, navegador, endereço IP e identificadores aleatórios.</p>
+            <p class="mt-2">O Google Analytics pode criar os cookies <code class="rounded bg-sand px-1 py-0.5 text-xs">_ga</code> e <code class="rounded bg-sand px-1 py-0.5 text-xs">_ga_*</code>, normalmente com duração até 2 anos. A variante e o identificador do teste A/B ficam no armazenamento local enquanto a autorização for válida.</p>
+            <p class="mt-2">Podes aceitar, recusar ou mudar de decisão a qualquer momento. A recusa não limita nenhuma funcionalidade do site.</p>
+          </section>
+
+          <section>
+            <h3 class="font-display text-lg font-bold text-bark">4. Sugestões e serviços externos</h3>
+            <p class="mt-2">As sugestões de locais não pedem o teu nome ou email. Quando abres o formulário de sugestão, carregamos o Google Places para permitir pesquisar um estabelecimento; o texto pesquisado e dados técnicos da ligação são então enviados à Google. Se nos contactares por email, usamos a mensagem e o endereço apenas para responder e acompanhar o assunto.</p>
+            <p class="mt-2">O site usa a Vercel para alojamento e a Supabase para base de dados e autenticação. Estes fornecedores podem tratar registos técnicos necessários à segurança e funcionamento do serviço. Consulta as políticas da <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="font-semibold text-sage underline decoration-sage/30 underline-offset-2">Vercel</a>, da <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" class="font-semibold text-sage underline decoration-sage/30 underline-offset-2">Supabase</a> e da <a href="https://policies.google.com/privacy?hl=pt-PT" target="_blank" rel="noopener noreferrer" class="font-semibold text-sage underline decoration-sage/30 underline-offset-2">Google</a>.</p>
+          </section>
+
+          <section>
+            <h3 class="font-display text-lg font-bold text-bark">5. Base legal, conservação e direitos</h3>
+            <p class="mt-2">A análise assenta no teu consentimento. Os restantes tratamentos limitam-se ao necessário para prestar as funcionalidades pedidas, proteger o site e responder a contactos. Conservamos os dados apenas durante o período necessário para cada finalidade ou para cumprir obrigações legais.</p>
+            <p class="mt-2">Podes pedir acesso, correção, apagamento, limitação ou portabilidade dos teus dados, opor-te ao tratamento e retirar o consentimento. Também podes apresentar uma reclamação à <a href="https://www.cnpd.pt/" target="_blank" rel="noopener noreferrer" class="font-semibold text-sage underline decoration-sage/30 underline-offset-2">Comissão Nacional de Proteção de Dados</a>.</p>
+          </section>
+
+          <section class="rounded-2xl border border-sand bg-white p-4">
+            <p class="font-semibold text-bark">Preferência atual</p>
+            <p id="cookie-preference-status" class="mt-1 text-bark/60">Ainda não escolheste.</p>
+            <div class="mt-4 grid grid-cols-2 gap-2">
+              <button type="button" onclick="setAnalyticsConsent(false)" class="min-h-11 rounded-full bg-sand px-4 py-2.5 font-semibold text-bark transition hover:bg-[#ebe2d5] active:scale-95">Recusar análise</button>
+              <button type="button" onclick="setAnalyticsConsent(true)" class="min-h-11 rounded-full bg-sage px-4 py-2.5 font-semibold text-cream transition hover:bg-moss active:scale-95">Aceitar análise</button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
 
     <div id="change-report-modal" class="hidden fixed inset-0 z-[90] bg-black/40 p-4">
       <div class="max-w-lg mx-auto bg-cream rounded-3xl border border-sand shadow-xl mt-16">
@@ -1858,6 +1925,7 @@
           </div>
           <div class="flex flex-col gap-2 text-sm">
             <a href="#" onclick="event.preventDefault(); showView('suggest')" class="hover:text-cream transition">Sugerir local</a>
+            <button type="button" onclick="openPrivacyModal()" class="w-fit text-left hover:text-cream transition">Cookies e privacidade</button>
             <a href="mailto:levocao.pt@gmail.com" class="hover:text-cream transition">levocao.pt@gmail.com</a>
             <a href="https://instagram.com/levocao.pt" target="_blank" rel="noopener noreferrer" class="hover:text-cream transition flex items-center gap-1">
               <i data-lucide="instagram" class="w-4 h-4"></i> Instagram
@@ -1874,6 +1942,15 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lemV1eGZvYmx5b2RqZmFvb2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjcxNDEsImV4cCI6MjA5MTUwMzE0MX0.UCzhiqF1dSKLou-Ma9RUkYepn0tc1LK_OsfS_80f-94';
     const MAC_IMAGE_DATA = '/mac.jpg';
     const PLACE_PHOTOS_BUCKET = 'place-photos';
+    const GOOGLE_ANALYTICS_ID = 'G-0GW8S5DEE2';
+    const GOOGLE_PLACES_API_KEY = 'AIzaSyAQnx3CcaZ5cCZDfyqp1ldOMVS72JEqM44';
+    const COOKIE_CONSENT_STORAGE_KEY = 'levocao_cookie_consent';
+    const COOKIE_CONSENT_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
+    const COOKIE_CONSENT_VERSION = 1;
+
+    window.googlePlacesReady = false;
+    window.googlePlacesLibrary = null;
+    window.googleAutocompleteSessionToken = null;
 
     const FEATURE_OPTIONS = [
       '🐾 Muito pet-friendly',
@@ -1911,6 +1988,7 @@
     const COMMUNITY_PROMPT_CONTRIBUTED_STORAGE_KEY = 'levocao_community_prompt_contributed_at';
     const COMMUNITY_PROMPT_VARIANT_STORAGE_KEY = 'levocao_community_prompt_variant';
     const COMMUNITY_PROMPT_SOURCE_STORAGE_KEY = 'levocao_community_prompt_source_variant';
+    const ANALYTICS_VISITOR_ID_STORAGE_KEY = 'levocao_analytics_visitor_id';
     const COMMUNITY_PROMPT_DELAY_MS = 40000;
     const COMMUNITY_PROMPT_DISMISS_DAYS = 7;
     const COMMUNITY_PROMPT_CONTRIBUTED_DAYS = 30;
@@ -1934,6 +2012,213 @@
     let adminChangeReportsCount = 0;
     let communityPromptTimer = null;
     let communityPromptShown = false;
+    let googlePlacesScriptPromise = null;
+    let sessionAnalyticsConsent = null;
+
+    function readCookieConsent() {
+      try {
+        const raw = localStorage.getItem(COOKIE_CONSENT_STORAGE_KEY);
+        if (!raw) return null;
+        const consent = JSON.parse(raw);
+        const isValid = consent
+          && consent.version === COOKIE_CONSENT_VERSION
+          && typeof consent.analytics === 'boolean'
+          && Number.isFinite(consent.savedAt)
+          && Date.now() - consent.savedAt < COOKIE_CONSENT_MAX_AGE_MS;
+
+        if (!isValid) {
+          localStorage.removeItem(COOKIE_CONSENT_STORAGE_KEY);
+          return null;
+        }
+        return consent;
+      } catch (_error) {
+        return null;
+      }
+    }
+
+    function hasAnalyticsConsent() {
+      if (typeof sessionAnalyticsConsent === 'boolean') return sessionAnalyticsConsent;
+      return readCookieConsent()?.analytics === true;
+    }
+
+    function showCookieBanner() {
+      const banner = document.getElementById('cookie-consent');
+      if (!banner) return;
+      hideCommunityPrompt();
+      banner.classList.remove('hidden');
+    }
+
+    function hideCookieBanner() {
+      document.getElementById('cookie-consent')?.classList.add('hidden');
+    }
+
+    function isCookieBannerVisible() {
+      const banner = document.getElementById('cookie-consent');
+      return Boolean(banner && !banner.classList.contains('hidden'));
+    }
+
+    function updateCookiePreferenceStatus() {
+      const status = document.getElementById('cookie-preference-status');
+      if (!status) return;
+      const consent = readCookieConsent();
+      status.textContent = consent === null
+        ? 'Ainda não escolheste.'
+        : consent.analytics
+          ? 'Análise autorizada. Podes retirar a autorização quando quiseres.'
+          : 'Análise recusada. O site continua totalmente funcional.';
+    }
+
+    function openPrivacyModal() {
+      const modal = document.getElementById('privacy-modal');
+      if (!modal) return;
+      hideCommunityPrompt();
+      updateCookiePreferenceStatus();
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('overflow-hidden');
+      lucide.createIcons();
+      window.setTimeout(() => document.getElementById('privacy-modal-close')?.focus(), 0);
+    }
+
+    function closePrivacyModal() {
+      const modal = document.getElementById('privacy-modal');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    function clearGoogleAnalyticsCookies() {
+      const cookieNames = document.cookie
+        .split(';')
+        .map((item) => item.split('=')[0].trim())
+        .filter((name) => name === '_ga' || name.startsWith('_ga_'));
+
+      cookieNames.forEach((name) => {
+        document.cookie = `${name}=; Max-Age=0; path=/; SameSite=Lax`;
+        document.cookie = `${name}=; Max-Age=0; path=/; domain=.levocao.pt; SameSite=Lax`;
+      });
+    }
+
+    function disableGoogleAnalytics() {
+      window[`ga-disable-${GOOGLE_ANALYTICS_ID}`] = true;
+      if (typeof window.gtag === 'function') {
+        window.gtag('consent', 'update', { analytics_storage: 'denied' });
+      }
+      clearGoogleAnalyticsCookies();
+    }
+
+    function loadGoogleAnalytics() {
+      window[`ga-disable-${GOOGLE_ANALYTICS_ID}`] = false;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'default', { analytics_storage: 'granted' });
+
+      if (document.querySelector('script[data-levocao-analytics]')) {
+        window.gtag('consent', 'update', { analytics_storage: 'granted' });
+        window.gtag('config', GOOGLE_ANALYTICS_ID);
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.dataset.levocaoAnalytics = 'true';
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GOOGLE_ANALYTICS_ID)}`;
+      document.head.appendChild(script);
+      window.gtag('js', new Date());
+      window.gtag('config', GOOGLE_ANALYTICS_ID);
+    }
+
+    function clearOptionalAnalyticsStorage() {
+      try {
+        localStorage.removeItem(COMMUNITY_PROMPT_VARIANT_STORAGE_KEY);
+        localStorage.removeItem(ANALYTICS_VISITOR_ID_STORAGE_KEY);
+        sessionStorage.removeItem(COMMUNITY_PROMPT_SOURCE_STORAGE_KEY);
+      } catch (_error) {
+        // A preferência continua válida mesmo quando o navegador bloqueia o armazenamento.
+      }
+    }
+
+    function setAnalyticsConsent(allowed) {
+      sessionAnalyticsConsent = Boolean(allowed);
+      try {
+        localStorage.setItem(COOKIE_CONSENT_STORAGE_KEY, JSON.stringify({
+          version: COOKIE_CONSENT_VERSION,
+          analytics: Boolean(allowed),
+          savedAt: Date.now()
+        }));
+      } catch (_error) {
+        // Sem armazenamento, a escolha aplica-se à sessão atual e o aviso poderá reaparecer depois.
+      }
+
+      if (allowed) {
+        loadGoogleAnalytics();
+      } else {
+        clearOptionalAnalyticsStorage();
+        disableGoogleAnalytics();
+      }
+
+      hideCookieBanner();
+      closePrivacyModal();
+      updateCookiePreferenceStatus();
+      scheduleCommunityPrompt();
+    }
+
+    function initCookieConsent() {
+      const consent = readCookieConsent();
+      if (consent === null) {
+        sessionAnalyticsConsent = false;
+        clearOptionalAnalyticsStorage();
+        disableGoogleAnalytics();
+        showCookieBanner();
+        return null;
+      }
+
+      sessionAnalyticsConsent = consent.analytics;
+      hideCookieBanner();
+      if (consent.analytics) loadGoogleAnalytics();
+      else disableGoogleAnalytics();
+      return consent;
+    }
+
+    function getAnalyticsVisitorId() {
+      if (!hasAnalyticsConsent()) return null;
+      try {
+        let id = localStorage.getItem(ANALYTICS_VISITOR_ID_STORAGE_KEY);
+        if (!id) {
+          id = crypto.randomUUID ? crypto.randomUUID() : `analytics-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+          localStorage.setItem(ANALYTICS_VISITOR_ID_STORAGE_KEY, id);
+        }
+        return id;
+      } catch (_error) {
+        return null;
+      }
+    }
+
+    function loadGooglePlaces() {
+      if (window.google?.maps?.importLibrary) return Promise.resolve();
+      if (googlePlacesScriptPromise) return googlePlacesScriptPromise;
+
+      googlePlacesScriptPromise = new Promise((resolve, reject) => {
+        window.initGooglePlaces = function () {
+          window.googlePlacesReady = true;
+          resolve();
+        };
+
+        const script = document.createElement('script');
+        script.async = true;
+        script.defer = true;
+        script.dataset.levocaoGooglePlaces = 'true';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(GOOGLE_PLACES_API_KEY)}&v=weekly&libraries=places&callback=initGooglePlaces`;
+        script.onerror = () => {
+          googlePlacesScriptPromise = null;
+          reject(new Error('Não foi possível carregar o Google Places.'));
+        };
+        document.head.appendChild(script);
+      });
+
+      return googlePlacesScriptPromise;
+    }
 
     const COMMUNITY_PROMPT_COPY = {
       A: {
@@ -1949,6 +2234,7 @@
     };
 
     function getCommunityPromptVariant() {
+      if (!hasAnalyticsConsent()) return 'B';
       try {
         const storedVariant = localStorage.getItem(COMMUNITY_PROMPT_VARIANT_STORAGE_KEY);
         if (storedVariant === 'A' || storedVariant === 'B') return storedVariant;
@@ -1961,10 +2247,12 @@
     }
 
     async function trackCommunityPromptEvent(eventType, variant = getCommunityPromptVariant()) {
-      if (!supabaseClient || !['impression', 'click', 'submission'].includes(eventType)) return;
+      if (!hasAnalyticsConsent() || !supabaseClient || !['impression', 'click', 'submission'].includes(eventType)) return;
+      const analyticsVisitorId = getAnalyticsVisitorId();
+      if (!analyticsVisitorId) return;
       try {
         const { error } = await supabaseClient.from('community_prompt_events').insert([{
-          visitor_id: getVisitorId(),
+          visitor_id: analyticsVisitorId,
           variant,
           event_type: eventType
         }]);
@@ -2016,13 +2304,16 @@
       const loginModal = document.getElementById('login-modal');
       const editModal = document.getElementById('edit-place-modal');
       const changeReportModal = document.getElementById('change-report-modal');
+      const privacyModal = document.getElementById('privacy-modal');
 
       return !currentUser
         && document.visibilityState === 'visible'
+        && !isCookieBannerVisible()
         && publicViews.includes(getVisibleViewName())
         && (!loginModal || loginModal.classList.contains('hidden'))
         && (!editModal || editModal.classList.contains('hidden'))
-        && (!changeReportModal || changeReportModal.classList.contains('hidden'));
+        && (!changeReportModal || changeReportModal.classList.contains('hidden'))
+        && (!privacyModal || privacyModal.classList.contains('hidden'));
     }
 
     function showCommunityPrompt() {
@@ -2056,10 +2347,12 @@
 
     function openSuggestFromCommunityPrompt() {
       const variant = getCommunityPromptVariant();
-      try {
-        sessionStorage.setItem(COMMUNITY_PROMPT_SOURCE_STORAGE_KEY, variant);
-      } catch (_error) {
-        // O envio continua a funcionar mesmo quando o armazenamento está indisponível.
+      if (hasAnalyticsConsent()) {
+        try {
+          sessionStorage.setItem(COMMUNITY_PROMPT_SOURCE_STORAGE_KEY, variant);
+        } catch (_error) {
+          // O envio continua a funcionar mesmo quando o armazenamento está indisponível.
+        }
       }
       trackCommunityPromptEvent('click', variant);
       dismissCommunityPrompt();
@@ -2206,13 +2499,17 @@
       `).join('');
     }
 
-    function getVisitorId() {
-      let id = localStorage.getItem(VISITOR_ID_STORAGE_KEY);
-      if (!id) {
-        id = crypto.randomUUID ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-        localStorage.setItem(VISITOR_ID_STORAGE_KEY, id);
+    function getVisitorId(createIfMissing = true) {
+      try {
+        let id = localStorage.getItem(VISITOR_ID_STORAGE_KEY);
+        if (!id && createIfMissing) {
+          id = crypto.randomUUID ? crypto.randomUUID() : `visitor-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+          localStorage.setItem(VISITOR_ID_STORAGE_KEY, id);
+        }
+        return id || null;
+      } catch (_error) {
+        return null;
       }
-      return id;
     }
 
     function getDogStatusMeta(status) {
@@ -2767,7 +3064,8 @@
       if (!locations.length) return;
 
       try {
-        const visitorId = getVisitorId();
+        const visitorId = getVisitorId(false);
+        if (!visitorId) return;
         const placeIds = locations.map(loc => loc.id);
 
         const { data, error } = await supabaseClient
@@ -4100,6 +4398,10 @@
       if (!loc) return;
 
       const visitorId = getVisitorId();
+      if (!visitorId) {
+        alert('O navegador não permitiu guardar a confirmação. Verifica as definições de armazenamento e tenta novamente.');
+        return;
+      }
       const existing = userVoteMap[id];
       const nowIso = new Date().toISOString();
 
@@ -5617,7 +5919,12 @@ function showView(view) {
   if (view === 'home') renderHomeSections();
 
   if (view === 'suggest') {
-    setupGooglePlacesAutocomplete();
+    loadGooglePlaces()
+      .then(setupGooglePlacesAutocomplete)
+      .catch((error) => {
+        console.error('Erro ao carregar o Google Places:', error);
+        setSuggestPlaceHelp('A pesquisa automática não carregou. Podes preencher o local manualmente.', true);
+      });
   }
 
   if (view === 'admin') {
@@ -5644,6 +5951,7 @@ function showView(view) {
       const input = document.getElementById('search-input');
       const box = document.getElementById('search-suggestions');
       const loginModal = document.getElementById('login-modal');
+      const privacyModal = document.getElementById('privacy-modal');
       const googleInput = document.getElementById('sg-place-search');
       const googleSuggestions = document.getElementById('sg-google-suggestions');
 
@@ -5657,6 +5965,10 @@ function showView(view) {
 
       if (loginModal && e.target === loginModal) {
         closeLoginModal();
+      }
+
+      if (privacyModal && e.target === privacyModal) {
+        closePrivacyModal();
       }
 
       const changeReportModal = document.getElementById('change-report-modal');
@@ -5673,6 +5985,7 @@ function showView(view) {
         closeLoginModal();
         closeEditPlaceModal();
         closeChangeReportModal();
+        closePrivacyModal();
       }
 
       const targetTag = String(e.target?.tagName || '').toLowerCase();
@@ -5701,7 +6014,8 @@ function showView(view) {
 
     async function initApp() {
       document.getElementById('year').textContent = String(new Date().getFullYear());
-      scheduleCommunityPrompt();
+      const cookieConsent = initCookieConsent();
+      if (cookieConsent !== null) scheduleCommunityPrompt();
 
       const detailView = document.getElementById('view-detail');
       if (detailView) {
@@ -5716,7 +6030,6 @@ function showView(view) {
       buildFeaturesCheckboxes('sg-features', 'sg-feature');
       buildFeaturesCheckboxes('edit-features', 'edit-feature');
 
-      getVisitorId();
       setMacImage();
       updateResultsBarVisibility('home');
       lucide.createIcons();
