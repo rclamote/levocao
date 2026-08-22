@@ -19,6 +19,14 @@ const GUIDES = {
     heading: 'Onde levar o cão no Alentejo',
     intro: 'Descobre alojamentos, restaurantes, passeios e experiências para ires com o teu cão no Alentejo, com informação prática reunida pela comunidade.',
     resultsTitle: 'Locais no Alentejo'
+  },
+  'onde-levar-o-cao-em-lisboa': {
+    title: 'Onde levar o cão em Lisboa | Locais pet-friendly',
+    description: 'Descobre onde levar o cão em Lisboa: restaurantes, cafés, alojamentos, parques e passeios, com regras e condições práticas para cada local.',
+    eyebrow: 'Guia pet-friendly em Lisboa',
+    heading: 'Onde levar o cão em Lisboa',
+    intro: 'Procuras onde levar o cão em Lisboa? Descobre restaurantes, cafés, alojamentos, parques, passeios e outros locais pet-friendly. Sempre que a informação está disponível, indicamos as condições de acesso e se foram confirmadas pelo estabelecimento ou pela comunidade.',
+    resultsTitle: 'Locais em Lisboa'
   }
 };
 

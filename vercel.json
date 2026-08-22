@@ -21,6 +21,10 @@
       "destination": "/api/guide?slug=onde-levar-o-cao-no-alentejo"
     },
     {
+      "source": "/onde-levar-o-cao-em-lisboa",
+      "destination": "/api/guide?slug=onde-levar-o-cao-em-lisboa"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
     },
