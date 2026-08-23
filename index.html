@@ -1049,20 +1049,25 @@
           <div class="flex items-center justify-between mb-4 gap-3">
             <div>
               <h2 class="font-display text-xl font-bold">Guias por zona</h2>
-              <p class="text-sm text-bark/55 mt-1">Começa por uma região e descobre locais para ires com o teu cão.</p>
+              <p class="text-sm text-bark/55 mt-1">Começa por uma zona e descobre locais para ires com o teu cão.</p>
             </div>
           </div>
-          <div class="grid sm:grid-cols-3 gap-3">
-            <button type="button" onclick="openGuideBySlug('onde-levar-o-cao-no-algarve')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <a href="/onde-levar-o-cao-no-algarve" onclick="openGuideBySlug('onde-levar-o-cao-no-algarve'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
               <p class="text-2xl mb-2">🌊</p>
               <p class="font-semibold text-bark">Onde levar o cão no Algarve</p>
               <p class="text-sm text-bark/55 mt-1">Praias, restaurantes, alojamentos e passeios.</p>
-            </button>
-            <button type="button" onclick="openGuideBySlug('onde-levar-o-cao-no-alentejo')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+            </a>
+            <a href="/onde-levar-o-cao-no-alentejo" onclick="openGuideBySlug('onde-levar-o-cao-no-alentejo'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
               <p class="text-2xl mb-2">🌿</p>
               <p class="font-semibold text-bark">Onde levar o cão no Alentejo</p>
               <p class="text-sm text-bark/55 mt-1">Escapadinhas, alojamentos e espaços tranquilos.</p>
-            </button>
+            </a>
+            <a href="/onde-levar-o-cao-em-lisboa" onclick="openGuideBySlug('onde-levar-o-cao-em-lisboa'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">🏙️</p>
+              <p class="font-semibold text-bark">Onde levar o cão em Lisboa</p>
+              <p class="text-sm text-bark/55 mt-1">Restaurantes, cafés, parques e passeios.</p>
+            </a>
             <button type="button" onclick="showView('list')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
               <p class="text-2xl mb-2">📍</p>
               <p class="font-semibold text-bark">Ver todos os locais</p>
@@ -2471,6 +2476,14 @@
         eyebrow: 'Guia pet-friendly no Alentejo',
         intro: 'Descobre alojamentos, restaurantes, passeios e experiências para ires com o teu cão no Alentejo, com informação prática reunida pela comunidade.',
         districts: ['Beja', 'Évora', 'Portalegre']
+      },
+      {
+        slug: 'onde-levar-o-cao-em-lisboa',
+        title: 'Onde levar o cão em Lisboa',
+        eyebrow: 'Guia pet-friendly em Lisboa',
+        intro: 'Procuras onde levar o cão em Lisboa? Descobre restaurantes, cafés, alojamentos, parques, passeios e outros locais pet-friendly. Sempre que a informação está disponível, indicamos as condições de acesso e se foram confirmadas pelo estabelecimento ou pela comunidade.',
+        districts: ['Lisboa'],
+        municipalities: ['Lisboa']
       }
     ];
 
@@ -2511,9 +2524,11 @@
     function getGuideLocations(guide = currentGuide, category = currentGuideCategory) {
       if (!guide) return [];
       const districts = Array.isArray(guide.districts) ? guide.districts : [];
+      const municipalities = Array.isArray(guide.municipalities) ? guide.municipalities : [];
 
       return locations
-        .filter((loc) => districts.includes(loc.district))
+        .filter((loc) => !districts.length || districts.includes(loc.district))
+        .filter((loc) => !municipalities.length || municipalities.includes(loc.municipality))
         .filter((loc) => !category || loc.displayType === category)
         .slice()
         .sort((a, b) => {
@@ -2621,6 +2636,9 @@
       } else {
         currentDistrictFilter = '';
         currentSearch = currentGuide.title.toLowerCase().includes('alentejo') ? 'alentejo' : '';
+      }
+      if (Array.isArray(currentGuide.municipalities) && currentGuide.municipalities.length === 1) {
+        currentMunicipalityFilter = currentGuide.municipalities[0];
       }
 
       const input = document.getElementById('search-input');
