@@ -3748,6 +3748,11 @@
       if (event.key === 'Enter') {
         event.preventDefault();
 
+        if (activeSuggestionIndex >= 0 && suggestions[activeSuggestionIndex]) {
+          selectSuggestion(suggestions[activeSuggestionIndex].loc.id);
+          return;
+        }
+
         const matchedZone = findLocationByQuery(input.value);
         if (matchedZone) {
           currentSearch = '';
@@ -3766,9 +3771,7 @@
       if (!loc) return;
 
       clearSearchState();
-      applyZoneFiltersFromLocation(loc);
-      showView('list');
-      renderCards('cards-list', getFiltered());
+      showDetail(loc.id, { navigationIds: getDefaultDetailNavigationIds() });
     }
 
 
