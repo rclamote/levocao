@@ -1774,6 +1774,54 @@
             <input id="edit-website" type="url" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
           </div>
 
+          <section id="edit-whatsapp-section" class="rounded-2xl border border-sage/25 bg-sage/5 p-4 space-y-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="font-display text-lg font-bold text-bark">Contacto WhatsApp</p>
+                <p class="mt-1 text-xs text-bark/55">Piloto para os primeiros negócios. O contacto só aparece no site enquanto estiver ativo.</p>
+              </div>
+              <span id="edit-whatsapp-status" class="rounded-full bg-white px-3 py-1 text-xs font-semibold text-bark/55 ring-1 ring-sand">Sem contacto</span>
+            </div>
+
+            <label class="flex items-start gap-3 cursor-pointer">
+              <input id="edit-whatsapp-enabled" type="checkbox" class="mt-1 h-4 w-4 accent-[#5B7553]" />
+              <span>
+                <strong class="block text-sm text-bark">Mostrar botão na página do local</strong>
+                <span class="block text-xs text-bark/50 mt-1">Ativa apenas depois de o negócio autorizar a publicação do contacto.</span>
+              </span>
+            </label>
+
+            <div>
+              <label for="edit-whatsapp-number" class="block text-sm font-medium mb-1">Número de WhatsApp</label>
+              <input id="edit-whatsapp-number" type="tel" inputmode="tel" autocomplete="off" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: +351 912 345 678" />
+              <p class="mt-1 text-xs text-bark/45">Para números portugueses, podes escrever apenas os 9 algarismos.</p>
+            </div>
+
+            <div class="grid gap-3 sm:grid-cols-3">
+              <div>
+                <label for="edit-whatsapp-access-type" class="block text-sm font-medium mb-1">Tipo de acesso</label>
+                <select id="edit-whatsapp-access-type" class="w-full px-3 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-sm">
+                  <option value="pilot">Piloto gratuito</option>
+                  <option value="gift">Oferta</option>
+                  <option value="paid">Pago</option>
+                </select>
+              </div>
+              <div>
+                <label for="edit-whatsapp-active-from" class="block text-sm font-medium mb-1">Início</label>
+                <input id="edit-whatsapp-active-from" type="date" class="w-full px-3 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-sm" />
+              </div>
+              <div>
+                <label for="edit-whatsapp-active-until" class="block text-sm font-medium mb-1">Fim opcional</label>
+                <input id="edit-whatsapp-active-until" type="date" class="w-full px-3 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition text-sm" />
+              </div>
+            </div>
+
+            <div id="edit-whatsapp-stats" class="rounded-xl bg-white px-4 py-3 text-sm text-bark/65 ring-1 ring-sand">
+              Ainda não existem cliques registados.
+            </div>
+            <p id="edit-whatsapp-error" class="hidden text-sm font-medium text-red-600"></p>
+          </section>
+
           <div>
             <label for="edit-emoji" class="block text-sm font-medium mb-1">Emoji</label>
             <input id="edit-emoji" type="text" maxlength="4" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" />
@@ -1924,6 +1972,8 @@
     let locations = [];
     let confirmationSummaryMap = {};
     let userVoteMap = {};
+    let whatsappContactMap = {};
+    let whatsappAdminStatsMap = {};
     let currentFilter = null;
     let currentSearch = '';
     let currentDistrictFilter = '';
@@ -2684,6 +2734,81 @@
       renderZoneFilters();
     }
 
+    function isMissingWhatsAppSchemaError(error) {
+      return ['42P01', 'PGRST205'].includes(String(error?.code || ''));
+    }
+
+    function normalizeWhatsAppNumber(value) {
+      let digits = String(value || '').replace(/\D/g, '');
+      if (digits.startsWith('00')) digits = digits.slice(2);
+      if (digits.length === 9) digits = `351${digits}`;
+      return digits.length >= 8 && digits.length <= 15 ? digits : '';
+    }
+
+    function getWhatsAppContact(placeId) {
+      return whatsappContactMap[Number(placeId)] || null;
+    }
+
+    function getWhatsAppUrl(placeId) {
+      const contact = getWhatsAppContact(placeId);
+      const number = normalizeWhatsAppNumber(contact?.whatsapp_number);
+      if (!number) return '';
+
+      const message = 'Olá! Encontrei o vosso contacto no Levo o Cão.';
+      return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+    }
+
+    async function loadPublicWhatsAppContacts() {
+      whatsappContactMap = {};
+      if (!supabaseClient) return;
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('place_whatsapp_contacts')
+          .select('place_id, whatsapp_number, access_type, active_from, active_until');
+
+        if (error) throw error;
+
+        (data || []).forEach((row) => {
+          whatsappContactMap[Number(row.place_id)] = row;
+        });
+      } catch (error) {
+        if (isMissingWhatsAppSchemaError(error)) {
+          console.info('O piloto de WhatsApp ainda não foi ativado na base de dados.');
+          return;
+        }
+        console.error('Erro ao carregar contactos de WhatsApp:', error);
+      }
+    }
+
+    function trackWhatsAppClick(placeId) {
+      const loc = locations.find((item) => Number(item.id) === Number(placeId));
+      if (!loc || !getWhatsAppContact(placeId)) return;
+
+      if (typeof gtag === 'function') {
+        gtag('event', 'whatsapp_contact_click', {
+          place_id: String(loc.id),
+          place_name: loc.name,
+          place_type: loc.displayType,
+          municipality: loc.municipality || ''
+        });
+      }
+
+      if (!supabaseClient) return;
+      supabaseClient
+        .from('place_whatsapp_clicks')
+        .insert([{
+          place_id: Number(loc.id),
+          visitor_id: getVisitorId(),
+          source: 'detail'
+        }])
+        .then(({ error }) => {
+          if (error && !isMissingWhatsAppSchemaError(error)) {
+            console.error('Erro ao registar clique no WhatsApp:', error);
+          }
+        });
+    }
+
     async function loadPlacesFromSupabase() {
       const loading = document.getElementById('loading-places');
       if (loading) loading.classList.remove('hidden');
@@ -2701,7 +2826,8 @@
 
         await Promise.all([
           loadConfirmationSummary(),
-          loadUserVotes()
+          loadUserVotes(),
+          loadPublicWhatsAppContacts()
         ]);
 
         renderZoneFilters();
@@ -3921,6 +4047,7 @@
       const userState = getUserVoteState(loc.id);
       const photoUrl = loc.photo_url || '';
       const directUrl = getPlaceDirectUrl(loc);
+      const whatsappUrl = getWhatsAppUrl(loc.id);
       const navigation = getDetailNavigationState(loc.id);
       const previousPlace = navigation.previousId
         ? locations.find((item) => Number(item.id) === Number(navigation.previousId))
@@ -4063,6 +4190,13 @@
                 </div>
               </div>
             </div>
+
+            ${whatsappUrl ? `
+              <a href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer" onclick="trackWhatsAppClick(${loc.id})" class="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-5 py-4 text-lg font-semibold text-white shadow-md transition hover:bg-[#1fb85a] active:scale-95">
+                <i data-lucide="message-circle" class="h-5 w-5"></i>
+                Contactar pelo WhatsApp
+              </a>
+            ` : ''}
 
             <div class="grid sm:grid-cols-2 gap-3">
               <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 w-full bg-sage text-cream font-semibold py-4 rounded-full shadow-md hover:bg-moss transition active:scale-95 text-lg">
@@ -4812,6 +4946,8 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
   const dogMeta = getDogStatusMeta(item.dog_status || 'yes');
   const missingFields = getMissingFields(item);
   const isIncomplete = missingFields.length > 0;
+  const whatsappStats = whatsappAdminStatsMap[Number(item.id)] || null;
+  const whatsappActive = isWhatsAppContactCurrentlyActive(whatsappStats);
 
   return `
     <article class="border ${highlightIncomplete ? 'border-[#E8D9BB] bg-white' : 'border-sand bg-white'} rounded-2xl p-3 sm:p-4">
@@ -4820,6 +4956,7 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
           <h4 class="font-display text-lg font-bold">${item.name}</h4>
           <p class="text-sm text-bark/55 mt-0.5">${item.city} · ${item.displayType}</p>
           ${isIncomplete ? `<p class="mt-1 text-xs font-semibold text-amber-900">Falta: ${missingFields.join(' · ')}</p>` : ''}
+          ${whatsappStats ? `<p class="mt-1 text-xs font-semibold ${whatsappActive ? 'text-sage' : 'text-bark/45'}">WhatsApp ${whatsappActive ? 'ativo' : 'inativo'} · ${Number(whatsappStats.clicks_30d || 0)} cliques em 30 dias</p>` : ''}
         </div>
         <div class="flex flex-wrap items-center gap-2 sm:justify-end">
           <button type="button" onclick="openEditPlaceModal(${item.id})" class="inline-flex items-center gap-1.5 bg-sage text-cream text-sm font-semibold px-3 py-2 rounded-full shadow-sm hover:bg-moss transition">
@@ -4842,6 +4979,7 @@ function createAdminPlaceCard(item, { highlightIncomplete = false } = {}) {
         <p><strong>Coordenadas:</strong> ${hasValidCoordinates(item) ? `${item.latitude}, ${item.longitude}` : '—'}</p>
         <p><strong>Website:</strong> ${item.website || '—'}</p>
         <p><strong>Google Place ID:</strong> ${item.google_place_id ? 'Sim' : '—'}</p>
+        <p><strong>WhatsApp:</strong> ${whatsappStats?.whatsapp_number ? escapeHtml(whatsappStats.whatsapp_number) : '—'}${whatsappStats ? ` · ${Number(whatsappStats.clicks_total || 0)} cliques totais` : ''}</p>
         ${item.features.length ? `<div class="flex flex-wrap gap-2 pt-1">${item.features.map((feature) => `<span class="text-xs bg-sand text-bark/75 font-medium px-2.5 py-1 rounded-full border border-sand">${feature}</span>`).join('')}</div>` : ''}
         <div class="flex flex-wrap gap-2 pt-2">
           <button type="button" onclick="copyPlaceDirectLink(${item.id})" class="inline-flex items-center gap-2 bg-white text-sage font-semibold px-4 py-2 rounded-full border border-sage hover:bg-sand transition"><i data-lucide="link" class="w-4 h-4"></i> Copiar link</button>
@@ -4934,6 +5072,37 @@ async function reviewChangeReport(id, status) {
   }
 }
 
+function isWhatsAppContactCurrentlyActive(contact) {
+  if (!contact?.is_enabled || !normalizeWhatsAppNumber(contact.whatsapp_number)) return false;
+  const today = new Date().toISOString().slice(0, 10);
+  if (contact.active_from && String(contact.active_from).slice(0, 10) > today) return false;
+  if (contact.active_until && String(contact.active_until).slice(0, 10) < today) return false;
+  return true;
+}
+
+async function loadWhatsAppAdminStats() {
+  whatsappAdminStatsMap = {};
+  if (!currentUser || !supabaseClient) return;
+
+  try {
+    const { data, error } = await supabaseClient
+      .from('admin_place_whatsapp_stats')
+      .select('*');
+
+    if (error) throw error;
+
+    (data || []).forEach((row) => {
+      whatsappAdminStatsMap[Number(row.place_id)] = row;
+    });
+  } catch (error) {
+    if (isMissingWhatsAppSchemaError(error)) {
+      console.info('As métricas do piloto de WhatsApp ainda não estão disponíveis.');
+      return;
+    }
+    console.error('Erro ao carregar métricas de WhatsApp:', error);
+  }
+}
+
    async function loadAdminPlaces() {
   if (!currentUser) return;
 
@@ -4949,6 +5118,8 @@ async function reviewChangeReport(id, status) {
   incompleteContainer.innerHTML = '<p class="text-sm text-bark/50">A carregar locais...</p>';
 
   try {
+    await loadWhatsAppAdminStats();
+
     const { data, error } = await supabaseClient
       .from('places')
       .select('*')
@@ -5146,6 +5317,11 @@ async function reviewChangeReport(id, status) {
         checkbox.checked = itemFeatures.includes(checkbox.value);
       });
 
+      resetEditWhatsAppFields();
+      const whatsappSection = document.getElementById('edit-whatsapp-section');
+      if (whatsappSection) whatsappSection.classList.toggle('hidden', source !== 'place');
+      if (source === 'place') loadEditWhatsAppContact(item.id);
+
       const title = document.querySelector('#edit-place-modal h3');
       const subtitle = document.querySelector('#edit-place-modal h3 + p');
 
@@ -5159,6 +5335,78 @@ async function reviewChangeReport(id, status) {
 
       document.getElementById('edit-place-modal').classList.remove('hidden');
       lucide.createIcons();
+    }
+
+    function resetEditWhatsAppFields() {
+      const today = new Date().toISOString().slice(0, 10);
+      const enabled = document.getElementById('edit-whatsapp-enabled');
+      const number = document.getElementById('edit-whatsapp-number');
+      const accessType = document.getElementById('edit-whatsapp-access-type');
+      const activeFrom = document.getElementById('edit-whatsapp-active-from');
+      const activeUntil = document.getElementById('edit-whatsapp-active-until');
+      const status = document.getElementById('edit-whatsapp-status');
+      const stats = document.getElementById('edit-whatsapp-stats');
+      const error = document.getElementById('edit-whatsapp-error');
+
+      if (enabled) enabled.checked = false;
+      if (number) number.value = '';
+      if (accessType) accessType.value = 'pilot';
+      if (activeFrom) activeFrom.value = today;
+      if (activeUntil) activeUntil.value = '';
+      if (status) status.textContent = 'Sem contacto';
+      if (stats) stats.textContent = 'Ainda não existem cliques registados.';
+      if (error) {
+        error.textContent = '';
+        error.classList.add('hidden');
+      }
+    }
+
+    async function loadEditWhatsAppContact(placeId) {
+      const status = document.getElementById('edit-whatsapp-status');
+      const stats = document.getElementById('edit-whatsapp-stats');
+      const errorElement = document.getElementById('edit-whatsapp-error');
+      if (status) status.textContent = 'A carregar…';
+
+      try {
+        const { data, error } = await supabaseClient
+          .from('admin_place_whatsapp_stats')
+          .select('*')
+          .eq('place_id', Number(placeId))
+          .maybeSingle();
+
+        if (error) throw error;
+        if (Number(document.getElementById('edit-place-id')?.value) !== Number(placeId)) return;
+
+        if (!data) {
+          if (status) status.textContent = 'Sem contacto';
+          return;
+        }
+
+        document.getElementById('edit-whatsapp-enabled').checked = data.is_enabled === true;
+        document.getElementById('edit-whatsapp-number').value = data.whatsapp_number || '';
+        document.getElementById('edit-whatsapp-access-type').value = data.access_type || 'pilot';
+        document.getElementById('edit-whatsapp-active-from').value = data.active_from ? String(data.active_from).slice(0, 10) : '';
+        document.getElementById('edit-whatsapp-active-until').value = data.active_until ? String(data.active_until).slice(0, 10) : '';
+
+        if (status) status.textContent = isWhatsAppContactCurrentlyActive(data) ? 'Ativo no site' : 'Inativo';
+        if (stats) {
+          const lastClick = data.last_clicked_at
+            ? new Date(data.last_clicked_at).toLocaleDateString('pt-PT')
+            : '—';
+          stats.innerHTML = `<strong>${Number(data.clicks_30d || 0)}</strong> cliques nos últimos 30 dias · <strong>${Number(data.clicks_total || 0)}</strong> no total · último clique: ${lastClick}`;
+        }
+      } catch (error) {
+        if (isMissingWhatsAppSchemaError(error)) {
+          if (status) status.textContent = 'Piloto ainda não configurado';
+          if (errorElement) {
+            errorElement.textContent = 'Falta ativar a estrutura do piloto na base de dados.';
+            errorElement.classList.remove('hidden');
+          }
+          return;
+        }
+        console.error('Erro ao carregar contacto de WhatsApp:', error);
+        if (status) status.textContent = 'Erro ao carregar';
+      }
     }
 
     function toggleEstablishmentConfirmationDate() {
@@ -5372,6 +5620,44 @@ async function reviewChangeReport(id, status) {
       updateCoordinatesPasteHelp(`Coordenadas detetadas: ${coords.latitude}, ${coords.longitude}`);
     }
 
+    function getEditWhatsAppPayload(placeId) {
+      const today = new Date().toISOString().slice(0, 10);
+      const rawNumber = document.getElementById('edit-whatsapp-number')?.value?.trim() || '';
+      const normalizedNumber = normalizeWhatsAppNumber(rawNumber);
+      const isEnabled = document.getElementById('edit-whatsapp-enabled')?.checked === true;
+      const accessType = document.getElementById('edit-whatsapp-access-type')?.value || 'pilot';
+      const activeFrom = document.getElementById('edit-whatsapp-active-from')?.value || null;
+      const activeUntil = document.getElementById('edit-whatsapp-active-until')?.value || null;
+
+      if (rawNumber && !normalizedNumber) {
+        throw new Error('Confirma o número de WhatsApp. Deve incluir entre 8 e 15 algarismos.');
+      }
+      if (isEnabled && !normalizedNumber) {
+        throw new Error('Introduz um número de WhatsApp antes de ativar o botão.');
+      }
+      if (activeFrom && activeUntil && activeUntil < activeFrom) {
+        throw new Error('A data de fim do piloto não pode ser anterior à data de início.');
+      }
+
+      return {
+        place_id: Number(placeId),
+        whatsapp_number: normalizedNumber || null,
+        is_enabled: isEnabled,
+        access_type: ['pilot', 'gift', 'paid'].includes(accessType) ? accessType : 'pilot',
+        active_from: activeFrom || today,
+        active_until: activeUntil,
+        updated_at: new Date().toISOString()
+      };
+    }
+
+    async function saveEditWhatsAppContact(payload) {
+      const { error } = await supabaseClient
+        .from('place_whatsapp_contacts')
+        .upsert([payload], { onConflict: 'place_id' });
+
+      if (error) throw error;
+    }
+
     async function saveEditPlace(event) {
       event.preventDefault();
       if (!currentUser) return;
@@ -5402,6 +5688,16 @@ async function reviewChangeReport(id, status) {
       const emoji = document.getElementById('edit-emoji').value.trim() || '📍';
       const features = Array.from(document.querySelectorAll('#edit-features input:checked')).map((input) => input.value);
       let photo_url = document.getElementById('edit-photo-url')?.value || null;
+      let whatsappPayload = null;
+
+      if (source === 'place') {
+        try {
+          whatsappPayload = getEditWhatsAppPayload(id);
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+      }
 
       const payload = {
         name,
@@ -5465,6 +5761,7 @@ async function reviewChangeReport(id, status) {
             .eq('id', id);
 
           if (error) throw error;
+          if (whatsappPayload) await saveEditWhatsAppContact(whatsappPayload);
         }
 
         closeEditPlaceModal();
