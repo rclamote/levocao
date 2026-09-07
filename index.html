@@ -1484,7 +1484,7 @@
     <div class="mb-5 overflow-x-auto">
       <div class="inline-flex min-w-full rounded-2xl border border-sand bg-white p-1 shadow-sm" role="tablist" aria-label="Áreas do painel admin">
         <button id="admin-tab-action" type="button" role="tab" onclick="setAdminTab('action')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">A tratar <span id="admin-tab-action-count" class="ml-1 opacity-60">0</span></button>
-        <button id="admin-tab-places" type="button" role="tab" onclick="setAdminTab('places')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Locais ativos <span id="admin-tab-places-count" class="ml-1 opacity-60">0</span></button>
+        <button id="admin-tab-places" type="button" role="tab" onclick="setAdminTab('places')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Locais <span id="admin-tab-places-count" class="ml-1 opacity-60">0</span></button>
         <button id="admin-tab-quality" type="button" role="tab" onclick="setAdminTab('quality')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Qualidade <span id="admin-tab-quality-count" class="ml-1 opacity-60">0</span></button>
       </div>
     </div>
@@ -1542,7 +1542,13 @@
     <section id="admin-panel-places" role="tabpanel" class="admin-panel hidden">
     <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
       <div class="flex items-center justify-between gap-3 mb-3">
-        <h3 class="font-display text-lg font-bold">Locais ativos</h3>
+        <h3 class="font-display text-lg font-bold">Locais</h3>
+        <label class="text-sm">Mostrar
+          <select id="admin-place-status" onchange="loadAdminPlaces()" class="ml-2 rounded-xl border border-sand bg-white px-3 py-2">
+            <option value="active">Ativos</option>
+            <option value="inactive">Desativados</option>
+          </select>
+        </label>
       </div>
       <div id="admin-places" class="space-y-3"></div>
       <p id="admin-places-empty" class="hidden text-sm text-bark/50 py-6 text-center">Não há locais ativos.</p>
@@ -5103,7 +5109,35 @@ async function loadWhatsAppAdminStats() {
   }
 }
 
-   async function loadAdminPlaces() {
+   
+function createInactivePlaceCard(item) {
+  return `<article class="border border-sand bg-white rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+    <div><h4 class="font-display text-lg font-bold">${escapeHtml(item.name)}</h4>
+    <p class="text-sm text-bark/55">${escapeHtml(item.city || '')} · Desativado</p></div>
+    <button type="button" onclick="reactivatePlace(${Number(item.id)}, this)" class="bg-sage text-cream font-semibold px-4 py-2 rounded-full">Reativar</button>
+  </article>`;
+}
+
+async function reactivatePlace(id, button) {
+  if (!currentUser || !confirm('Reativar este local? Voltará a aparecer no site.')) return;
+  if (button) button.disabled = true;
+  try {
+    const { data, error } = await supabaseClient.from('places')
+      .update({ is_active: true }).eq('id', id).eq('is_active', false)
+      .select('id').single();
+    if (error) throw error;
+    if (!data) throw new Error('Nenhum local foi reativado.');
+    await loadPlacesFromSupabase();
+    await loadAdminPlaces();
+  } catch (error) {
+    console.error('Erro ao reativar local:', error);
+    alert('Não foi possível reativar o local. Atualiza a página e tenta novamente.');
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
+async function loadAdminPlaces() {
   if (!currentUser) return;
 
   const container = document.getElementById('admin-places');
@@ -5123,16 +5157,17 @@ async function loadWhatsAppAdminStats() {
     const { data, error } = await supabaseClient
       .from('places')
       .select('*')
-      .eq('is_active', true)
       .order('name', { ascending: true });
 
     if (error) throw error;
 
-    const allRows = (data || []).map(normalizePlace);
+    const showInactive = document.getElementById('admin-place-status')?.value === 'inactive';
+    const allRows = (data || []).filter(item => item.is_active === true).map(normalizePlace);
+    const inactiveRows = filterAdminItems((data || []).filter(item => item.is_active === false).map(normalizePlace));
     let rows = filterAdminItems(allRows);
 
     const incompleteRows = rows.filter(isPlaceIncomplete);
-    const completeRows = rows.filter(item => !isPlaceIncomplete(item));
+    const completeRows = showInactive ? inactiveRows : rows.filter(item => !isPlaceIncomplete(item));
     const allIncompleteRows = allRows.filter(isPlaceIncomplete);
 
     incompleteCountEl.textContent = String(allIncompleteRows.length);
@@ -5140,7 +5175,8 @@ async function loadWhatsAppAdminStats() {
     const placesTabCount = document.getElementById('admin-tab-places-count');
     const qualityTabCount = document.getElementById('admin-tab-quality-count');
     if (placesCountEl) placesCountEl.textContent = String(allRows.length);
-    if (placesTabCount) placesTabCount.textContent = String(allRows.length - allIncompleteRows.length);
+    if (placesTabCount) placesTabCount.textContent = String(showInactive ? (data || []).filter(item => item.is_active === false).length : allRows.length - allIncompleteRows.length);
+    empty.textContent = showInactive ? 'Não há locais desativados para esta pesquisa.' : 'Não há locais ativos para esta pesquisa. Os locais com dados em falta estão em Qualidade.';
     if (qualityTabCount) qualityTabCount.textContent = String(allIncompleteRows.length);
 
     if (!incompleteRows.length) {
@@ -5163,7 +5199,7 @@ async function loadWhatsAppAdminStats() {
     empty.classList.add('hidden');
 
     container.innerHTML = completeRows
-      .map(item => createAdminPlaceCard(item))
+      .map(item => showInactive ? createInactivePlaceCard(item) : createAdminPlaceCard(item))
       .join('');
 
     lucide.createIcons();
