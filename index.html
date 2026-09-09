@@ -1485,6 +1485,7 @@
       <div class="inline-flex min-w-full rounded-2xl border border-sand bg-white p-1 shadow-sm" role="tablist" aria-label="Áreas do painel admin">
         <button id="admin-tab-action" type="button" role="tab" onclick="setAdminTab('action')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">A tratar <span id="admin-tab-action-count" class="ml-1 opacity-60">0</span></button>
         <button id="admin-tab-places" type="button" role="tab" onclick="setAdminTab('places')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Locais ativos <span id="admin-tab-places-count" class="ml-1 opacity-60">0</span></button>
+        <button id="admin-tab-whatsapp" type="button" role="tab" onclick="setAdminTab('whatsapp')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">WhatsApp</button>
         <button id="admin-tab-quality" type="button" role="tab" onclick="setAdminTab('quality')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Qualidade <span id="admin-tab-quality-count" class="ml-1 opacity-60">0</span></button>
       </div>
     </div>
@@ -1537,6 +1538,28 @@
       <div id="admin-incomplete-places" class="space-y-3"></div>
       <p id="admin-incomplete-empty" class="hidden text-sm text-bark/50 py-6 text-center">Todos os locais ativos já têm zona completa e coordenadas.</p>
     </div>
+    </section>
+
+
+    <section id="admin-panel-whatsapp" role="tabpanel" class="admin-panel hidden">
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <h3 class="font-display text-lg font-bold">Contactos WhatsApp</h3>
+        <p class="text-sm text-bark/55 mt-1">Atualiza ao guardar um contacto e ao abrir este separador. Os cliques não garantem mensagens ou reservas.</p>
+        <div class="flex flex-wrap gap-3 my-4">
+          <input id="admin-wa-search" aria-label="Pesquisar contactos WhatsApp" placeholder="Pesquisar local ou concelho" oninput="renderWhatsAppTable()" class="border border-sand rounded-xl px-3 py-2">
+          <select id="admin-wa-sort" aria-label="Ordenar contactos WhatsApp" onchange="renderWhatsAppTable()" class="border border-sand rounded-xl px-3 py-2">
+            <option value="clicks_30d">Mais cliques em 30 dias</option><option value="clicks_total">Mais cliques totais</option><option value="name">Nome A–Z</option>
+          </select>
+          <button type="button" onclick="loadWhatsAppTable()" class="text-sage font-semibold px-3 py-2">Atualizar</button>
+        </div>
+        <p id="admin-wa-summary" role="status" class="text-sm text-bark/55 mb-3"></p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead><tr class="border-b border-sand"><th class="p-3">Local</th><th class="p-3">Concelho</th><th class="p-3">WhatsApp</th><th class="p-3">Estado do botão</th><th class="p-3 text-right">Cliques · 30 dias</th><th class="p-3 text-right">Cliques totais</th></tr></thead>
+            <tbody id="admin-wa-rows"></tbody>
+          </table>
+        </div>
+      </div>
     </section>
 
     <section id="admin-panel-places" role="tabpanel" class="admin-panel hidden">
@@ -2136,8 +2159,9 @@
     }
 
     function setAdminTab(tab) {
-      if (!['action', 'places', 'quality'].includes(tab)) return;
+      if (!['action', 'places', 'quality', 'whatsapp'].includes(tab)) return;
       adminActiveTab = tab;
+      if (tab === 'whatsapp') loadWhatsAppTable();
 
       document.querySelectorAll('.admin-panel').forEach((panel) => panel.classList.add('hidden'));
       const activePanel = document.getElementById(`admin-panel-${tab}`);
@@ -5080,6 +5104,62 @@ function isWhatsAppContactCurrentlyActive(contact) {
   return true;
 }
 
+
+let adminWhatsAppRows = [];
+let adminWhatsAppRequest = 0;
+
+function getWhatsAppTableRows(rows, search, sort) {
+  const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const query = normalize(search).trim();
+  return rows.filter(row => normalize(row.name + ' ' + row.municipality).includes(query))
+    .sort((a, b) => (sort === 'name' ? 0 : Number(b[sort] || 0) - Number(a[sort] || 0)) || a.name.localeCompare(b.name, 'pt'));
+}
+
+function renderWhatsAppTable() {
+  const body = document.getElementById('admin-wa-rows');
+  if (!body) return;
+  const rows = getWhatsAppTableRows(adminWhatsAppRows, document.getElementById('admin-wa-search')?.value, document.getElementById('admin-wa-sort')?.value || 'clicks_30d');
+  document.getElementById('admin-wa-summary').textContent = rows.length + ' de ' + adminWhatsAppRows.length + ' locais com contacto WhatsApp';
+  body.innerHTML = rows.length ? rows.map(row => `<tr class="border-b border-sand">
+    <td class="p-3 font-semibold">${escapeHtml(row.name)}</td>
+    <td class="p-3">${escapeHtml(row.municipality || '—')}</td>
+    <td class="p-3 whitespace-nowrap">${escapeHtml(row.whatsapp_number)}</td>
+    <td class="p-3">${row.is_active !== true ? 'Local desativado' : isWhatsAppContactCurrentlyActive(row) ? 'Ativo' : 'Inativo'}</td>
+    <td class="p-3 text-right tabular-nums">${Number(row.clicks_30d || 0)}</td>
+    <td class="p-3 text-right tabular-nums">${Number(row.clicks_total || 0)}</td>
+  </tr>`).join('') : '<tr><td colspan="6" class="p-4 text-bark/55">Não há contactos para esta pesquisa.</td></tr>';
+}
+
+async function loadWhatsAppTable() {
+  const request = ++adminWhatsAppRequest;
+  const body = document.getElementById('admin-wa-rows');
+  if (!body) return;
+  adminWhatsAppRows = [];
+  body.innerHTML = '';
+  const summary = document.getElementById('admin-wa-summary');
+  if (!currentUser) { summary.textContent = ''; return; }
+  summary.textContent = 'A carregar contactos...';
+  try {
+    const [stats, places] = await Promise.all([
+      supabaseClient.from('admin_place_whatsapp_stats').select('*'),
+      supabaseClient.from('places').select('id,name,municipality,city,is_active')
+    ]);
+    if (request !== adminWhatsAppRequest || !currentUser) return;
+    if (stats.error) throw stats.error;
+    if (places.error) throw places.error;
+    const byId = new Map((places.data || []).map(place => [Number(place.id), place]));
+    adminWhatsAppRows = (stats.data || []).filter(row => String(row.whatsapp_number || '').trim()).map(row => {
+      const place = byId.get(Number(row.place_id));
+      return { ...row, name: place?.name || 'Local #' + row.place_id, municipality: place?.municipality || place?.city || '', is_active: place?.is_active === true };
+    });
+    renderWhatsAppTable();
+  } catch (error) {
+    if (request !== adminWhatsAppRequest) return;
+    summary.textContent = 'Não foi possível carregar os contactos. Tenta Atualizar.';
+    console.error('Erro ao carregar tabela WhatsApp:', error);
+  }
+}
+
 async function loadWhatsAppAdminStats() {
   whatsappAdminStatsMap = {};
   if (!currentUser || !supabaseClient) return;
@@ -5765,6 +5845,7 @@ async function loadWhatsAppAdminStats() {
         }
 
         closeEditPlaceModal();
+        await loadWhatsAppTable();
         await loadPlacesFromSupabase();
         await loadAdminSuggestions();
         await loadAdminPlaces();
