@@ -3594,13 +3594,33 @@
       return null;
     }
 
+    function formatConfirmationDate(value) {
+      if (!value) return '';
+      const date = new Date(value);
+      if (!Number.isFinite(date.getTime())) return '';
+      return new Intl.DateTimeFormat('pt-PT', {
+        day: '2-digit', month: '2-digit', year: 'numeric',
+        timeZone: 'Europe/Lisbon'
+      }).format(date);
+    }
+
+    function getLatestConfirmationDate(loc) {
+      const votes = getStoredPlaceVotes(loc.id);
+      const dates = [
+        loc.establishment_confirmed ? loc.establishment_confirmed_at : null,
+        votes.yes > 0 ? votes.lastUpdated : null
+      ].filter(value => value && Number.isFinite(new Date(value).getTime()));
+      if (!dates.length) return '';
+      return formatConfirmationDate(dates.reduce((latest, value) =>
+        new Date(value) > new Date(latest) ? value : latest));
+    }
+
     function getCardTrustBadge(loc) {
       const votes = getStoredPlaceVotes(loc.id);
 
       if (loc.establishment_confirmed) {
-        const date = formatMonthYear(loc.establishment_confirmed_at);
         return {
-          text: 'Confirmado pelo estabelecimento' + (date ? ' · ' + date : ''),
+          text: 'Confirmado pelo estabelecimento',
           communityText: votes.yes > 0
             ? (votes.yes === 1 ? '👤 1 pessoa confirmou' : '👥 ' + votes.yes + ' pessoas confirmaram')
             : '',
@@ -3627,7 +3647,7 @@
       const recentBadge = loc.createdAt && (Date.now() - new Date(loc.createdAt).getTime()) <= 7 * 24 * 60 * 60 * 1000
         ? '<span class="text-xs bg-white/90 text-sage font-medium px-2.5 py-1 rounded-full border border-sand">Novo</span>'
         : '';
-      const lastUpdate = getLastUpdateText(loc.id);
+      const lastConfirmationDate = getLatestConfirmationDate(loc);
       const locationLine = getCardLocationLine(loc);
       const primaryFeature = getPrimaryFeatureBadge(loc);
       const trustBadge = getCardTrustBadge(loc);
@@ -3670,6 +3690,7 @@
                 <span class="min-w-0">
                 <span class="block">${trustBadge.text}</span>
                 ${trustBadge.communityText ? `<span class="mt-0.5 block text-xs font-medium text-bark/55">${trustBadge.communityText}</span>` : ''}
+                ${lastConfirmationDate ? `<span class="mt-1 block text-sm font-normal text-bark/70">Última confirmação: ${lastConfirmationDate}</span>` : ''}
               </span>
               </div>` : ''}
 
@@ -4066,8 +4087,8 @@
       const votes = getStoredPlaceVotes(loc.id);
       const confirmationCount = getConfirmationCount(loc.id);
       const trustLevel = getTrustLevel(loc.id);
-      const lastUpdate = getLastUpdateText(loc.id);
-      const lastUpdateExact = getLastUpdateExactText(loc.id);
+      const lastUpdate = formatConfirmationDate(votes.lastUpdated);
+      const establishmentDate = formatConfirmationDate(loc.establishment_confirmed_at);
       const grad = `linear-gradient(135deg, ${loc.colors[0]}55, ${loc.colors[1]}33)`;
       const mapsUrl = getGoogleMapsUrlForPlace(loc);
       const dogMeta = getDogStatusMeta(loc.dog_status || 'yes');
@@ -4191,12 +4212,12 @@
 
                 <div class="mt-4 space-y-2 border-t border-bark/10 pt-4">
                   ${loc.establishment_confirmed
-                    ? '<p class="flex items-start gap-2 text-sm text-bark/75"><i data-lucide="store" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i><span><strong class="text-bark">Informação confirmada pelo estabelecimento</strong><br><span class="text-xs text-bark/55">' + formatMonthYear(loc.establishment_confirmed_at) + '</span></span></p>'
+                    ? '<p class="flex items-start gap-2 text-sm text-bark/75"><i data-lucide="store" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i><span><strong class="text-bark">Informação confirmada pelo estabelecimento</strong>' + (establishmentDate ? '<br><span class="text-sm text-bark/70">Última confirmação: ' + establishmentDate + '</span>' : '') + '</span></p>'
                     : ''}
                   <p class="flex items-start gap-2 text-sm text-bark/75">
                     <i data-lucide="users" class="mt-0.5 h-4 w-4 shrink-0 text-sage"></i>
                     <span>${votes.yes > 0
-                      ? '<strong class="text-bark">' + votes.yes + ' ' + (votes.yes === 1 ? 'pessoa confirmou' : 'pessoas confirmaram') + '</strong> que a informação continua correta' + (lastUpdate ? '<br><span class="text-xs text-bark/55">' + lastUpdate + '</span>' : '')
+                      ? '<strong class="text-bark">' + votes.yes + ' ' + (votes.yes === 1 ? 'pessoa confirmou' : 'pessoas confirmaram') + '</strong> que a informação continua correta' + (lastUpdate ? '<br><span class="text-sm text-bark/70">Última confirmação: ' + lastUpdate + '</span>' : '')
                       : 'Ainda ninguém confirmou esta informação pela comunidade.'}</span>
                   </p>
                 </div>
