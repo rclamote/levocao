@@ -10,7 +10,8 @@ const GUIDES = {
     eyebrow: 'Guia pet-friendly no Algarve',
     heading: 'Onde levar o cão no Algarve',
     intro: 'Descobre restaurantes, praias, alojamentos, passeios e experiências onde podes ir com o teu cão no Algarve. Informação prática, simples e pensada para evitar surpresas.',
-    resultsTitle: 'Locais no Algarve'
+    resultsTitle: 'Locais no Algarve',
+    districts: ['Faro']
   },
   'onde-levar-o-cao-no-alentejo': {
     title: 'Onde levar o cão no Alentejo | Locais pet-friendly',
@@ -18,7 +19,8 @@ const GUIDES = {
     eyebrow: 'Guia pet-friendly no Alentejo',
     heading: 'Onde levar o cão no Alentejo',
     intro: 'Descobre alojamentos, restaurantes, passeios e experiências para ires com o teu cão no Alentejo, com informação prática reunida pela comunidade.',
-    resultsTitle: 'Locais no Alentejo'
+    resultsTitle: 'Locais no Alentejo',
+    districts: ['Beja', 'Évora', 'Portalegre']
   },
   'onde-levar-o-cao-em-lisboa': {
     title: 'Onde levar o cão em Lisboa | Locais pet-friendly',
@@ -26,7 +28,9 @@ const GUIDES = {
     eyebrow: 'Guia pet-friendly em Lisboa',
     heading: 'Onde levar o cão em Lisboa',
     intro: 'Procuras onde levar o cão em Lisboa? Descobre restaurantes, cafés, alojamentos, parques, passeios e outros locais pet-friendly. Sempre que a informação está disponível, indicamos as condições de acesso e se foram confirmadas pelo estabelecimento ou pela comunidade.',
-    resultsTitle: 'Locais em Lisboa'
+    resultsTitle: 'Locais em Lisboa',
+    districts: ['Lisboa'],
+    municipalities: ['Lisboa']
   }
 };
 
@@ -44,9 +48,106 @@ function replaceElementText(html, id, value) {
   return html.replace(pattern, `$1${escapeHtml(value)}$2`);
 }
 
-function injectGuideSeo(html, slug, guide) {
+function replaceElementHtml(html, id, value) {
+  const pattern = new RegExp(`(<[^>]+id=["']${id}["'][^>]*>)[\\s\\S]*?(<\\/[^>]+>)`, 'i');
+  return html.replace(pattern, `$1${value}$2`);
+}
+
+function slugify(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\\u0300-\\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function cleanText(value) {
+  return String(value || '').replace(/\\s+/g, ' ').trim();
+}
+
+function truncate(value, max = 180) {
+  const text = cleanText(value);
+  if (text.length <= max) return text;
+  return `${text.slice(0, max - 1).replace(/\\s+\\S*$/, '')}…`;
+}
+
+function placeSlug(place) {
+  const base = slugify(place.name || 'local');
+  return place.id ? `${base}-${place.id}` : base;
+}
+
+function locationName(place) {
+  return place.locality || place.city || place.municipality || place.district || 'Portugal';
+}
+
+function placeDescription(place) {
+  return truncate(place.description || place.notes || '', 180);
+}
+
+function readSupabaseConfig(html) {
+  const urlFromHtml = html.match(/const\s+SUPABASE_URL\s*=\s*['"]([^'"]+)['"]/i)?.[1] || '';
+  const keyFromHtml = html.match(/const\s+SUPABASE_ANON_KEY\s*=\s*['"]([^'"]+)['"]/i)?.[1] || '';
+  const url = process.env.SUPABASE_URL || urlFromHtml;
+  const anonKey = process.env.SUPABASE_ANON_KEY || keyFromHtml;
+  if (!url || !anonKey) throw new Error('Supabase configuration unavailable');
+  return { url, anonKey };
+}
+
+async function fetchPlaces(html) {
+  const config = readSupabaseConfig(html);
+  const fields = [
+    'id', 'name', 'city', 'district', 'municipality', 'locality',
+    'type', 'description', 'notes', 'photo_url'
+  ].join(',');
+  const url = `${config.url}/rest/v1/places?select=${encodeURIComponent(fields)}&is_active=eq.true&order=id.desc`;
+  const response = await fetch(url, {
+    headers: {
+      apikey: config.anonKey,
+      Authorization: `Bearer ${config.anonKey}`
+    }
+  });
+  if (!response.ok) throw new Error(`Supabase returned ${response.status}`);
+  return response.json();
+}
+
+function getGuidePlaces(places, guide) {
+  const districts = Array.isArray(guide.districts) ? guide.districts : [];
+  const municipalities = Array.isArray(guide.municipalities) ? guide.municipalities : [];
+
+  return (places || [])
+    .filter((place) => !districts.length || districts.includes(place.district))
+    .filter((place) => !municipalities.length || municipalities.includes(place.municipality));
+}
+
+function renderGuideCards(places) {
+  return places.map((place) => {
+    const name = cleanText(place.name) || 'Local pet-friendly';
+    const location = locationName(place);
+    const type = cleanText(place.type) || 'Local pet-friendly';
+    const description = placeDescription(place);
+    const href = `/local/${encodeURIComponent(placeSlug(place))}`;
+    const image = cleanText(place.photo_url);
+
+    return `
+      <article class="bg-white rounded-2xl border border-sand shadow-sm overflow-hidden">
+        <a href="${escapeHtml(href)}" class="block text-inherit no-underline">
+          ${image ? `<img src="${escapeHtml(image)}" alt="${escapeHtml(name)}" class="w-full h-40 object-cover" loading="lazy" />` : ''}
+          <div class="p-4">
+            <p class="text-xs text-sage font-semibold mb-1">${escapeHtml(type)}</p>
+            <h3 class="font-display font-bold text-xl leading-tight">${escapeHtml(name)}</h3>
+            <p class="text-bark/55 text-sm mt-1">${escapeHtml(location)}</p>
+            ${description ? `<p class="text-bark/70 text-sm mt-3">${escapeHtml(description)}</p>` : ''}
+          </div>
+        </a>
+      </article>`;
+  }).join('');
+}
+
+function injectGuideSeo(html, slug, guide, places) {
   const canonical = `${SITE_URL}/${slug}`;
   const image = `${SITE_URL}/mac.jpg`;
+  const guidePlaces = getGuidePlaces(places, guide);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -59,6 +160,16 @@ function injectGuideSeo(html, slug, guide) {
       '@type': 'WebSite',
       name: 'Levo o Cão',
       url: `${SITE_URL}/`
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: guidePlaces.length,
+      itemListElement: guidePlaces.map((place, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: cleanText(place.name),
+        url: `${SITE_URL}/local/${encodeURIComponent(placeSlug(place))}`
+      }))
     }
   };
 
@@ -78,12 +189,15 @@ function injectGuideSeo(html, slug, guide) {
   html = replaceElementText(html, 'region-eyebrow', guide.eyebrow);
   html = replaceElementText(html, 'region-title', guide.heading);
   html = replaceElementText(html, 'region-intro', guide.intro);
+  html = replaceElementText(html, 'region-count-pill', `${guidePlaces.length} ${guidePlaces.length === 1 ? 'local' : 'locais'} nesta zona`);
   html = replaceElementText(html, 'region-results-title', guide.resultsTitle);
+  html = replaceElementText(html, 'region-results-subtitle', `${guidePlaces.length} ${guidePlaces.length === 1 ? 'local encontrado' : 'locais encontrados'}`);
+  html = replaceElementHtml(html, 'cards-region', renderGuideCards(guidePlaces));
 
   return html;
 }
 
-module.exports = function handler(req, res) {
+module.exports = async function handler(req, res) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
 
@@ -97,7 +211,8 @@ module.exports = function handler(req, res) {
       return res.end(html.replace('</head>', '  <meta name="robots" content="noindex" />\n</head>'));
     }
 
-    return res.status(200).end(injectGuideSeo(html, slug, guide));
+    const places = await fetchPlaces(html);
+    return res.status(200).end(injectGuideSeo(html, slug, guide, places));
   } catch (error) {
     console.error('Guide SEO render failed:', error);
     res.statusCode = 503;
