@@ -86,8 +86,8 @@ function placeDescription(place) {
 }
 
 function readSupabaseConfig(html) {
-  const urlFromHtml = html.match(/const\\s+SUPABASE_URL\\s*=\\s*['"]([^'"]+)['"]/i)?.[1] || '';
-  const keyFromHtml = html.match(/const\\s+SUPABASE_ANON_KEY\\s*=\\s*['"]([^'"]+)['"]/i)?.[1] || '';
+  const urlFromHtml = html.match(/const\s+SUPABASE_URL\s*=\s*['"]([^'"]+)['"]/i)?.[1] || '';
+  const keyFromHtml = html.match(/const\s+SUPABASE_ANON_KEY\s*=\s*['"]([^'"]+)['"]/i)?.[1] || '';
   const url = process.env.SUPABASE_URL || urlFromHtml;
   const anonKey = process.env.SUPABASE_ANON_KEY || keyFromHtml;
   if (!url || !anonKey) throw new Error('Supabase configuration unavailable');
