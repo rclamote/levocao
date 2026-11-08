@@ -1006,6 +1006,35 @@
         <div id="cards-recent" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
       </section>
 
+      <section class="max-w-6xl mx-auto px-5 pb-8">
+        <div class="relative overflow-hidden rounded-3xl border border-sage/20 bg-gradient-to-br from-sage/10 via-white to-sand p-5 shadow-sm sm:p-7">
+          <div class="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-moss/10" aria-hidden="true"></div>
+          <div class="relative">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-sage">A matilha que faz o mapa crescer</p>
+                <h2 class="mt-1 font-display text-2xl font-bold text-bark sm:text-3xl">Exploradores do mês 🐾</h2>
+                <p class="mt-2 max-w-2xl text-sm text-bark/60">Os cães que mais ajudaram a descobrir e confirmar locais onde somos bem-vindos.</p>
+              </div>
+              <span class="rounded-full border border-sage/25 bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-sage">Pré-visualização</span>
+            </div>
+
+            <div id="home-dog-explorers" class="mt-5"></div>
+
+            <div class="mt-5 flex flex-col gap-3 border-t border-sage/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="font-semibold text-bark">O teu cão também pode aparecer aqui.</p>
+                <p class="mt-0.5 text-xs text-bark/50">Nesta demonstração, os números são apenas exemplos e não são guardados no Supabase.</p>
+              </div>
+              <button type="button" onclick="showView('suggest')" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-sage px-5 py-3 text-sm font-semibold text-cream shadow-md transition hover:bg-moss active:scale-95">
+                <span aria-hidden="true">🐾</span>
+                Tornar o meu cão explorador
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="max-w-3xl mx-auto px-5 py-8">
         <div class="mb-6 rounded-3xl bg-sand/70 border border-sand p-5">
           <div class="grid sm:grid-cols-3 gap-4 text-left">
@@ -3803,6 +3832,124 @@
         </div>`;
     }
 
+    function getHomeDogExplorerEntries() {
+      const previewState = getDogExplorerPreviewState();
+      const dogMap = new Map();
+
+      Object.values(previewState).forEach((placePreview) => {
+        ['discovered', 'confirmed'].forEach((role) => {
+          const dog = placePreview?.[role];
+          if (!dog?.name) return;
+
+          const key = dog.name.trim().toLocaleLowerCase('pt-PT');
+          const existing = dogMap.get(key) || {
+            name: dog.name.trim().slice(0, 40),
+            photo: '',
+            discovered: 0,
+            confirmed: 0,
+            isSample: false
+          };
+
+          existing.photo = getSafeDogPreviewPhoto(dog.photo) || existing.photo;
+          existing[role] += 1;
+          dogMap.set(key, existing);
+        });
+      });
+
+      const savedEntries = [...dogMap.values()]
+        .map((dog) => ({ ...dog, score: dog.discovered * 2 + dog.confirmed }))
+        .sort((a, b) => b.score - a.score || b.discovered - a.discovered || a.name.localeCompare(b.name, 'pt-PT'));
+
+      const sampleEntries = [
+        { name: 'Mel', label: 'Exploradora do mês', discovered: 6, confirmed: 9, emoji: '🐕', isSample: true },
+        { name: 'Bono', label: 'Em missão', discovered: 4, confirmed: 7, emoji: '🐶', isSample: true },
+        { name: 'Mac', label: 'Explorador fundador', discovered: 0, confirmed: 0, photo: MAC_IMAGE_DATA, founder: true, isSample: true }
+      ];
+
+      const entries = savedEntries.slice(0, 3);
+      sampleEntries.forEach((sample) => {
+        if (entries.length >= 3) return;
+        const alreadyIncluded = entries.some((entry) =>
+          entry.name.toLocaleLowerCase('pt-PT') === sample.name.toLocaleLowerCase('pt-PT')
+        );
+        if (!alreadyIncluded) entries.push(sample);
+      });
+
+      return entries.slice(0, 3);
+    }
+
+    function renderHomeDogExplorerAvatar(explorer, sizeClass) {
+      const uploadedPhoto = getSafeDogPreviewPhoto(explorer.photo);
+      const photo = uploadedPhoto || (explorer.photo === MAC_IMAGE_DATA ? MAC_IMAGE_DATA : '');
+
+      if (photo) {
+        return `<img src="${photo}" alt="${escapeHtml(explorer.name)}" class="${sizeClass} shrink-0 rounded-full border-4 border-white/90 object-cover shadow-lg">`;
+      }
+
+      return `
+        <span class="flex ${sizeClass} shrink-0 items-center justify-center rounded-full border-4 border-white/90 bg-gradient-to-br from-sand to-white text-4xl shadow-lg" aria-hidden="true">
+          ${explorer.emoji || '🐶'}
+        </span>`;
+    }
+
+    function renderHomeDogExplorerStats(explorer, inverted = false) {
+      if (explorer.founder) {
+        return `<p class="${inverted ? 'text-cream/80' : 'text-bark/60'} text-sm">Inspirou o Levo o Cão 🐾</p>`;
+      }
+
+      const textClass = inverted ? 'text-cream/75' : 'text-bark/55';
+      const valueClass = inverted ? 'text-cream' : 'text-bark';
+      return `
+        <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm ${textClass}">
+          <span><strong class="${valueClass}">${explorer.discovered}</strong> ${explorer.discovered === 1 ? 'local descoberto' : 'locais descobertos'}</span>
+          <span><strong class="${valueClass}">${explorer.confirmed}</strong> ${explorer.confirmed === 1 ? 'confirmação' : 'confirmações'}</span>
+        </div>`;
+    }
+
+    function renderHomeDogExplorers() {
+      const container = document.getElementById('home-dog-explorers');
+      if (!container) return;
+
+      const explorers = getHomeDogExplorerEntries();
+      const leader = explorers[0];
+      const remaining = explorers.slice(1);
+      if (!leader) return;
+
+      container.innerHTML = `
+        <div class="grid gap-3 lg:grid-cols-[1.2fr_1fr]">
+          <div class="relative overflow-hidden rounded-3xl bg-sage p-5 text-cream shadow-md sm:p-6">
+            <div class="absolute -bottom-14 -right-10 h-40 w-40 rounded-full bg-white/10" aria-hidden="true"></div>
+            <div class="relative flex flex-col gap-5 sm:flex-row sm:items-center">
+              <div class="relative w-fit">
+                ${renderHomeDogExplorerAvatar(leader, 'h-28 w-28')}
+                <span class="absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-amber-300 text-xl shadow-md" aria-label="Primeiro lugar">🥇</span>
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs font-bold uppercase tracking-[0.16em] text-cream/65">${escapeHtml(leader.label || 'Explorador em destaque')}</p>
+                <h3 class="mt-1 truncate font-display text-3xl font-bold">${escapeHtml(leader.name)}</h3>
+                <div class="mt-3">${renderHomeDogExplorerStats(leader, true)}</div>
+                <p class="mt-4 inline-flex rounded-full bg-white/15 px-3 py-1.5 text-xs font-semibold">Abriu caminho para outros cães</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+            ${remaining.map((explorer, index) => `
+              <div class="flex items-center gap-4 rounded-2xl border border-sand bg-white p-4 shadow-sm">
+                <div class="relative">
+                  ${renderHomeDogExplorerAvatar(explorer, 'h-16 w-16')}
+                  <span class="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full border border-white bg-sand text-xs shadow-sm" aria-label="${index === 0 ? 'Segundo lugar' : 'Destaque'}">${index === 0 ? '🥈' : '🐾'}</span>
+                </div>
+                <div class="min-w-0 flex-1">
+                  <p class="text-[10px] font-bold uppercase tracking-wider text-sage">${escapeHtml(explorer.label || (index === 0 ? 'A ganhar terreno' : 'Destaque especial'))}</p>
+                  <h3 class="truncate font-display text-xl font-bold text-bark">${escapeHtml(explorer.name)}</h3>
+                  <div class="mt-1">${renderHomeDogExplorerStats(explorer)}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }
+
     function setDogExplorerPreviewImage(photo) {
       const image = document.getElementById('dog-explorer-preview-image');
       const placeholder = document.getElementById('dog-explorer-preview-placeholder');
@@ -4047,6 +4194,7 @@
     function renderHomeSections() {
       renderCards('cards-recent', getRecentLocations());
       renderCards('cards-top', getTopConfirmedLocations());
+      renderHomeDogExplorers();
       updateCommunityStats();
     }
 
