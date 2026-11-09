@@ -214,7 +214,9 @@
       justify-content: center;
     }
 
-    #curator-feed-new-feed-layout .crt-post {
+    #curator-feed-new-feed-layout .crt-post,
+    #curator-feed-new-feed-layout .crt-grid-post,
+    #curator-feed-new-feed-layout .crt-mosaic-post {
       position: relative !important;
       inset: auto !important;
       transform: none !important;
@@ -232,6 +234,8 @@
     #curator-feed-new-feed-layout .crt-post-header,
     #curator-feed-new-feed-layout .crt-post-text,
     #curator-feed-new-feed-layout .crt-post-footer,
+    #curator-feed-new-feed-layout .crt-grid-post-text,
+    #curator-feed-new-feed-layout .crt-post-hover,
     #curator-feed-new-feed-layout .crt-post-max-height-read-more,
     #curator-feed-new-feed-layout .crt-load-more-container {
       display: none !important;
@@ -264,7 +268,9 @@
         justify-content: flex-start;
       }
 
-      #curator-feed-new-feed-layout .crt-post {
+      #curator-feed-new-feed-layout .crt-post,
+      #curator-feed-new-feed-layout .crt-grid-post,
+      #curator-feed-new-feed-layout .crt-mosaic-post {
         flex-basis: min(15rem, 78vw);
         width: min(15rem, 78vw) !important;
       }
@@ -4103,7 +4109,7 @@
       feed.dataset.visibilityObserverReady = 'true';
 
       const updateVisibility = () => {
-        const publishedPosts = feed.querySelectorAll('.crt-post');
+        const publishedPosts = feed.querySelectorAll('.crt-post, .crt-grid-post, .crt-mosaic-post');
         const hasPublishedPost = publishedPosts.length > 0 || Boolean(feed.querySelector(
           'a[href*="instagram.com/p/"], a[href*="instagram.com/reel/"]'
         ));
