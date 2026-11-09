@@ -192,6 +192,13 @@
       min-height: 0 !important;
     }
 
+    /* No modo Grid móvel, o Curator reserva por defeito três linhas vazias. */
+    #curator-feed-new-feed-layout .crt-feed-window {
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+    }
+
     #curator-feed-new-feed-layout .crt-feed {
       display: flex !important;
       align-items: flex-start;
