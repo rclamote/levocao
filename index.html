@@ -270,6 +270,31 @@
       opacity: 0.55;
     }
 
+    #curator-feed-new-feed-layout .levocao-curator-author {
+      position: absolute;
+      left: 0.7rem;
+      bottom: 0.7rem;
+      z-index: 8;
+      display: inline-flex;
+      max-width: calc(100% - 4rem);
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      background: rgba(61, 44, 30, 0.78);
+      padding: 0.38rem 0.62rem;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      pointer-events: none;
+    }
+
     @media (max-width: 640px) {
       #curator-feed-new-feed-layout .crt-feed.levocao-single-post {
         justify-content: flex-start;
@@ -4117,6 +4142,31 @@
 
       const updateVisibility = () => {
         const publishedPosts = feed.querySelectorAll('.crt-post, .crt-grid-post, .crt-mosaic-post');
+        publishedPosts.forEach(post => {
+          if (post.querySelector('.levocao-curator-author')) return;
+
+          const authorLink = post.querySelector('.crt-post-username a, .crt-post-fullname a');
+          let authorName = authorLink?.textContent?.trim().replace(/^@+/, '');
+          try {
+            const authorUrl = new URL(authorLink?.href || '', window.location.href);
+            const profilePath = authorUrl.hostname.includes('instagram.com')
+              ? authorUrl.pathname.split('/').filter(Boolean)[0]
+              : '';
+            if (profilePath && !['p', 'reel', 'stories', 'explore'].includes(profilePath)) {
+              authorName = decodeURIComponent(profilePath);
+            }
+          } catch (error) {
+            // Mantém o nome disponibilizado pelo Curator.
+          }
+          if (!authorName) return;
+
+          const authorBadge = document.createElement('span');
+          authorBadge.className = 'levocao-curator-author';
+          authorBadge.textContent = `@${authorName}`;
+          authorBadge.setAttribute('aria-label', `Fotografia de @${authorName}`);
+          post.appendChild(authorBadge);
+        });
+
         const hasPublishedPost = publishedPosts.length > 0 || Boolean(feed.querySelector(
           'a[href*="instagram.com/p/"], a[href*="instagram.com/reel/"]'
         ));
