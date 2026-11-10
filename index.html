@@ -1029,6 +1029,10 @@
             Admin
           </button>
 
+          <button id="nav-account-btn" type="button" onclick="openExplorerAccount()" class="auth-btn hidden">
+            Os meus cães
+          </button>
+
           <button id="nav-login-btn" type="button" onclick="openLoginModal()" class="auth-btn">
             Entrar
           </button>
@@ -1199,7 +1203,7 @@
                 <h2 class="mt-1 font-display text-2xl font-bold text-bark sm:text-3xl">Exploradores do mês 🐾</h2>
                 <p class="mt-2 max-w-2xl text-sm text-bark/60">Os cães que mais ajudaram a descobrir e confirmar locais onde somos bem-vindos.</p>
               </div>
-              <span class="rounded-full border border-sage/25 bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-sage">Pré-visualização</span>
+              <span class="rounded-full border border-sage/25 bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-sage">Comunidade</span>
             </div>
 
             <div id="home-dog-explorers" class="mt-5"></div>
@@ -1207,9 +1211,9 @@
             <div class="mt-5 flex flex-col gap-3 border-t border-sage/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p class="font-semibold text-bark">O teu cão também pode aparecer aqui.</p>
-                <p class="mt-0.5 text-xs text-bark/50">Nesta demonstração, os números são apenas exemplos e não são guardados no Supabase.</p>
+                <p class="mt-0.5 text-xs text-bark/50">Regista o teu cão, contribui para o mapa e ganha pontos pelas descobertas e confirmações.</p>
               </div>
-              <button type="button" onclick="showView('suggest')" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-sage px-5 py-3 text-sm font-semibold text-cream shadow-md transition hover:bg-moss active:scale-95">
+              <button type="button" onclick="startExplorerRegistration()" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-sage px-5 py-3 text-sm font-semibold text-cream shadow-md transition hover:bg-moss active:scale-95">
                 <span aria-hidden="true">🐾</span>
                 Tornar o meu cão explorador
               </button>
@@ -1622,25 +1626,23 @@
             <input id="sg-website" type="url" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="Ex: www.cafepark.pt" />
           </div>
 
-          <div class="rounded-2xl border border-sage/25 bg-sage/5 p-4">
+          <div id="suggest-explorer-box" class="rounded-2xl border border-sage/25 bg-sage/5 p-4">
             <div class="flex items-start justify-between gap-3 mb-3">
               <div>
                 <p class="text-sm font-semibold text-bark">🐾 Quem descobriu este local?</p>
-                <p class="text-xs text-bark/55 mt-1">Experimenta associar o teu cão à descoberta.</p>
+                <p id="sg-explorer-help" class="text-xs text-bark/55 mt-1">Se tiveres conta, podes associar a descoberta a um dos teus cães.</p>
               </div>
-              <span class="shrink-0 rounded-full border border-sage/25 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-sage">Pré-visualização</span>
+              <span class="shrink-0 rounded-full border border-sage/25 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-sage">+5 pontos</span>
             </div>
-            <div class="grid grid-cols-[64px_1fr] gap-3 items-center">
-              <label for="sg-dog-photo" class="relative flex h-16 w-16 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-sage/40 bg-white text-2xl" title="Escolher fotografia">
-                <span id="sg-dog-photo-placeholder">📷</span>
-                <img id="sg-dog-photo-preview" alt="Pré-visualização do cão" class="hidden absolute inset-0 h-full w-full object-cover">
-              </label>
-              <div>
-                <input id="sg-dog-name" type="text" maxlength="40" placeholder="Nome do cão (opcional)" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition">
-                <input id="sg-dog-photo" type="file" accept="image/*" class="sr-only" onchange="previewSuggestionDogPhoto(event)">
-              </div>
+            <div id="sg-explorer-signed-out" class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <p class="text-sm text-bark/60">Podes continuar sem conta; a sugestão será enviada normalmente.</p>
+              <button type="button" onclick="openLoginModal('explorer')" class="shrink-0 rounded-full border border-sage bg-white px-4 py-2 text-sm font-semibold text-sage hover:bg-sand">Entrar</button>
             </div>
-            <p class="mt-3 text-[11px] leading-relaxed text-bark/50"><strong>Neste branch de teste</strong>, estes dados não são enviados nem guardados. Servem apenas para veres como a ideia pode funcionar.</p>
+            <div id="sg-explorer-signed-in" class="hidden">
+              <label for="sg-dog-explorer" class="sr-only">Cão explorador</label>
+              <select id="sg-dog-explorer" onchange="setActiveDogExplorer(this.value)" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition"></select>
+              <button type="button" onclick="openExplorerAccount()" class="mt-2 text-xs font-semibold text-sage hover:underline">Gerir os meus cães</button>
+            </div>
           </div>
 
           <button type="submit" class="w-full bg-sage text-cream font-semibold py-3.5 rounded-full shadow-md hover:bg-moss transition active:scale-95">Enviar sugestão</button>
@@ -2160,37 +2162,103 @@
     </div>
 
     <div id="login-modal" class="hidden fixed inset-0 z-[100] bg-black/40 p-4">
-      <div class="max-w-md mx-auto bg-white rounded-3xl border border-sand shadow-xl mt-12">
+      <div class="max-w-md mx-auto bg-white rounded-3xl border border-sand shadow-xl mt-12 max-h-[90vh] overflow-y-auto">
         <div class="p-5 border-b border-sand flex items-center justify-between">
           <div>
-            <h3 class="font-display text-xl font-bold">Entrar no admin</h3>
-            <p class="text-sm text-bark/55">Usa o teu email e password do Supabase.</p>
+            <h3 class="font-display text-xl font-bold">Entrar no Levo o Cão</h3>
+            <p class="text-sm text-bark/55">Sem palavra-passe. Enviamos um acesso seguro para o teu email.</p>
           </div>
           <button type="button" onclick="closeLoginModal()" class="p-2 rounded-full hover:bg-sand transition">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
         </div>
 
-        <div class="p-5 space-y-4">
+        <div id="explorer-login-step-email" class="p-5 space-y-4">
+          <div>
+            <label for="explorer-login-email" class="block text-sm font-medium mb-1">Email</label>
+            <input id="explorer-login-email" type="email" autocomplete="email" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="nome@exemplo.pt" />
+          </div>
+          <p id="login-error" class="hidden text-sm text-red-600">Não foi possível entrar.</p>
+          <button id="explorer-login-send" type="button" onclick="sendExplorerLogin()" class="w-full bg-sage text-cream font-semibold py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+            Enviar acesso por email
+          </button>
+          <p class="text-xs leading-relaxed text-bark/45">Na primeira entrada, a conta é criada automaticamente. Nas visitas seguintes, permaneces ligado neste dispositivo.</p>
+          <button type="button" onclick="showAdminLogin()" class="w-full text-xs font-semibold text-bark/45 hover:text-sage">Acesso de administrador</button>
+        </div>
+
+        <div id="explorer-login-step-code" class="hidden p-5 space-y-4">
+          <div class="rounded-2xl border border-sage/20 bg-sage/5 p-4 text-sm text-bark/70">
+            Consulta o email <strong id="explorer-login-email-sent"></strong>. Introduz o código recebido ou abre o link de acesso.
+          </div>
+          <div>
+            <label for="explorer-login-code" class="block text-sm font-medium mb-1">Código de 6 algarismos</label>
+            <input id="explorer-login-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" class="w-full px-4 py-3 text-center text-xl tracking-[0.35em] rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="000000" />
+          </div>
+          <p id="login-code-error" class="hidden text-sm text-red-600"></p>
+          <button type="button" onclick="verifyExplorerLogin()" class="w-full bg-sage text-cream font-semibold py-3 rounded-full shadow-md hover:bg-moss">Confirmar código</button>
+          <button type="button" onclick="resetExplorerLogin()" class="w-full text-sm font-semibold text-sage">Usar outro email</button>
+        </div>
+
+        <div id="admin-login-step" class="hidden p-5 space-y-4">
+          <p class="rounded-2xl bg-sand/60 p-3 text-xs text-bark/60">Área reservada à administração do Levo o Cão.</p>
           <div>
             <label for="login-email" class="block text-sm font-medium mb-1">Email</label>
-            <input id="login-email" type="email" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="O teu email" />
+            <input id="login-email" type="email" autocomplete="username" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="O teu email" />
           </div>
-
           <div>
             <label for="login-password" class="block text-sm font-medium mb-1">Password</label>
-            <input id="login-password" type="password" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="A tua password" />
+            <input id="login-password" type="password" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage transition" placeholder="A tua password" />
+          </div>
+          <p id="admin-login-error" class="hidden text-sm text-red-600"></p>
+          <button type="button" onclick="adminLogin()" class="w-full bg-bark text-cream font-semibold py-3 rounded-full shadow-md hover:bg-bark/90">Entrar no admin</button>
+          <button type="button" onclick="resetExplorerLogin()" class="w-full text-sm font-semibold text-sage">Voltar</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="explorer-account-modal" class="hidden fixed inset-0 z-[100] bg-black/40 p-4">
+      <div class="max-w-lg mx-auto bg-cream rounded-3xl border border-sand shadow-xl mt-8 max-h-[90vh] overflow-y-auto">
+        <div class="bg-bark p-5 text-cream flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-cream/55">Clube dos Exploradores</p>
+            <h3 class="mt-1 font-display text-2xl font-bold">Os meus cães 🐾</h3>
+            <p id="explorer-account-email" class="mt-1 text-xs text-cream/60"></p>
+          </div>
+          <button type="button" onclick="closeExplorerAccount()" class="rounded-full p-2 hover:bg-white/10" aria-label="Fechar"><i data-lucide="x" class="w-5 h-5"></i></button>
+        </div>
+
+        <div class="p-5 space-y-5">
+          <div id="explorer-dogs-list" class="space-y-3"></div>
+          <div id="explorer-dogs-empty" class="hidden rounded-2xl border border-dashed border-sage/30 bg-white p-5 text-center">
+            <p class="font-semibold">Ainda não adicionaste nenhum cão.</p>
+            <p class="mt-1 text-sm text-bark/55">Adiciona o primeiro explorador para começar a ganhar pontos.</p>
           </div>
 
-          <p id="login-error" class="hidden text-sm text-red-600">Não foi possível entrar.</p>
+          <form id="explorer-dog-form" onsubmit="saveDogExplorer(event)" class="rounded-3xl border border-sand bg-white p-4 space-y-4">
+            <div>
+              <h4 class="font-display text-lg font-bold">Adicionar cão</h4>
+              <p class="text-xs text-bark/50">Podes adicionar mais do que um cão à mesma conta.</p>
+            </div>
+            <div class="flex items-center gap-4">
+              <label for="explorer-dog-photo" class="relative flex h-20 w-20 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-sage/40 bg-sand/40 text-3xl">
+                <span id="explorer-dog-photo-placeholder">📷</span>
+                <img id="explorer-dog-photo-preview" alt="Fotografia do cão" class="hidden absolute inset-0 h-full w-full object-cover">
+              </label>
+              <div class="flex-1">
+                <label for="explorer-dog-name" class="block text-sm font-medium mb-1">Nome do cão</label>
+                <input id="explorer-dog-name" required maxlength="40" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage" placeholder="Ex.: Mel" />
+                <input id="explorer-dog-photo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only" onchange="previewExplorerDogPhoto(event)" />
+              </div>
+            </div>
+            <div>
+              <label for="explorer-dog-bio" class="block text-sm font-medium mb-1">Apresentação <span class="font-normal text-bark/40">(opcional)</span></label>
+              <input id="explorer-dog-bio" maxlength="160" class="w-full px-4 py-3 rounded-xl border border-sand bg-white outline-none focus:border-sage" placeholder="Ex.: Adora praia, trilhos e esplanadas." />
+            </div>
+            <p id="explorer-dog-error" class="hidden text-sm text-red-600"></p>
+            <button id="explorer-dog-save" type="submit" class="w-full rounded-full bg-sage py-3 font-semibold text-cream shadow-md hover:bg-moss">Adicionar explorador</button>
+          </form>
 
-          <button type="button" onclick="login()" class="w-full bg-sage text-cream font-semibold py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
-            Entrar
-          </button>
-
-          <button type="button" onclick="closeLoginModal()" class="w-full bg-white text-sage font-semibold py-3 rounded-full border border-sage hover:bg-sand transition">
-            Cancelar
-          </button>
+          <button type="button" onclick="logout()" class="w-full rounded-full border border-sand bg-white py-3 text-sm font-semibold text-bark/60 hover:bg-sand">Terminar sessão</button>
         </div>
       </div>
     </div>
@@ -2220,6 +2288,8 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lemV1eGZvYmx5b2RqZmFvb2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjcxNDEsImV4cCI6MjA5MTUwMzE0MX0.UCzhiqF1dSKLou-Ma9RUkYepn0tc1LK_OsfS_80f-94';
     const MAC_IMAGE_DATA = '/mac.jpg';
     const PLACE_PHOTOS_BUCKET = 'place-photos';
+    const DOG_EXPLORER_PHOTOS_BUCKET = 'dog-explorer-photos';
+    const ACTIVE_DOG_EXPLORER_STORAGE_KEY = 'levocao_active_dog_explorer';
 
     const FEATURE_OPTIONS = [
       '🐾 Muito pet-friendly',
@@ -2274,6 +2344,12 @@
     let currentLocalityFilter = '';
     let activeSuggestionIndex = -1;
     let currentUser = null;
+    let currentUserIsAdmin = false;
+    let currentDogExplorers = [];
+    let publicDogExplorers = [];
+    let pendingExplorerEmail = '';
+    let explorerDogPhotoFile = null;
+    let dogExplorerSchemaReady = true;
     let currentChangeReportPlaceId = null;
     let adminSearch = '';
     let adminCategoryFilter = '';
@@ -2457,7 +2533,7 @@
     }
 
     async function loadCommunityPromptStats() {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
       const container = document.getElementById('admin-prompt-stats');
       if (!container) return;
 
@@ -3973,97 +4049,39 @@
     }
 
     function renderDogExplorersPreview(loc) {
-      const preview = getDogExplorerPreviewForPlace(loc.id);
-      const hasPreview = !!(preview.discovered?.name || preview.confirmed?.name);
-
-      return `
-        <section id="dog-explorers-preview-${loc.id}" class="rounded-2xl border border-sage/25 bg-sage/5 p-4 sm:p-5">
-          <div class="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <p class="font-display text-lg font-bold text-bark">Os cães deste local</p>
-              <p class="mt-1 text-sm text-bark/55">Dar protagonismo a quem descobre e confirma os locais.</p>
-            </div>
-            <span class="rounded-full border border-sage/25 bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-sage">Pré-visualização</span>
-          </div>
-          <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            ${renderDogExplorerRole(loc.id, 'discovered', 'Descoberto por', preview.discovered)}
-            ${renderDogExplorerRole(loc.id, 'confirmed', 'Confirmado por', preview.confirmed)}
-          </div>
-          <div class="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-bark/45">
-            <span>Guardado só nesta sessão · sem alterações no Supabase</span>
-            ${hasPreview ? `<button type="button" onclick="clearDogExplorerPreview(${loc.id})" class="font-semibold text-bark/55 hover:text-bark hover:underline">Limpar teste</button>` : ''}
-          </div>
-        </section>`;
+      return '';
     }
 
     function renderDogExplorerCardPreview(placeId) {
-      const preview = getDogExplorerPreviewForPlace(placeId);
-      const entries = [
-        preview.discovered?.name ? { label: 'Descoberto por', dog: preview.discovered } : null,
-        preview.confirmed?.name ? { label: 'Confirmado por', dog: preview.confirmed } : null
-      ].filter(Boolean);
-
-      if (!entries.length) return '';
-
-      return `
-        <div class="mb-3 rounded-xl border border-sage/20 bg-sage/5 px-3 py-2.5">
-          ${entries.map(({ label, dog }) => `
-            <div class="flex items-center gap-2 py-1">
-              ${renderDogPreviewAvatar(dog, 'h-8 w-8')}
-              <p class="min-w-0 text-xs text-bark/55"><span class="font-medium">${label}</span><br><strong class="truncate text-bark">${escapeHtml(dog.name)}</strong></p>
-            </div>`).join('')}
-        </div>`;
+      return '';
     }
 
     function getHomeDogExplorerEntries() {
-      const previewState = getDogExplorerPreviewState();
-      const dogMap = new Map();
+      const entries = publicDogExplorers.slice(0, 3).map((dog, index) => ({
+        ...dog,
+        label: index === 0 ? 'Explorador do mês' : index === 1 ? 'A ganhar terreno' : 'Em missão',
+        photo: getDogExplorerPhotoUrl(dog),
+        discovered: Number(dog.discovered_count || 0),
+        confirmed: Number(dog.confirmation_count || 0)
+      }));
 
-      Object.values(previewState).forEach((placePreview) => {
-        ['discovered', 'confirmed'].forEach((role) => {
-          const dog = placePreview?.[role];
-          if (!dog?.name) return;
-
-          const key = dog.name.trim().toLocaleLowerCase('pt-PT');
-          const existing = dogMap.get(key) || {
-            name: dog.name.trim().slice(0, 40),
-            photo: '',
-            discovered: 0,
-            confirmed: 0,
-            isSample: false
-          };
-
-          existing.photo = getSafeDogPreviewPhoto(dog.photo) || existing.photo;
-          existing[role] += 1;
-          dogMap.set(key, existing);
+      if (!entries.length) {
+        entries.push({
+          name: 'Mac',
+          label: 'Explorador fundador',
+          discovered: 0,
+          confirmed: 0,
+          photo: MAC_IMAGE_DATA,
+          founder: true
         });
-      });
-
-      const savedEntries = [...dogMap.values()]
-        .map((dog) => ({ ...dog, score: dog.discovered * 2 + dog.confirmed }))
-        .sort((a, b) => b.score - a.score || b.discovered - a.discovered || a.name.localeCompare(b.name, 'pt-PT'));
-
-      const sampleEntries = [
-        { name: 'Mel', label: 'Exploradora do mês', discovered: 6, confirmed: 9, emoji: '🐕', isSample: true },
-        { name: 'Bono', label: 'Em missão', discovered: 4, confirmed: 7, emoji: '🐶', isSample: true },
-        { name: 'Mac', label: 'Explorador fundador', discovered: 0, confirmed: 0, photo: MAC_IMAGE_DATA, founder: true, isSample: true }
-      ];
-
-      const entries = savedEntries.slice(0, 3);
-      sampleEntries.forEach((sample) => {
-        if (entries.length >= 3) return;
-        const alreadyIncluded = entries.some((entry) =>
-          entry.name.toLocaleLowerCase('pt-PT') === sample.name.toLocaleLowerCase('pt-PT')
-        );
-        if (!alreadyIncluded) entries.push(sample);
-      });
-
-      return entries.slice(0, 3);
+      }
+      return entries;
     }
 
     function renderHomeDogExplorerAvatar(explorer, sizeClass) {
       const uploadedPhoto = getSafeDogPreviewPhoto(explorer.photo);
-      const photo = uploadedPhoto || (explorer.photo === MAC_IMAGE_DATA ? MAC_IMAGE_DATA : '');
+      const remotePhoto = typeof explorer.photo === 'string' && /^https:\/\//i.test(explorer.photo) ? explorer.photo : '';
+      const photo = uploadedPhoto || remotePhoto || (explorer.photo === MAC_IMAGE_DATA ? MAC_IMAGE_DATA : '');
 
       if (photo) {
         return `<img src="${photo}" alt="${escapeHtml(explorer.name)}" class="${sizeClass} shrink-0 rounded-full border-4 border-white/90 object-cover shadow-lg">`;
@@ -4084,6 +4102,7 @@
       const valueClass = inverted ? 'text-cream' : 'text-bark';
       return `
         <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm ${textClass}">
+          <span><strong class="${valueClass}">${Number(explorer.points_month || 0)}</strong> pontos este mês</span>
           <span><strong class="${valueClass}">${explorer.discovered}</strong> ${explorer.discovered === 1 ? 'local descoberto' : 'locais descobertos'}</span>
           <span><strong class="${valueClass}">${explorer.confirmed}</strong> ${explorer.confirmed === 1 ? 'confirmação' : 'confirmações'}</span>
         </div>`;
@@ -4835,7 +4854,7 @@
                   id="detail-admin-edit-button"
                   type="button"
                   onclick="openEditPlaceModal(${loc.id})"
-                  class="${currentUser ? 'inline-flex' : 'hidden'} shrink-0 items-center gap-2 rounded-full border border-sage bg-white px-3 py-2 text-xs font-semibold text-sage transition hover:bg-sand"
+                  class="${currentUserIsAdmin ? 'inline-flex' : 'hidden'} shrink-0 items-center gap-2 rounded-full border border-sage bg-white px-3 py-2 text-xs font-semibold text-sage transition hover:bg-sand"
                 >
                   <i data-lucide="pencil" class="h-3.5 w-3.5"></i>
                   Editar no admin
@@ -5017,6 +5036,7 @@
       const visitorId = getVisitorId();
       const existing = userVoteMap[id];
       const nowIso = new Date().toISOString();
+      const activeDog = getActiveDogExplorer();
 
       try {
         if (!existing) {
@@ -5026,12 +5046,16 @@
               place_id: id,
               vote_type: type,
               visitor_id: visitorId,
+              owner_id: activeDog ? currentUser?.id : null,
+              dog_explorer_id: activeDog?.id || null,
               updated_at: nowIso
             }]);
 
           if (error) throw error;
 
-          alert(`Obrigado! Confirmaste "${loc.name}" 🐾`);
+          alert(activeDog && type === 'yes'
+            ? `Obrigado! Confirmaste "${loc.name}" e ${activeDog.name} ganhou 1 ponto 🐾`
+            : `Obrigado! Confirmaste "${loc.name}" 🐾`);
         } else {
           const referenceDate = existing.updated_at || existing.created_at;
           const minutesSince = getMinutesSince(referenceDate);
@@ -5076,7 +5100,9 @@
 
         await Promise.all([
           loadConfirmationSummary(),
-          loadUserVotes()
+          loadUserVotes(),
+          currentUser ? loadCurrentDogExplorers() : Promise.resolve(),
+          loadPublicDogExplorers()
         ]);
 
         renderHomeSections();
@@ -5459,6 +5485,7 @@
       const latitude = latitudeRaw ? Number(latitudeRaw) : null;
       const longitude = longitudeRaw ? Number(longitudeRaw) : null;
       const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
+      const activeDog = getActiveDogExplorer();
 
       const emojiMap = {
         'Comer & Beber': '🍽️',
@@ -5505,7 +5532,9 @@
         dogs: dog_status !== 'no',
         dog_status,
         confirmations: 1,
-        status: 'pending'
+        status: 'pending',
+        owner_id: activeDog ? currentUser?.id : null,
+        dog_explorer_id: activeDog?.id || null
       };
 
       const { error } = await supabaseClient.from('suggestions').insert([payload]);
@@ -5568,7 +5597,7 @@
     }
 
     async function loadAdminSuggestions() {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       const container = document.getElementById('admin-suggestions');
       const empty = document.getElementById('admin-empty');
@@ -5732,7 +5761,7 @@ function toggleAdminPlaceDetails(id) {
   lucide.createIcons();
 }
    async function loadAdminChangeReports() {
-  if (!currentUser) return;
+  if (!currentUserIsAdmin) return;
 
   const container = document.getElementById('admin-change-reports');
   const empty = document.getElementById('admin-change-reports-empty');
@@ -5786,7 +5815,7 @@ function toggleAdminPlaceDetails(id) {
 }
 
 async function reviewChangeReport(id, status) {
-  if (!currentUser || !['resolved', 'dismissed'].includes(status)) return;
+  if (!currentUserIsAdmin || !['resolved', 'dismissed'].includes(status)) return;
 
   try {
     const { error } = await supabaseClient
@@ -5843,14 +5872,14 @@ async function loadWhatsAppTable() {
   adminWhatsAppRows = [];
   body.innerHTML = '';
   const summary = document.getElementById('admin-wa-summary');
-  if (!currentUser) { summary.textContent = ''; return; }
+  if (!currentUserIsAdmin) { summary.textContent = ''; return; }
   summary.textContent = 'A carregar contactos...';
   try {
     const [stats, places] = await Promise.all([
       supabaseClient.from('admin_place_whatsapp_stats').select('*'),
       supabaseClient.from('places').select('id,name,municipality,city,is_active')
     ]);
-    if (request !== adminWhatsAppRequest || !currentUser) return;
+    if (request !== adminWhatsAppRequest || !currentUserIsAdmin) return;
     if (stats.error) throw stats.error;
     if (places.error) throw places.error;
     const byId = new Map((places.data || []).map(place => [Number(place.id), place]));
@@ -5868,7 +5897,7 @@ async function loadWhatsAppTable() {
 
 async function loadWhatsAppAdminStats() {
   whatsappAdminStatsMap = {};
-  if (!currentUser || !supabaseClient) return;
+  if (!currentUserIsAdmin || !supabaseClient) return;
 
   try {
     const { data, error } = await supabaseClient
@@ -5890,7 +5919,7 @@ async function loadWhatsAppAdminStats() {
 }
 
    async function loadAdminPlaces() {
-  if (!currentUser) return;
+  if (!currentUserIsAdmin) return;
 
   const container = document.getElementById('admin-places');
   const empty = document.getElementById('admin-places-empty');
@@ -5972,7 +6001,7 @@ async function loadWhatsAppAdminStats() {
 }
 
     async function approveSuggestion(id) {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       try {
         const { data, error } = await supabaseClient
@@ -6007,13 +6036,32 @@ async function loadWhatsAppAdminStats() {
           is_active: true
         };
 
-        const { error: insertError } = await supabaseClient.from('places').insert([payload]);
+        const { data: insertedPlace, error: insertError } = await supabaseClient
+          .from('places')
+          .insert([payload])
+          .select('id')
+          .single();
         if (insertError) {
           if (insertError.code === '23505') {
             alert('Este local já existe nos locais ativos.');
             return;
           }
           throw insertError;
+        }
+
+        if (data.dog_explorer_id && data.owner_id && insertedPlace?.id) {
+          const { error: contributionError } = await supabaseClient
+            .from('explorer_contributions')
+            .insert([{
+              dog_explorer_id: data.dog_explorer_id,
+              owner_id: data.owner_id,
+              place_id: insertedPlace.id,
+              contribution_type: 'discovery',
+              points: 5,
+              source_type: 'suggestion',
+              source_id: String(data.id)
+            }]);
+          if (contributionError && contributionError.code !== '23505') throw contributionError;
         }
 
         const { error: deleteError } = await supabaseClient.from('suggestions').delete().eq('id', id);
@@ -6029,7 +6077,7 @@ async function loadWhatsAppAdminStats() {
     }
 
     async function rejectSuggestion(id) {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       try {
         const { error } = await supabaseClient.from('suggestions').delete().eq('id', id);
@@ -6042,7 +6090,7 @@ async function loadWhatsAppAdminStats() {
     }
 
     async function deactivatePlace(id) {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       const place = locations.find((item) => item.id === id);
       if (!place) return;
@@ -6208,7 +6256,7 @@ async function loadWhatsAppAdminStats() {
     }
 
     function openEditPlaceModal(id) {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       const place = locations.find((item) => item.id === id);
       if (!place) return;
@@ -6217,7 +6265,7 @@ async function loadWhatsAppAdminStats() {
     }
 
     async function openApproveSuggestionModal(id) {
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       try {
         const { data, error } = await supabaseClient
@@ -6446,7 +6494,7 @@ async function loadWhatsAppAdminStats() {
 
     async function saveEditPlace(event) {
       event.preventDefault();
-      if (!currentUser) return;
+      if (!currentUserIsAdmin) return;
 
       const id = Number(document.getElementById('edit-place-id').value);
       const source = document.getElementById('edit-source')?.value || 'place';
@@ -6572,10 +6620,16 @@ async function loadWhatsAppAdminStats() {
       }
     }
 
-    function openLoginModal() {
+    function isAdminUser(user = currentUser) {
+      return user?.app_metadata?.role === 'admin';
+    }
+
+    function openLoginModal(mode = 'explorer') {
       hideCommunityPrompt();
       document.getElementById('login-modal').classList.remove('hidden');
       document.getElementById('login-error').classList.add('hidden');
+      if (mode === 'admin') showAdminLogin();
+      else resetExplorerLogin();
       lucide.createIcons();
     }
 
@@ -6583,26 +6637,49 @@ async function loadWhatsAppAdminStats() {
       document.getElementById('login-modal').classList.add('hidden');
     }
 
+    function resetExplorerLogin() {
+      document.getElementById('explorer-login-step-email')?.classList.remove('hidden');
+      document.getElementById('explorer-login-step-code')?.classList.add('hidden');
+      document.getElementById('admin-login-step')?.classList.add('hidden');
+      document.getElementById('login-error')?.classList.add('hidden');
+      document.getElementById('login-code-error')?.classList.add('hidden');
+      const code = document.getElementById('explorer-login-code');
+      if (code) code.value = '';
+    }
+
+    function showAdminLogin() {
+      document.getElementById('explorer-login-step-email')?.classList.add('hidden');
+      document.getElementById('explorer-login-step-code')?.classList.add('hidden');
+      document.getElementById('admin-login-step')?.classList.remove('hidden');
+      document.getElementById('admin-login-error')?.classList.add('hidden');
+    }
+
     function updateAuthUI() {
       const loginBtn = document.getElementById('nav-login-btn');
       const logoutBtn = document.getElementById('nav-logout-btn');
       const adminBtn = document.getElementById('nav-admin-btn');
+      const accountBtn = document.getElementById('nav-account-btn');
       const detailEditBtn = document.getElementById('detail-admin-edit-button');
 
-      if (!loginBtn || !logoutBtn || !adminBtn) return;
+      if (!loginBtn || !logoutBtn || !adminBtn || !accountBtn) return;
 
       if (currentUser) {
         loginBtn.classList.add('hidden');
         logoutBtn.classList.remove('hidden');
-        adminBtn.classList.remove('hidden');
-        if (detailEditBtn) {
+        accountBtn.classList.remove('hidden');
+        adminBtn.classList.toggle('hidden', !currentUserIsAdmin);
+        if (detailEditBtn && currentUserIsAdmin) {
           detailEditBtn.classList.remove('hidden');
           detailEditBtn.classList.add('inline-flex');
+        } else if (detailEditBtn) {
+          detailEditBtn.classList.add('hidden');
+          detailEditBtn.classList.remove('inline-flex');
         }
       } else {
         loginBtn.classList.remove('hidden');
         logoutBtn.classList.add('hidden');
         adminBtn.classList.add('hidden');
+        accountBtn.classList.add('hidden');
         if (detailEditBtn) {
           detailEditBtn.classList.add('hidden');
           detailEditBtn.classList.remove('inline-flex');
@@ -6612,12 +6689,80 @@ async function loadWhatsAppAdminStats() {
           showView('home');
         }
       }
+      renderSuggestionExplorerChooser();
     }
 
-    async function login() {
+    async function sendExplorerLogin() {
+      const email = document.getElementById('explorer-login-email').value.trim().toLowerCase();
+      const errorEl = document.getElementById('login-error');
+      const button = document.getElementById('explorer-login-send');
+      errorEl.classList.add('hidden');
+      if (!email || !email.includes('@')) {
+        errorEl.textContent = 'Introduz um email válido.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        button.disabled = true;
+        button.textContent = 'A enviar...';
+        const { error } = await supabaseClient.auth.signInWithOtp({
+          email,
+          options: {
+            shouldCreateUser: true,
+            emailRedirectTo: window.location.origin
+          }
+        });
+        if (error) throw error;
+        pendingExplorerEmail = email;
+        document.getElementById('explorer-login-email-sent').textContent = email;
+        document.getElementById('explorer-login-step-email').classList.add('hidden');
+        document.getElementById('explorer-login-step-code').classList.remove('hidden');
+        setTimeout(() => document.getElementById('explorer-login-code')?.focus(), 50);
+      } catch (error) {
+        console.error('Erro ao enviar acesso:', error);
+        errorEl.textContent = error?.message || 'Não foi possível enviar o acesso. Tenta novamente.';
+        errorEl.classList.remove('hidden');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Enviar acesso por email';
+      }
+    }
+
+    async function verifyExplorerLogin() {
+      const token = document.getElementById('explorer-login-code').value.replace(/\D/g, '');
+      const errorEl = document.getElementById('login-code-error');
+      errorEl.classList.add('hidden');
+      if (!pendingExplorerEmail || token.length !== 6) {
+        errorEl.textContent = 'Introduz o código de 6 algarismos recebido por email.';
+        errorEl.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const { data, error } = await supabaseClient.auth.verifyOtp({
+          email: pendingExplorerEmail,
+          token,
+          type: 'email'
+        });
+        if (error) throw error;
+        currentUser = data.user || data.session?.user || null;
+        currentUserIsAdmin = isAdminUser(currentUser);
+        await loadCurrentDogExplorers();
+        updateAuthUI();
+        closeLoginModal();
+        openExplorerAccount();
+      } catch (error) {
+        console.error('Erro ao confirmar código:', error);
+        errorEl.textContent = 'O código não é válido ou já expirou.';
+        errorEl.classList.remove('hidden');
+      }
+    }
+
+    async function adminLogin() {
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
-      const errorEl = document.getElementById('login-error');
+      const errorEl = document.getElementById('admin-login-error');
 
       errorEl.classList.add('hidden');
 
@@ -6630,14 +6775,25 @@ async function loadWhatsAppAdminStats() {
         if (error) throw error;
 
         currentUser = data.user || null;
+        currentUserIsAdmin = isAdminUser(currentUser);
+        if (!currentUserIsAdmin) {
+          await supabaseClient.auth.signOut();
+          currentUser = null;
+          throw new Error('Esta conta não tem acesso à administração.');
+        }
+        await loadCurrentDogExplorers();
         updateAuthUI();
         closeLoginModal();
         showView('admin');
       } catch (error) {
         console.error('Erro no login:', error);
-        errorEl.textContent = 'Email ou password inválidos.';
+        errorEl.textContent = error?.message || 'Email ou password inválidos.';
         errorEl.classList.remove('hidden');
       }
+    }
+
+    async function login() {
+      return adminLogin();
     }
 
     async function logout() {
@@ -6647,13 +6803,16 @@ async function loadWhatsAppAdminStats() {
         console.error('Erro no logout:', error);
       }
       currentUser = null;
+      currentUserIsAdmin = false;
+      currentDogExplorers = [];
+      closeExplorerAccount();
       updateAuthUI();
       showView('home');
     }
 
     function goToAdmin() {
-      if (!currentUser) {
-        openLoginModal();
+      if (!currentUserIsAdmin) {
+        openLoginModal('admin');
         return;
       }
       showView('admin');
@@ -6664,11 +6823,265 @@ async function loadWhatsAppAdminStats() {
         const { data, error } = await supabaseClient.auth.getSession();
         if (error) throw error;
         currentUser = data?.session?.user || null;
+        currentUserIsAdmin = isAdminUser(currentUser);
+        if (currentUser) await loadCurrentDogExplorers();
         updateAuthUI();
       } catch (error) {
         console.error('Erro ao restaurar sessão:', error);
         currentUser = null;
+        currentUserIsAdmin = false;
+        currentDogExplorers = [];
         updateAuthUI();
+      }
+    }
+
+    function startExplorerRegistration() {
+      if (currentUser) openExplorerAccount();
+      else openLoginModal('explorer');
+    }
+
+    function getDogExplorerPhotoUrl(dog) {
+      if (!dog?.photo_path || !supabaseClient) return '';
+      return supabaseClient.storage.from(DOG_EXPLORER_PHOTOS_BUCKET).getPublicUrl(dog.photo_path).data?.publicUrl || '';
+    }
+
+    function isMissingDogExplorerSchemaError(error) {
+      return ['42P01', 'PGRST205', 'PGRST204'].includes(String(error?.code || ''));
+    }
+
+    function getActiveDogExplorerId() {
+      const stored = localStorage.getItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY) || '';
+      if (currentDogExplorers.some((dog) => dog.id === stored)) return stored;
+      return currentDogExplorers[0]?.id || '';
+    }
+
+    function getActiveDogExplorer() {
+      const id = getActiveDogExplorerId();
+      return currentDogExplorers.find((dog) => dog.id === id) || null;
+    }
+
+    function setActiveDogExplorer(id) {
+      if (!currentDogExplorers.some((dog) => dog.id === id)) return;
+      localStorage.setItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY, id);
+      renderExplorerAccount();
+      renderSuggestionExplorerChooser();
+    }
+
+    async function loadCurrentDogExplorers() {
+      if (!currentUser) {
+        currentDogExplorers = [];
+        return;
+      }
+      const { data, error } = await supabaseClient
+        .from('dog_explorers')
+        .select('*')
+        .eq('owner_id', currentUser.id)
+        .order('created_at', { ascending: true });
+      if (error) {
+        if (isMissingDogExplorerSchemaError(error)) {
+          dogExplorerSchemaReady = false;
+          currentDogExplorers = [];
+          return;
+        }
+        throw error;
+      }
+      dogExplorerSchemaReady = true;
+      currentDogExplorers = Array.isArray(data) ? data : [];
+      if (currentDogExplorers.length && !getActiveDogExplorerId()) {
+        localStorage.setItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY, currentDogExplorers[0].id);
+      }
+      renderSuggestionExplorerChooser();
+    }
+
+    async function loadPublicDogExplorers() {
+      try {
+        const monthKey = new Date().toISOString().slice(0, 7);
+        const { data, error } = await supabaseClient
+          .from('dog_explorers')
+          .select('id,name,photo_path,bio,points_total,points_month,points_month_key,discovered_count,confirmation_count,created_at')
+          .eq('is_public', true)
+          .order('points_month', { ascending: false })
+          .order('points_total', { ascending: false })
+          .limit(12);
+        if (error) throw error;
+        publicDogExplorers = (data || []).map((dog) => ({
+          ...dog,
+          points_month: dog.points_month_key === monthKey ? Number(dog.points_month || 0) : 0
+        })).sort((a, b) => b.points_month - a.points_month || Number(b.points_total || 0) - Number(a.points_total || 0));
+      } catch (error) {
+        if (isMissingDogExplorerSchemaError(error)) dogExplorerSchemaReady = false;
+        else console.error('Erro ao carregar exploradores:', error);
+        publicDogExplorers = [];
+      }
+      renderHomeDogExplorers();
+    }
+
+    function openExplorerAccount() {
+      if (!currentUser) {
+        openLoginModal('explorer');
+        return;
+      }
+      document.getElementById('explorer-account-email').textContent = currentUser.email || '';
+      renderExplorerAccount();
+      document.getElementById('explorer-account-modal').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function closeExplorerAccount() {
+      document.getElementById('explorer-account-modal')?.classList.add('hidden');
+    }
+
+    function renderExplorerAccount() {
+      const list = document.getElementById('explorer-dogs-list');
+      const empty = document.getElementById('explorer-dogs-empty');
+      if (!list || !empty) return;
+      const activeId = getActiveDogExplorerId();
+      empty.classList.toggle('hidden', currentDogExplorers.length > 0);
+      if (!dogExplorerSchemaReady) {
+        empty.classList.remove('hidden');
+        empty.innerHTML = '<p class="font-semibold">O registo está a ser preparado.</p><p class="mt-1 text-sm text-bark/55">A base de dados deste branch ainda precisa da migração dos exploradores.</p>';
+        document.getElementById('explorer-dog-form')?.classList.add('hidden');
+      } else {
+        empty.innerHTML = '<p class="font-semibold">Ainda não adicionaste nenhum cão.</p><p class="mt-1 text-sm text-bark/55">Adiciona o primeiro explorador para começar a ganhar pontos.</p>';
+        document.getElementById('explorer-dog-form')?.classList.remove('hidden');
+      }
+      list.innerHTML = currentDogExplorers.map((dog) => {
+        const photo = getDogExplorerPhotoUrl(dog);
+        const monthKey = new Date().toISOString().slice(0, 7);
+        const monthPoints = dog.points_month_key === monthKey ? Number(dog.points_month || 0) : 0;
+        return `
+          <article class="rounded-2xl border ${dog.id === activeId ? 'border-sage bg-sage/5' : 'border-sand bg-white'} p-4">
+            <div class="flex items-center gap-3">
+              ${photo
+                ? `<img src="${photo}" alt="${escapeHtml(dog.name)}" class="h-16 w-16 shrink-0 rounded-full object-cover border-2 border-white shadow-sm">`
+                : '<span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-sand text-3xl">🐶</span>'}
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-2">
+                  <h4 class="truncate font-display text-xl font-bold">${escapeHtml(dog.name)}</h4>
+                  ${dog.id === activeId ? '<span class="rounded-full bg-sage px-2 py-0.5 text-[10px] font-bold text-cream">ATIVO</span>' : ''}
+                </div>
+                ${dog.bio ? `<p class="mt-0.5 truncate text-xs text-bark/50">${escapeHtml(dog.bio)}</p>` : ''}
+                <p class="mt-1 text-sm text-bark/65"><strong>${Number(dog.points_total || 0)}</strong> pontos · <strong>${monthPoints}</strong> este mês</p>
+              </div>
+            </div>
+            <div class="mt-3 flex flex-wrap gap-2 border-t border-sand pt-3">
+              ${dog.id !== activeId ? `<button type="button" onclick="setActiveDogExplorer('${dog.id}')" class="rounded-full border border-sage px-3 py-1.5 text-xs font-semibold text-sage">Usar este cão</button>` : ''}
+              <button type="button" onclick="deleteDogExplorer('${dog.id}')" class="ml-auto px-2 py-1.5 text-xs font-semibold text-red-600/70 hover:text-red-600">Remover</button>
+            </div>
+          </article>`;
+      }).join('');
+      lucide.createIcons();
+    }
+
+    function renderSuggestionExplorerChooser() {
+      const signedOut = document.getElementById('sg-explorer-signed-out');
+      const signedIn = document.getElementById('sg-explorer-signed-in');
+      const select = document.getElementById('sg-dog-explorer');
+      const help = document.getElementById('sg-explorer-help');
+      if (!signedOut || !signedIn || !select) return;
+
+      const hasDogs = currentUser && currentDogExplorers.length > 0;
+      signedOut.classList.toggle('hidden', !!hasDogs);
+      signedIn.classList.toggle('hidden', !hasDogs);
+      if (currentUser && !hasDogs) {
+        signedOut.querySelector('p').textContent = 'Adiciona primeiro um cão para receber os pontos desta descoberta.';
+        signedOut.querySelector('button').textContent = 'Adicionar cão';
+        signedOut.querySelector('button').setAttribute('onclick', 'openExplorerAccount()');
+      } else if (!currentUser) {
+        signedOut.querySelector('p').textContent = 'Podes continuar sem conta; a sugestão será enviada normalmente.';
+        signedOut.querySelector('button').textContent = 'Entrar';
+        signedOut.querySelector('button').setAttribute('onclick', "openLoginModal('explorer')");
+      }
+      if (!hasDogs) return;
+
+      const activeId = getActiveDogExplorerId();
+      select.innerHTML = currentDogExplorers.map((dog) => `<option value="${dog.id}" ${dog.id === activeId ? 'selected' : ''}>${escapeHtml(dog.name)} · recebe 5 pontos após aprovação</option>`).join('');
+      if (help) help.textContent = `A descoberta será atribuída a ${getActiveDogExplorer()?.name || 'este explorador'} depois de aprovada.`;
+    }
+
+    function previewExplorerDogPhoto(event) {
+      const file = event.target.files?.[0] || null;
+      const preview = document.getElementById('explorer-dog-photo-preview');
+      const placeholder = document.getElementById('explorer-dog-photo-placeholder');
+      explorerDogPhotoFile = null;
+      if (!file) return;
+      if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 6 * 1024 * 1024) {
+        alert('Escolhe uma fotografia JPG, PNG ou WebP com menos de 6 MB.');
+        event.target.value = '';
+        return;
+      }
+      explorerDogPhotoFile = file;
+      preview.src = URL.createObjectURL(file);
+      preview.classList.remove('hidden');
+      placeholder.classList.add('hidden');
+    }
+
+    async function saveDogExplorer(event) {
+      event.preventDefault();
+      if (!currentUser) return;
+      const name = document.getElementById('explorer-dog-name').value.trim();
+      const bio = document.getElementById('explorer-dog-bio').value.trim();
+      const errorEl = document.getElementById('explorer-dog-error');
+      const button = document.getElementById('explorer-dog-save');
+      errorEl.classList.add('hidden');
+
+      try {
+        button.disabled = true;
+        button.textContent = 'A adicionar...';
+        let photoPath = null;
+        if (explorerDogPhotoFile) {
+          const extension = explorerDogPhotoFile.type === 'image/png' ? 'png' : explorerDogPhotoFile.type === 'image/webp' ? 'webp' : 'jpg';
+          photoPath = `${currentUser.id}/${crypto.randomUUID()}.${extension}`;
+          const { error: uploadError } = await supabaseClient.storage
+            .from(DOG_EXPLORER_PHOTOS_BUCKET)
+            .upload(photoPath, explorerDogPhotoFile, { cacheControl: '31536000', upsert: false });
+          if (uploadError) throw uploadError;
+        }
+
+        const { data, error } = await supabaseClient
+          .from('dog_explorers')
+          .insert([{ owner_id: currentUser.id, name, bio: bio || null, photo_path: photoPath }])
+          .select('*')
+          .single();
+        if (error) throw error;
+        currentDogExplorers.push(data);
+        if (currentDogExplorers.length === 1) localStorage.setItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY, data.id);
+        event.currentTarget.reset();
+        explorerDogPhotoFile = null;
+        const preview = document.getElementById('explorer-dog-photo-preview');
+        preview.src = '';
+        preview.classList.add('hidden');
+        document.getElementById('explorer-dog-photo-placeholder').classList.remove('hidden');
+        renderExplorerAccount();
+        renderSuggestionExplorerChooser();
+        await loadPublicDogExplorers();
+      } catch (error) {
+        console.error('Erro ao adicionar explorador:', error);
+        errorEl.textContent = error?.message || 'Não foi possível adicionar o cão.';
+        errorEl.classList.remove('hidden');
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Adicionar explorador';
+      }
+    }
+
+    async function deleteDogExplorer(id) {
+      const dog = currentDogExplorers.find((item) => item.id === id);
+      if (!dog || !confirm(`Remover ${dog.name} dos exploradores?`)) return;
+      try {
+        const { error } = await supabaseClient.from('dog_explorers').delete().eq('id', id);
+        if (error) throw error;
+        if (dog.photo_path) await supabaseClient.storage.from(DOG_EXPLORER_PHOTOS_BUCKET).remove([dog.photo_path]);
+        currentDogExplorers = currentDogExplorers.filter((item) => item.id !== id);
+        if (localStorage.getItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY) === id) {
+          localStorage.setItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY, currentDogExplorers[0]?.id || '');
+        }
+        renderExplorerAccount();
+        renderSuggestionExplorerChooser();
+        await loadPublicDogExplorers();
+      } catch (error) {
+        console.error('Erro ao remover explorador:', error);
+        alert('Não foi possível remover o cão.');
       }
     }
 
@@ -6763,9 +7176,9 @@ function showView(view) {
   }
 
   if (view === 'admin') {
-    if (!currentUser) {
+    if (!currentUserIsAdmin) {
       alert('Precisas de entrar para aceder ao admin.');
-      openLoginModal();
+      openLoginModal('admin');
       document.getElementById('view-admin').classList.add('hidden');
       document.getElementById('view-home').classList.remove('hidden');
       updateResultsBarVisibility('home');
@@ -6801,6 +7214,11 @@ function showView(view) {
         closeLoginModal();
       }
 
+      const explorerAccountModal = document.getElementById('explorer-account-modal');
+      if (explorerAccountModal && e.target === explorerAccountModal) {
+        closeExplorerAccount();
+      }
+
       const changeReportModal = document.getElementById('change-report-modal');
       if (changeReportModal && e.target === changeReportModal) {
         closeChangeReportModal();
@@ -6813,6 +7231,7 @@ function showView(view) {
           dismissCommunityPrompt();
         }
         closeLoginModal();
+        closeExplorerAccount();
         closeEditPlaceModal();
         closeChangeReportModal();
       }
@@ -6872,9 +7291,23 @@ function showView(view) {
 
       await restoreSession();
 
-      supabaseClient.auth.onAuthStateChange((_event, session) => {
+      supabaseClient.auth.onAuthStateChange((event, session) => {
         currentUser = session?.user || null;
+        currentUserIsAdmin = isAdminUser(currentUser);
         updateAuthUI();
+        if (currentUser) {
+          setTimeout(async () => {
+            try {
+              await loadCurrentDogExplorers();
+              if (event === 'SIGNED_IN' && !currentUserIsAdmin) {
+                closeLoginModal();
+                openExplorerAccount();
+              }
+            } catch (error) {
+              console.error('Erro ao carregar os cães da conta:', error);
+            }
+          }, 0);
+        }
       });
 
       const suggestForm = document.getElementById('suggest-form');
@@ -6921,7 +7354,10 @@ function showView(view) {
         editPlaceForm.addEventListener('submit', saveEditPlace);
       }
 
-      await loadPlacesFromSupabase();
+      await Promise.all([
+        loadPlacesFromSupabase(),
+        loadPublicDogExplorers()
+      ]);
       if (!openLocalFromUrlParam()) {
         openGuideFromUrlPath();
       }
