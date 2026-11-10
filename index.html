@@ -6568,11 +6568,21 @@ async function loadWhatsAppAdminStats() {
         }
 
         if (source === 'suggestion') {
+          // Preserve ownership before deleting the suggestion, so discovery points are awarded.
+          const { data: suggestion, error: suggestionError } = await supabaseClient
+            .from('suggestions')
+            .select('id,owner_id,dog_explorer_id')
+            .eq('id', id)
+            .single();
+          if (suggestionError) throw suggestionError;
+
           payload.photo_url = await uploadEditPhotoIfNeeded(`suggestion-${id}`, name);
 
-          const { error: insertError } = await supabaseClient
+          const { data: insertedPlace, error: insertError } = await supabaseClient
             .from('places')
-            .insert([{ ...payload, confirmations: 1, is_active: true }]);
+            .insert([{ ...payload, confirmations: 1, is_active: true }])
+            .select('id')
+            .single();
 
           if (insertError) {
             if (insertError.code === '23505') {
@@ -6580,6 +6590,21 @@ async function loadWhatsAppAdminStats() {
               return;
             }
             throw insertError;
+          }
+
+          if (suggestion.dog_explorer_id && suggestion.owner_id) {
+            const { error: contributionError } = await supabaseClient
+              .from('explorer_contributions')
+              .insert([{
+                dog_explorer_id: suggestion.dog_explorer_id,
+                owner_id: suggestion.owner_id,
+                place_id: insertedPlace.id,
+                contribution_type: 'discovery',
+                points: 5,
+                source_type: 'suggestion',
+                source_id: String(suggestion.id)
+              }]);
+            if (contributionError && contributionError.code !== '23505') throw contributionError;
           }
 
           const { error: deleteError } = await supabaseClient
