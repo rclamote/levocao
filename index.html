@@ -7046,7 +7046,7 @@ async function loadWhatsAppAdminStats() {
         if (error) throw error;
         currentDogExplorers.push(data);
         if (currentDogExplorers.length === 1) localStorage.setItem(ACTIVE_DOG_EXPLORER_STORAGE_KEY, data.id);
-        event.currentTarget.reset();
+        document.getElementById('explorer-dog-form')?.reset();
         explorerDogPhotoFile = null;
         const preview = document.getElementById('explorer-dog-photo-preview');
         preview.src = '';
