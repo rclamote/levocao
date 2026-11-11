@@ -5507,6 +5507,16 @@
       const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
       const activeDog = getActiveDogExplorer();
 
+      // Anonymous suggestions remain possible, but must not silently promise points.
+      if (!activeDog) {
+        const proceed = confirm(
+          'Esta sugestão não está associada a nenhum Cão Explorador e não dará 5 pontos. ' +
+          'Para ganhar pontos, entra na conta dos Exploradores e escolhe um cão antes de enviar. ' +
+          'Queres enviar a sugestão sem pontos?'
+        );
+        if (!proceed) return false;
+      }
+
       const emojiMap = {
         'Comer & Beber': '🍽️',
         Praia: '🏖️',
@@ -5661,6 +5671,7 @@
               </div>
               <div class="space-y-2 text-sm text-bark/70 mb-4">
                 <p><strong>Estado:</strong> ${dogMeta.text}</p>
+                <p class="font-semibold ${item.owner_id && item.dog_explorer_id ? 'text-sage' : 'text-amber-800'}"><strong>Pontos Explorador:</strong> ${item.owner_id && item.dog_explorer_id ? '+5 pontos após aprovação' : 'Sem cão associado — não atribui pontos'}</p>
                 <p><strong>Distrito:</strong> ${item.district || '—'}</p>
                 <p><strong>Concelho:</strong> ${item.municipality || '—'}</p>
                 <p><strong>Localidade:</strong> ${item.locality || '—'}</p>
@@ -6032,6 +6043,8 @@ async function loadWhatsAppAdminStats() {
 
         if (error) throw error;
         if (!data) return;
+        if ((!data.owner_id || !data.dog_explorer_id) &&
+            !confirm('Esta sugestão não tem Cão Explorador associado. A aprovação não dará 5 pontos. Aprovar mesmo assim?')) return;
 
         const payload = {
           name: data.name,
@@ -6595,6 +6608,10 @@ async function loadWhatsAppAdminStats() {
             .eq('id', id)
             .single();
           if (suggestionError) throw suggestionError;
+
+          if (!suggestion.owner_id || !suggestion.dog_explorer_id) {
+            if (!confirm('Esta sugestão não tem Cão Explorador associado. A aprovação não dará 5 pontos. Aprovar mesmo assim?')) return;
+          }
 
           payload.photo_url = await uploadEditPhotoIfNeeded(`suggestion-${id}`, name);
 
