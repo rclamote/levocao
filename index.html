@@ -7002,7 +7002,7 @@ async function loadWhatsAppAdminStats() {
       const dashboard = document.getElementById('explorer-dashboard');
       const addAnother = document.getElementById('explorer-add-another-toggle');
       const formTitle = document.getElementById('explorer-dog-form-title');
-      empty.classList.toggle('hidden', hasDogs);
+      empty.classList.toggle('hidden', hasDogs || dogExplorerSchemaReady);
       welcome?.classList.toggle('hidden', hasDogs || !dogExplorerSchemaReady);
       dashboard?.classList.toggle('hidden', !hasDogs);
       addAnother?.classList.toggle('hidden', !hasDogs || !dogExplorerSchemaReady);
