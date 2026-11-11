@@ -5531,9 +5531,9 @@
         alert('A conta mudou neste dispositivo. Volta a «Os meus cães» para escolher o teu Explorador.');
         return false;
       }
-      if (authenticatedUser && !currentDogExplorers.length) await loadCurrentDogExplorers();
-      const activeDog = authenticatedUser ? getActiveDogExplorer() : null;
-      if (authenticatedUser && currentDogExplorers.length && !activeDog) {
+      if (authenticatedUser && !currentUserIsAdmin && !currentDogExplorers.length) await loadCurrentDogExplorers();
+      const activeDog = authenticatedUser && !isAdminUser(authenticatedUser) ? getActiveDogExplorer() : null;
+      if (authenticatedUser && !currentUserIsAdmin && currentDogExplorers.length && !activeDog) {
         alert('Não foi possível identificar o cão associado. Escolhe um Explorador antes de enviar.');
         return false;
       }
@@ -6759,7 +6759,7 @@ async function loadWhatsAppAdminStats() {
       if (currentUser) {
         loginBtn.classList.add('hidden');
         logoutBtn.classList.remove('hidden');
-        accountBtn.classList.remove('hidden');
+        accountBtn.classList.toggle('hidden', currentUserIsAdmin);
         adminBtn.classList.toggle('hidden', !currentUserIsAdmin);
         if (detailEditBtn && currentUserIsAdmin) {
           detailEditBtn.classList.remove('hidden');
@@ -6841,6 +6841,16 @@ async function loadWhatsAppAdminStats() {
         if (error) throw error;
         currentUser = data.user || data.session?.user || null;
         currentUserIsAdmin = isAdminUser(currentUser);
+        if (currentUserIsAdmin) {
+          await supabaseClient.auth.signOut();
+          currentUser = null;
+          currentUserIsAdmin = false;
+          currentDogExplorers = [];
+          updateAuthUI();
+          closeLoginModal();
+          alert('Este email pertence à administração. Entra através do acesso Admin ou utiliza outro email para os Exploradores.');
+          return;
+        }
         await loadCurrentDogExplorers();
         updateAuthUI();
         closeLoginModal();
@@ -6874,7 +6884,7 @@ async function loadWhatsAppAdminStats() {
           currentUser = null;
           throw new Error('Esta conta não tem acesso à administração.');
         }
-        await loadCurrentDogExplorers();
+        currentDogExplorers = [];
         updateAuthUI();
         closeLoginModal();
         showView('admin');
@@ -6929,6 +6939,10 @@ async function loadWhatsAppAdminStats() {
     }
 
     function startExplorerRegistration() {
+      if (currentUserIsAdmin) {
+        alert('A conta de administração é exclusiva da gestão. Para registar um cão, utiliza outro email como Explorador.');
+        return;
+      }
       if (currentUser) openExplorerAccount();
       else openLoginModal('explorer');
     }
@@ -6949,6 +6963,7 @@ async function loadWhatsAppAdminStats() {
     }
 
     function getActiveDogExplorer() {
+      if (currentUserIsAdmin) return null;
       const id = getActiveDogExplorerId();
       return currentDogExplorers.find((dog) => dog.id === id) || null;
     }
@@ -6961,7 +6976,7 @@ async function loadWhatsAppAdminStats() {
     }
 
     async function loadCurrentDogExplorers() {
-      if (!currentUser) {
+      if (!currentUser || currentUserIsAdmin) {
         currentDogExplorers = [];
         return;
       }
@@ -7010,6 +7025,10 @@ async function loadWhatsAppAdminStats() {
     }
 
     function openExplorerAccount() {
+      if (currentUserIsAdmin) {
+        alert('A conta de administração não participa nos Exploradores. Usa outro email para registar o teu cão.');
+        return;
+      }
       if (!currentUser) {
         openLoginModal('explorer');
         return;
@@ -7104,14 +7123,19 @@ async function loadWhatsAppAdminStats() {
       const help = document.getElementById('sg-explorer-help');
       if (!signedOut || !signedIn || !select) return;
 
-      const hasDogs = currentUser && currentDogExplorers.length > 0;
+      const hasDogs = !!currentUser && !currentUserIsAdmin && currentDogExplorers.length > 0;
       signedOut.classList.toggle('hidden', !!hasDogs);
       signedIn.classList.toggle('hidden', !hasDogs);
-      if (currentUser && !hasDogs) {
+      if (currentUserIsAdmin) {
+        signedOut.querySelector('p').textContent = 'As contas de administração não recebem pontos. Para participar, entra com outro email como Explorador.';
+        signedOut.querySelector('button').classList.add('hidden');
+      } else if (currentUser && !hasDogs) {
+        signedOut.querySelector('button').classList.remove('hidden');
         signedOut.querySelector('p').textContent = 'Adiciona primeiro um cão para receber os pontos desta descoberta.';
         signedOut.querySelector('button').textContent = 'Adicionar cão';
         signedOut.querySelector('button').setAttribute('onclick', 'openExplorerAccount()');
       } else if (!currentUser) {
+        signedOut.querySelector('button').classList.remove('hidden');
         signedOut.querySelector('p').textContent = 'Podes continuar sem conta; a sugestão será enviada normalmente.';
         signedOut.querySelector('button').textContent = 'Entrar';
         signedOut.querySelector('button').setAttribute('onclick', "openLoginModal('explorer')");
@@ -7142,7 +7166,7 @@ async function loadWhatsAppAdminStats() {
 
     async function saveDogExplorer(event) {
       event.preventDefault();
-      if (!currentUser) return;
+      if (!currentUser || currentUserIsAdmin) return;
       const name = document.getElementById('explorer-dog-name').value.trim();
       const bio = document.getElementById('explorer-dog-bio').value.trim();
       const errorEl = document.getElementById('explorer-dog-error');
