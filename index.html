@@ -5505,14 +5505,28 @@
       const latitude = latitudeRaw ? Number(latitudeRaw) : null;
       const longitude = longitudeRaw ? Number(longitudeRaw) : null;
       const features = Array.from(document.querySelectorAll('#sg-features input:checked')).map((input) => input.value);
-      const activeDog = getActiveDogExplorer();
-
-      // Anonymous suggestions remain possible, but must not silently promise points.
+      // Validate the browser's actual session, rather than relying on stale UI state.
+      const { data: authData, error: authError } = await supabaseClient.auth.getUser();
+      const authenticatedUser = authError ? null : authData?.user || null;
+      if (currentUser && !authenticatedUser) {
+        alert('A sessão expirou. Entra novamente como Explorador antes de enviar a sugestão.');
+        return false;
+      }
+      if (currentUser && authenticatedUser && currentUser.id !== authenticatedUser.id) {
+        alert('A conta mudou neste dispositivo. Volta a «Os meus cães» para escolher o teu Explorador.');
+        return false;
+      }
+      if (authenticatedUser && !currentDogExplorers.length) await loadCurrentDogExplorers();
+      const activeDog = authenticatedUser ? getActiveDogExplorer() : null;
+      if (authenticatedUser && currentDogExplorers.length && !activeDog) {
+        alert('Não foi possível identificar o cão associado. Escolhe um Explorador antes de enviar.');
+        return false;
+      }
       if (!activeDog) {
         const proceed = confirm(
-          'Esta sugestão não está associada a nenhum Cão Explorador e não dará 5 pontos. ' +
-          'Para ganhar pontos, entra na conta dos Exploradores e escolhe um cão antes de enviar. ' +
-          'Queres enviar a sugestão sem pontos?'
+          'Esta sugestão será enviada SEM Cão Explorador e não dará 5 pontos. ' +
+          'Para ganhar pontos, entra como Explorador e escolhe um cão antes de enviar. ' +
+          'Queres continuar sem pontos?'
         );
         if (!proceed) return false;
       }
@@ -5563,7 +5577,7 @@
         dog_status,
         confirmations: 1,
         status: 'pending',
-        owner_id: activeDog ? currentUser?.id : null,
+        owner_id: activeDog ? authenticatedUser.id : null,
         dog_explorer_id: activeDog?.id || null
       };
 
@@ -5575,7 +5589,7 @@
         }
         throw error;
       }
-      return true;
+      return { explorerName: activeDog?.name || null };
     }
 
     function resetSuggestForm() {
@@ -6097,8 +6111,9 @@ async function loadWhatsAppAdminStats() {
           if (contributionError && contributionError.code !== '23505') throw contributionError;
         }
 
-        const { error: deleteError } = await supabaseClient.from('suggestions').delete().eq('id', id);
-        if (deleteError) throw deleteError;
+        // Archive approved suggestions instead of deleting ownership evidence.
+        const { error: archiveError } = await supabaseClient.from('suggestions').update({ status: 'approved' }).eq('id', id);
+        if (archiveError) throw archiveError;
 
         await loadPlacesFromSupabase();
         await loadAdminSuggestions();
@@ -6644,12 +6659,13 @@ async function loadWhatsAppAdminStats() {
             if (contributionError && contributionError.code !== '23505') throw contributionError;
           }
 
-          const { error: deleteError } = await supabaseClient
+          // Keep the approved suggestion and its explorer attribution for audit.
+          const { error: archiveError } = await supabaseClient
             .from('suggestions')
-            .delete()
+            .update({ status: 'approved' })
             .eq('id', id);
 
-          if (deleteError) throw deleteError;
+          if (archiveError) throw archiveError;
         } else {
           const { error } = await supabaseClient
             .from('places')
@@ -7433,7 +7449,18 @@ function showView(view) {
             if (dogPhotoPlaceholder) dogPhotoPlaceholder.classList.remove('hidden');
             suggestForm.classList.add('hidden');
             const success = document.getElementById('suggest-success');
-            if (success) success.classList.remove('hidden');
+            if (success) {
+              success.classList.remove('hidden');
+              const rewardMessage = document.getElementById('suggest-explorer-reward-message');
+              if (rewardMessage) rewardMessage.remove();
+              const message = document.createElement('p');
+              message.id = 'suggest-explorer-reward-message';
+              message.className = 'mt-3 text-sm font-semibold text-sage';
+              message.textContent = submitted.explorerName
+                ? 'Sugestão associada a ' + submitted.explorerName + '. Receberá 5 pontos após aprovação.'
+                : 'Sugestão enviada sem Explorador associado. Não serão atribuídos pontos.';
+              success.appendChild(message);
+            }
             lucide.createIcons();
           } catch (error) {
             console.error('Erro ao enviar sugestão:', error);
