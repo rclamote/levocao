@@ -1139,6 +1139,116 @@
         <div id="cards-recent" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
       </section>
 
+      <section class="max-w-3xl mx-auto px-5 py-8">
+        <div class="mb-6 rounded-3xl bg-sand/70 border border-sand p-5">
+          <div class="grid sm:grid-cols-3 gap-4 text-left">
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">1. Descobre</p>
+              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, zona ou categoria.</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">2. Confirma</p>
+              <p class="text-sm text-bark/70">Ajuda a comunidade a saber quais os locais onde os cães são realmente bem-vindos.</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 border border-sand">
+              <p class="text-sm font-semibold text-sage mb-1">3. Adiciona</p>
+              <p class="text-sm text-bark/70">Conheces um bom sítio? Partilha-o para outros donos de cães o descobrirem.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-6 rounded-3xl bg-white border border-sand shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
+            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
+            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência, um espaço comercial ou um espaço seguro para soltar o cão, adiciona-o.</p>
+          </div>
+          <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            Adicionar local
+          </button>
+        </div>
+
+        <div class="sr-only-seo" aria-hidden="true">
+          <h2>Locais pet-friendly em Portugal</h2>
+          <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
+          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos, espaços comerciais e sítios para passear com o cão.</p>
+          <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
+        </div>
+
+      </section>
+
+
+
+      <section class="max-w-6xl mx-auto px-5 pb-8">
+        <div class="relative overflow-hidden rounded-3xl border border-sage/20 bg-gradient-to-br from-sage/10 via-white to-sand p-5 shadow-sm sm:p-7">
+          <div class="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-moss/10" aria-hidden="true"></div>
+          <div class="relative">
+            <div class="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <p class="text-xs font-bold uppercase tracking-[0.18em] text-sage">A matilha que faz o mapa crescer</p>
+                <h2 class="mt-1 font-display text-2xl font-bold text-bark sm:text-3xl">Exploradores do mês 🐾</h2>
+                <p class="mt-2 max-w-2xl text-sm text-bark/60">Os cães que mais ajudaram a descobrir e confirmar locais onde somos bem-vindos.</p>
+              </div>
+              <span class="rounded-full border border-sage/25 bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-sage">Comunidade</span>
+            </div>
+
+            <div id="home-dog-explorers" class="mt-5"></div>
+
+            <div class="mt-5 flex flex-col gap-3 border-t border-sage/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p class="font-semibold text-bark">O teu cão também pode aparecer aqui.</p>
+                <p class="mt-0.5 text-xs text-bark/50">Regista o teu cão, contribui para o mapa e ganha pontos pelas descobertas e confirmações.</p>
+              </div>
+              <button type="button" onclick="startExplorerRegistration()" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-sage px-5 py-3 text-sm font-semibold text-cream shadow-md transition hover:bg-moss active:scale-95">
+                <span aria-hidden="true">🐾</span>
+                Tornar o meu cão explorador
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="max-w-6xl mx-auto px-5 pb-8">
+        <div class="rounded-3xl bg-white border border-sand shadow-sm p-5">
+          <div class="flex items-center justify-between mb-4 gap-3">
+            <div>
+              <h2 class="font-display text-xl font-bold">Guias por zona</h2>
+              <p class="text-sm text-bark/55 mt-1">Começa por uma zona e descobre locais para ires com o teu cão.</p>
+            </div>
+          </div>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            <a href="/onde-levar-o-cao-no-algarve" onclick="openGuideBySlug('onde-levar-o-cao-no-algarve'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">🌊</p>
+              <p class="font-semibold text-bark">Onde levar o cão no Algarve</p>
+              <p class="text-sm text-bark/55 mt-1">Praias, restaurantes, alojamentos e passeios.</p>
+            </a>
+            <a href="/onde-levar-o-cao-no-alentejo" onclick="openGuideBySlug('onde-levar-o-cao-no-alentejo'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">🌿</p>
+              <p class="font-semibold text-bark">Onde levar o cão no Alentejo</p>
+              <p class="text-sm text-bark/55 mt-1">Escapadinhas, alojamentos e espaços tranquilos.</p>
+            </a>
+            <a href="/onde-levar-o-cao-em-lisboa" onclick="openGuideBySlug('onde-levar-o-cao-em-lisboa'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">🏙️</p>
+              <p class="font-semibold text-bark">Onde levar o cão em Lisboa</p>
+              <p class="text-sm text-bark/55 mt-1">Restaurantes, cafés, parques e passeios.</p>
+            </a>
+            <button type="button" onclick="showView('list')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
+              <p class="text-2xl mb-2">📍</p>
+              <p class="font-semibold text-bark">Ver todos os locais</p>
+              <p class="text-sm text-bark/55 mt-1">Filtra por distrito, concelho, localidade e categoria.</p>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="max-w-6xl mx-auto px-5 pb-12">
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <h2 class="font-display text-xl font-bold">Mais confirmados pela comunidade</h2>
+          <span class="text-sm text-bark/55">Locais com mais confiança</span>
+        </div>
+        <div id="cards-top" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
       <section class="max-w-6xl mx-auto px-5 pb-8">
         <div class="overflow-hidden rounded-3xl bg-bark text-cream shadow-lg">
           <div class="flex flex-wrap items-start justify-between gap-4 p-5 pb-4 sm:p-7 sm:pb-5">
@@ -1193,116 +1303,6 @@
         })();
       </script>
 
-      <section class="max-w-6xl mx-auto px-5 pb-8">
-        <div class="relative overflow-hidden rounded-3xl border border-sage/20 bg-gradient-to-br from-sage/10 via-white to-sand p-5 shadow-sm sm:p-7">
-          <div class="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-moss/10" aria-hidden="true"></div>
-          <div class="relative">
-            <div class="flex flex-wrap items-start justify-between gap-3">
-              <div>
-                <p class="text-xs font-bold uppercase tracking-[0.18em] text-sage">A matilha que faz o mapa crescer</p>
-                <h2 class="mt-1 font-display text-2xl font-bold text-bark sm:text-3xl">Exploradores do mês 🐾</h2>
-                <p class="mt-2 max-w-2xl text-sm text-bark/60">Os cães que mais ajudaram a descobrir e confirmar locais onde somos bem-vindos.</p>
-              </div>
-              <span class="rounded-full border border-sage/25 bg-white/85 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-sage">Comunidade</span>
-            </div>
-
-            <div id="home-dog-explorers" class="mt-5"></div>
-
-            <div class="mt-5 flex flex-col gap-3 border-t border-sage/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p class="font-semibold text-bark">O teu cão também pode aparecer aqui.</p>
-                <p class="mt-0.5 text-xs text-bark/50">Regista o teu cão, contribui para o mapa e ganha pontos pelas descobertas e confirmações.</p>
-              </div>
-              <button type="button" onclick="startExplorerRegistration()" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-sage px-5 py-3 text-sm font-semibold text-cream shadow-md transition hover:bg-moss active:scale-95">
-                <span aria-hidden="true">🐾</span>
-                Tornar o meu cão explorador
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="max-w-3xl mx-auto px-5 py-8">
-        <div class="mb-6 rounded-3xl bg-sand/70 border border-sand p-5">
-          <div class="grid sm:grid-cols-3 gap-4 text-left">
-            <div class="bg-white rounded-2xl p-4 border border-sand">
-              <p class="text-sm font-semibold text-sage mb-1">1. Descobre</p>
-              <p class="text-sm text-bark/70">Explora locais pet-friendly por cidade, zona ou categoria.</p>
-            </div>
-            <div class="bg-white rounded-2xl p-4 border border-sand">
-              <p class="text-sm font-semibold text-sage mb-1">2. Confirma</p>
-              <p class="text-sm text-bark/70">Ajuda a comunidade a saber quais os locais onde os cães são realmente bem-vindos.</p>
-            </div>
-            <div class="bg-white rounded-2xl p-4 border border-sand">
-              <p class="text-sm font-semibold text-sage mb-1">3. Adiciona</p>
-              <p class="text-sm text-bark/70">Conheces um bom sítio? Partilha-o para outros donos de cães o descobrirem.</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="mb-6 rounded-3xl bg-white border border-sand shadow-sm p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold text-sage mb-1">Feito pela comunidade</p>
-            <h2 class="font-display text-xl font-bold">Ajuda a construir o melhor guia pet-friendly em Portugal</h2>
-            <p class="text-bark/65 text-sm mt-1">Se conheces um restaurante, uma praia, um alojamento, um passeio, uma experiência, um espaço comercial ou um espaço seguro para soltar o cão, adiciona-o.</p>
-          </div>
-          <button type="button" onclick="showView('suggest')" class="shrink-0 inline-flex items-center gap-2 bg-sage text-cream font-semibold px-5 py-3 rounded-full shadow-md hover:bg-moss transition active:scale-95">
-            <i data-lucide="plus-circle" class="w-4 h-4"></i>
-            Adicionar local
-          </button>
-        </div>
-
-        <div class="sr-only-seo" aria-hidden="true">
-          <h2>Locais pet-friendly em Portugal</h2>
-          <p>O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.</p>
-          <p>Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos, espaços comerciais e sítios para passear com o cão.</p>
-          <p>A informação é prática, simples e feita por quem vive isto no dia a dia.</p>
-        </div>
-
-      </section>
-
-
-
-      <section class="max-w-6xl mx-auto px-5 pb-8">
-        <div class="rounded-3xl bg-white border border-sand shadow-sm p-5">
-          <div class="flex items-center justify-between mb-4 gap-3">
-            <div>
-              <h2 class="font-display text-xl font-bold">Guias por zona</h2>
-              <p class="text-sm text-bark/55 mt-1">Começa por uma zona e descobre locais para ires com o teu cão.</p>
-            </div>
-          </div>
-          <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <a href="/onde-levar-o-cao-no-algarve" onclick="openGuideBySlug('onde-levar-o-cao-no-algarve'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
-              <p class="text-2xl mb-2">🌊</p>
-              <p class="font-semibold text-bark">Onde levar o cão no Algarve</p>
-              <p class="text-sm text-bark/55 mt-1">Praias, restaurantes, alojamentos e passeios.</p>
-            </a>
-            <a href="/onde-levar-o-cao-no-alentejo" onclick="openGuideBySlug('onde-levar-o-cao-no-alentejo'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
-              <p class="text-2xl mb-2">🌿</p>
-              <p class="font-semibold text-bark">Onde levar o cão no Alentejo</p>
-              <p class="text-sm text-bark/55 mt-1">Escapadinhas, alojamentos e espaços tranquilos.</p>
-            </a>
-            <a href="/onde-levar-o-cao-em-lisboa" onclick="openGuideBySlug('onde-levar-o-cao-em-lisboa'); return false;" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
-              <p class="text-2xl mb-2">🏙️</p>
-              <p class="font-semibold text-bark">Onde levar o cão em Lisboa</p>
-              <p class="text-sm text-bark/55 mt-1">Restaurantes, cafés, parques e passeios.</p>
-            </a>
-            <button type="button" onclick="showView('list')" class="text-left rounded-2xl bg-sand/70 border border-sand p-4 hover:bg-sand transition">
-              <p class="text-2xl mb-2">📍</p>
-              <p class="font-semibold text-bark">Ver todos os locais</p>
-              <p class="text-sm text-bark/55 mt-1">Filtra por distrito, concelho, localidade e categoria.</p>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <section class="max-w-6xl mx-auto px-5 pb-12">
-        <div class="flex items-center justify-between mb-4 gap-3">
-          <h2 class="font-display text-xl font-bold">Mais confirmados pela comunidade</h2>
-          <span class="text-sm text-bark/55">Locais com mais confiança</span>
-        </div>
-        <div id="cards-top" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></div>
-      </section>
     </div>
 
     <div id="view-list" class="hidden">
