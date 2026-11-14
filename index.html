@@ -1725,6 +1725,7 @@
       <div class="inline-flex min-w-full rounded-2xl border border-sand bg-white p-1 shadow-sm" role="tablist" aria-label="Áreas do painel admin">
         <button id="admin-tab-action" type="button" role="tab" onclick="setAdminTab('action')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">A tratar <span id="admin-tab-action-count" class="ml-1 opacity-60">0</span></button>
         <button id="admin-tab-places" type="button" role="tab" onclick="setAdminTab('places')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Locais ativos <span id="admin-tab-places-count" class="ml-1 opacity-60">0</span></button>
+        <button id="admin-tab-explorers" type="button" role="tab" onclick="setAdminTab('explorers')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Exploradores <span id="admin-tab-explorers-count" class="ml-1 opacity-60">0</span></button>
         <button id="admin-tab-whatsapp" type="button" role="tab" onclick="setAdminTab('whatsapp')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">WhatsApp</button>
         <button id="admin-tab-quality" type="button" role="tab" onclick="setAdminTab('quality')" class="admin-tab flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition">Qualidade <span id="admin-tab-quality-count" class="ml-1 opacity-60">0</span></button>
       </div>
@@ -1799,6 +1800,26 @@
             <tbody id="admin-wa-rows"></tbody>
           </table>
         </div>
+      </div>
+    </section>
+
+    <section id="admin-panel-explorers" role="tabpanel" class="admin-panel hidden">
+      <div class="bg-white border border-sand rounded-2xl p-4 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div>
+            <h3 class="font-display text-lg font-bold">Cães Exploradores</h3>
+            <p class="text-sm text-bark/55 mt-1">Todos os perfis criados, incluindo os privados. Informação visível apenas para o Admin.</p>
+          </div>
+          <button type="button" onclick="loadAdminDogExplorers()" class="text-sm text-sage font-semibold">Atualizar</button>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <div class="rounded-xl bg-sand/50 p-3"><p class="text-xs text-bark/60">Total</p><p id="admin-explorers-total" class="font-display text-xl font-bold">—</p></div>
+          <div class="rounded-xl bg-sand/50 p-3"><p class="text-xs text-bark/60">Públicos</p><p id="admin-explorers-public" class="font-display text-xl font-bold">—</p></div>
+          <div class="rounded-xl bg-sand/50 p-3"><p class="text-xs text-bark/60">Privados</p><p id="admin-explorers-private" class="font-display text-xl font-bold">—</p></div>
+        </div>
+        <input id="admin-explorers-search" type="search" aria-label="Pesquisar Exploradores" placeholder="Pesquisar pelo nome do cão..." oninput="renderAdminDogExplorers()" class="mb-4 w-full rounded-xl border border-sand bg-white px-3 py-2.5 outline-none focus:border-sage" />
+        <p id="admin-explorers-status" role="status" class="text-sm text-bark/55 mb-3">Abre este separador para carregar os perfis.</p>
+        <div id="admin-explorers-list" class="grid gap-3 sm:grid-cols-2"></div>
       </div>
     </section>
 
@@ -2374,6 +2395,7 @@
     let adminSearch = '';
     let adminCategoryFilter = '';
     let adminActiveTab = 'action';
+    let adminDogExplorers = [];
     let adminPendingCount = 0;
     let adminChangeReportsCount = 0;
     let communityPromptTimer = null;
@@ -2529,9 +2551,10 @@
     }
 
     function setAdminTab(tab) {
-      if (!['action', 'places', 'quality', 'whatsapp'].includes(tab)) return;
+      if (!['action', 'places', 'quality', 'whatsapp', 'explorers'].includes(tab)) return;
       adminActiveTab = tab;
       if (tab === 'whatsapp') loadWhatsAppTable();
+      if (tab === 'explorers') loadAdminDogExplorers();
 
       document.querySelectorAll('.admin-panel').forEach((panel) => panel.classList.add('hidden'));
       const activePanel = document.getElementById(`admin-panel-${tab}`);
@@ -2549,7 +2572,81 @@
     }
 
     async function refreshAdmin() {
-      await Promise.all([loadAdminSuggestions(), loadAdminChangeReports(), loadAdminPlaces(), loadCommunityPromptStats()]);
+      await Promise.all([loadAdminSuggestions(), loadAdminChangeReports(), loadAdminPlaces(), loadCommunityPromptStats(),
+        ...(adminActiveTab === 'explorers' ? [loadAdminDogExplorers()] : [])]);
+    }
+
+    function renderAdminDogExplorers() {
+      if (!currentUserIsAdmin) return;
+      const list = document.getElementById('admin-explorers-list');
+      const status = document.getElementById('admin-explorers-status');
+      if (!list || !status) return;
+      const query = (document.getElementById('admin-explorers-search')?.value || '').trim().toLocaleLowerCase('pt-PT');
+      const filtered = adminDogExplorers.filter(dog => String(dog.name || '').toLocaleLowerCase('pt-PT').includes(query));
+      status.textContent = adminDogExplorers.length
+        ? `A mostrar ${filtered.length} de ${adminDogExplorers.length} perfis · mais recentes primeiro`
+        : 'Ainda não existem cães registados.';
+      list.innerHTML = filtered.map(dog => {
+        const photo = dog.photo_path ? getDogExplorerPhotoUrl(dog) : '';
+        const name = escapeHtml(dog.name || 'Sem nome');
+        const date = dog.created_at && Number.isFinite(Date.parse(dog.created_at))
+          ? new Intl.DateTimeFormat('pt-PT', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Europe/Lisbon' }).format(new Date(dog.created_at))
+          : 'Data desconhecida';
+        return `
+          <article class="flex items-start gap-3 rounded-2xl border border-sand bg-cream/40 p-3">
+            ${photo
+              ? `<img src="${escapeHtml(photo)}" alt="Fotografia de ${name}" loading="lazy" class="h-20 w-20 shrink-0 rounded-2xl object-cover" />`
+              : '<div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-sand text-3xl">🐾</div>'}
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <h4 class="font-display text-lg font-bold break-words">${name}</h4>
+                <span class="rounded-full px-2 py-0.5 text-xs font-medium ${dog.is_public ? 'bg-sage/10 text-sage' : 'bg-sand text-bark/70'}">${dog.is_public ? 'Público' : 'Privado'}</span>
+              </div>
+              <p class="mt-1 text-xs text-bark/55">Inscrito em ${date}</p>
+              <p class="mt-2 text-sm font-medium text-sage">${Number(dog.points_total) || 0} pontos</p>
+              <p class="text-xs text-bark/65">${Number(dog.discovered_count) || 0} locais descobertos · ${Number(dog.confirmation_count) || 0} confirmações</p>
+            </div>
+          </article>`;
+      }).join('');
+      if (adminDogExplorers.length && !filtered.length) {
+        list.innerHTML = '<p class="py-5 text-sm text-bark/55">Não foram encontrados cães com esse nome.</p>';
+      }
+    }
+
+    async function loadAdminDogExplorers() {
+      if (!currentUserIsAdmin || !isAdminUser(currentUser)) return;
+      const status = document.getElementById('admin-explorers-status');
+      if (status) status.textContent = 'A carregar os perfis...';
+      try {
+        const rows = [];
+        let start = 0;
+        const pageSize = 500;
+        while (true) {
+          const { data, error } = await supabaseClient
+            .from('dog_explorers')
+            .select('id,name,photo_path,is_public,points_total,discovered_count,confirmation_count,created_at')
+            .order('created_at', { ascending: false })
+            .order('id', { ascending: false })
+            .range(start, start + pageSize - 1);
+          if (error) throw error;
+          rows.push(...(data || []));
+          if (!data || data.length < pageSize) break;
+          start += pageSize;
+        }
+        if (!currentUserIsAdmin) return;
+        adminDogExplorers = rows;
+        const setCount = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = String(value); };
+        setCount('admin-explorers-total', rows.length);
+        setCount('admin-explorers-public', rows.filter(dog => dog.is_public).length);
+        setCount('admin-explorers-private', rows.filter(dog => !dog.is_public).length);
+        setCount('admin-tab-explorers-count', rows.length);
+        renderAdminDogExplorers();
+      } catch (error) {
+        console.error('Erro ao carregar Exploradores no Admin:', error);
+        if (status) status.textContent = 'Não foi possível carregar os Exploradores. Verifica a sessão Admin e tenta atualizar.';
+        const list = document.getElementById('admin-explorers-list');
+        if (list) list.innerHTML = '';
+      }
     }
 
     async function loadCommunityPromptStats() {
