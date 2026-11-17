@@ -237,12 +237,33 @@
   "Guardar alterações": "Save changes",
   "Parabéns!": "Congratulations!"
 });
+  Object.assign(translations, {
+  "Onde levar o cão no Algarve": "Where to take your dog in the Algarve",
+  "Onde levar o cão no Alentejo": "Where to take your dog in Alentejo",
+  "Onde levar o cão em Lisboa": "Where to take your dog in Lisbon",
+  "Guia pet-friendly no Algarve": "Dog-friendly Algarve guide",
+  "Guia pet-friendly no Alentejo": "Dog-friendly Alentejo guide",
+  "Guia pet-friendly em Lisboa": "Dog-friendly Lisbon guide",
+  "Locais no Algarve": "Places in the Algarve",
+  "Locais no Alentejo": "Places in Alentejo",
+  "Locais em Lisboa": "Places in Lisbon",
+  "locais nesta zona": "places in this area",
+  "local nesta zona": "place in this area",
+  "Ver locais": "View places",
+  "Explorar zona": "Explore region",
+  "Todos os tipos": "All categories",
+  "Voltar ao mapa": "Back to map",
+  "Ver detalhes de": "View details for",
+  "Última confirmação:": "Last confirmed:",
+  "Confirmações": "Confirmations",
+  "Mais informações": "More information"
+});
   const originalText = new WeakMap();
   const lastRenderedText = new WeakMap();
   const originalAttributes = new WeakMap();
   const attributes = ['placeholder', 'aria-label', 'title'];
   const isEnglish = () => /^\/en(?:\/|$)/.test(window.location.pathname);
-  const longerPhrases = Object.keys(translations).filter((key) => key.length >= 20).sort((a, b) => b.length - a.length);
+  const longerPhrases = Object.keys(translations).filter((key) => key.length >= 10).sort((a, b) => b.length - a.length);
   const translateValue = (value) => {
     const trimmed = value.trim();
     if (Object.prototype.hasOwnProperty.call(translations, trimmed)) {
