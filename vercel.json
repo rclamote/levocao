@@ -1,19 +1,13 @@
 {
   "functions": {
     "api/local.js": {
-      "includeFiles": [
-        "index.html",
-        "translations/places-en.json"
-      ]
+      "includeFiles": "{index.html,translations/places-en.json}"
     },
     "api/guide.js": {
       "includeFiles": "index.html"
     },
     "api/en.js": {
-      "includeFiles": [
-        "index.html",
-        "translations/interface-en.json"
-      ]
+      "includeFiles": "{index.html,translations/interface-en.json}"
     },
     "api/sitemap.js": {
       "includeFiles": "translations/places-en.json"
