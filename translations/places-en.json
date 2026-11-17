@@ -473,8 +473,14 @@
   "250": {
     "description": "Blade, on Praça Dom Luís I near Cais do Sodré in Lisbon, welcomes dogs indoors and on its terrace. The restaurant specialises in steak served with different sides and sauces in an informal setting. Close to Mercado da Ribeira and the riverfront, it is a convenient place for a meal with your dog in central Lisbon."
   },
+  "252": {
+    "description": "At Street Coffee on Rua da Senhora da Luz in Porto's Foz do Douro neighbourhood welcomes dogs indoors. It is a convenient speciality coffee stop before or after a seaside walk, without needing to rely on outdoor tables."
+  },
   "253": {
     "description": "O Vitó, in Linda-a-Velha near Oeiras, welcomes dogs only on its covered outdoor terrace, which is sheltered from the wind. Known for homestyle Portuguese cooking, the restaurant serves traditional dishes, sharing plates and snails in season. It is a practical place for a meal with your dog, but dogs are not permitted indoors."
+  },
+  "254": {
+    "description": "Quinta da Dourada in Portalegre, within Serra de São Mamede Natural Park, welcomes up to three pets of any size per house. Pets may stay in the accommodation and use the estate's permitted areas but cannot enter the pool. They can be left alone in the room if they do not disturb others, and guests are responsible for any damage."
   },
   "255": {
     "description": "AREL – Padaria & Cozinha in Aljezur welcomes dogs indoors. Located on Rua 25 de Abril, it combines an artisan bakery with a kitchen, serving sourdough bread, pastries and food throughout the day. It is a handy stop for breakfast, lunch or coffee with your dog in the centre of the village, especially for visitors exploring Aljezur and the Vicentine Coast."
@@ -482,17 +488,41 @@
   "256": {
     "description": "Salema Tours, based at Salema Beach in the municipality of Vila do Bispo, allows dogs on boat trips when sea conditions permit. The company offers dolphin-watching trips, visits to coastal caves and Benagil Cave, fishing excursions and kayak hire. If taking a dog aboard is not advisable, the animal may be left ashore in the care of the animal-loving team while its owners enjoy the trip. This offers a distinctive way to explore the Algarve coast without leaving your dog out of the experience."
   },
+  "257": {
+    "description": "O Grande Museu das Casinhas de Bonecas on Rua do Alferes Malheiro in Porto welcomes dogs indoors on a lead and offers water. Set in a former garage, the museum displays more than 60 detailed miniature Victorian houses, farms and workshops, alongside material about reuse and sustainability."
+  },
   "258": {
     "description": "The Passadiços da Póvoa de Santa Iria boardwalks, in the municipality of Vila Franca de Xira, welcome dogs provided they remain on a lead. Following the Tagus estuary waterfront, the flat walking and cycling paths offer river views and opportunities for birdwatching. Water is available along the route, and there is a terrace where visitors can stop with their dogs. A pleasant waterside walk near Lisbon."
   },
   "259": {
     "description": "CoolAres, in Colares near Sintra, welcomes dogs indoors and on its spacious terrace. The team is friendly towards visiting dogs and provides water for them. The menu includes all-day brunch, internationally inspired dishes and vegetarian, vegan and gluten-free options. It is a relaxed place to eat with your dog between the Sintra hills and nearby beaches."
   },
+  "260": {
+    "description": "Passadiços da Barrinha de Esmoriz in Ovar offer a walk of roughly six kilometres beside Barrinha de Esmoriz, also known as Lagoa de Paramos. This coastal lagoon is part of the Natura 2000 network and is important for birds. The wooden boardwalks offer a scenic nature walk with your dog."
+  },
   "261": {
     "description": "Copenhagen Coffee Lab, on Avenida Álvares Cabral near Estrela in Lisbon, welcomes dogs indoors. This bakery and café serves speciality coffee, freshly baked bread and pastries, as well as breakfast and brunch dishes. With indoor tables and a location close to Jardim da Estrela, it is a convenient place for coffee or a light meal with your dog."
   },
+  "262": {
+    "description": "Gleba Almada Centro on Avenida Dom Nuno Álvares Pereira welcomes dogs indoors and on its terrace. The bakery and café serves fresh bread, pastries, speciality coffee and breakfast or brunch options throughout the day."
+  },
+  "263": {
+    "description": "Ramen Break on Praça Conde de Agrolongo in Braga welcomes dogs indoors and provides water. This relaxed restaurant and cocktail bar specialises in Japanese-inspired ramen with carefully prepared broths and different toppings."
+  },
+  "264": {
+    "description": "Benedito Brunch & Restaurante in central Barcelos welcomes dogs indoors and provides water. The menu includes brunch sets, pancakes, bowls, pastries, speciality coffee and fresh juices, making it a convenient breakfast or lunch stop with your dog."
+  },
+  "265": {
+    "description": "Praia Fluvial de Zebreiros in Foz do Sousa, Gondomar, allows dogs in the area beside the supervised bathing zone. On the right bank of the Douro near the Sousa confluence, it has sand, access facilities and a café terrace. Respect the designated beach boundaries."
+  },
   "266": {
     "description": "NAUTK Restaurant & Rooftop, at Praia da Bafureira in Parede, near Cascais, welcomes dogs of any size indoors and on its terrace. Dogs must remain accompanied by their owners and behave appropriately in the restaurant. Overlooking the Atlantic, the venue combines a restaurant, bar and rooftop with Portuguese- and Mediterranean-inspired food, fresh fish, seafood, meat and cocktails. It is a scenic choice for lunch, dinner or sunset drinks with your dog on the Cascais coast."
+  },
+  "267": {
+    "description": "À Lagardère in Samora Correia, Benavente, welcomes dogs indoors and provides water. It also has a fenced outdoor area. Chef Joana Serafim Candeias creates seasonal dishes that combine local Ribatejo ingredients with contemporary ideas."
+  },
+  "268": {
+    "description": "Lagoa de Santo André in Santiago do Cacém offers scenic walks with dogs among the lagoon, dunes and Atlantic coastline. Part of the Santo André and Sancha Lagoons Nature Reserve, the area is important for birdlife. Follow local signs and access rules, particularly during the bathing season."
   },
   "269": {
     "description": "Belém – Brunch Bar in Tavira welcomes small and medium-sized dogs both indoors and on the terrace. The all-day concept combines brunch, coffee and cocktails, with options for breakfast, lunch or a relaxed break. Being able to choose between indoor and outdoor seating makes it a practical place to eat with your dog in Tavira, Algarve."
@@ -509,6 +539,9 @@
   "273": {
     "description": "Koala, in Jardim do Eucaliptal de Benfica in Lisbon, welcomes dogs both indoors and on its terrace, with water available. The café, bar and restaurant has a spacious outdoor area amid greenery, making it a pleasant place for a meal, coffee or a break during a walk. There is also a dog park in the same garden."
   },
+  "274": {
+    "description": "Bons Tempos Restaurante e Petiscos on Rua de Santa Sofia in Vila Real welcomes dogs of any size indoors and on its terrace, with a limit of two dogs per visit. The menu combines Portuguese regional dishes such as cod with cornbread and rojões with contemporary touches. A garden area is available in warmer months."
+  },
   "275": {
     "description": "Jardim Nativo, in Parque Urbano de Miraflores in Algés, welcomes dogs on its large outdoor terrace and provides water for pets. Surrounded by green spaces, the restaurant serves breakfast, brunch, lunch, afternoon snacks and dinner, with picnic options in the garden. A fenced dog park nearby makes it easy to combine a meal with outdoor exercise for your dog."
   },
@@ -518,11 +551,17 @@
   "277": {
     "description": "Pátio – Cozinha Portuguesa, at LX Factory in Alcântara, Lisbon, welcomes dogs of any size indoors and on its spacious terrace. The restaurant serves relaxed Portuguese cooking, including sharing plates and dishes inspired by traditional flavours. Its informal atmosphere makes it an attractive place for lunch, dinner or an evening meal with your dog in one of Lisbon’s creative districts."
   },
+  "278": {
+    "description": "Parque Canino da Gafanha da Encarnação in Ílhavo is a fenced dog park on Rua da Estufa, opened in 2023. Dogs can play and exercise off lead in an ample area with activity obstacles and places for owners to rest."
+  },
   "279": {
     "description": "Espressolab Castilho, on Rua Castilho in Lisbon, welcomes dogs of all sizes indoors and on its terrace. Alongside speciality coffee, it offers a food menu and all-day breakfast choices, making it suitable for a quick coffee or a longer brunch with your dog in central Lisbon."
   },
   "280": {
     "description": "Espressolab Estrela, on Calçada da Estrela in Lisbon, welcomes dogs of any size indoors and on its terrace, with no additional restrictions specified. Dedicated to speciality coffee, it offers a relaxed place for a break with your dog while exploring the Estrela neighbourhood, with the choice of indoor or outdoor seating."
+  },
+  "281": {
+    "description": "Hotel Meira in Vila Praia de Âncora, Caminha, welcomes pets in guest rooms and most communal areas, except dining spaces. Dogs must be on a lead in shared areas. The fee is €20 per animal per night, and pets must be declared when booking. Balcony or terrace rooms may be prioritised where available, and pet beds can be rented. Beach access rules vary by season; the Praia das Crianças area is a nearby walking option during the bathing season."
   },
   "282": {
     "description": "Linha d’Água, in Jardim Amália Rodrigues in Lisbon, welcomes dogs of all sizes on its terrace, with drinking water available for pets. Beside a lake and surrounded by greenery, the café serves salads, quiche, hot dishes, toast, wraps, pastries and fresh juices throughout the day. It is a pleasant place to relax with your dog in a central Lisbon park."
@@ -545,6 +584,9 @@
   "288": {
     "description": "Parque e Palácio de Monserrate in Sintra includes historic gardens where dogs are welcome. Dogs enter free of charge, but owners must obtain a dog ticket on arrival. One dog per person is allowed, always on a non-retractable lead; visitors must use the designated paths and respect restricted areas. The park has drinking fountains, waste-bag dispensers and places where dogs can wait while owners visit areas that do not admit pets. Its lush gardens and lakes make it a memorable outing with your dog in Sintra."
   },
+  "289": {
+    "description": "The Póvoa e Meadas reservoir near Castelo de Vide is a peaceful place to walk with your dog in the Alto Alentejo. The PR4 Barragem da Póvoa route is an easy, mostly flat trail of approximately 7.3 km, with views over the water, birdwatching spots and the Boa Morte necropolis."
+  },
   "290": {
     "description": "Mila Intendente, on Avenida Almirante Reis in Lisbon, welcomes dogs of any size indoors and on the terrace, with no further restrictions specified. This all-day café serves brunch, lunch and speciality coffee, including its signature Crab Benedict alongside eggs, bowls and toast. It is a practical place to enjoy brunch with your dog in the Intendente area."
   },
@@ -559,6 +601,9 @@
   },
   "294": {
     "description": "Grão Café & Bar, in Infantado, Loures, welcomes dogs indoors and outside. Larger dogs are discouraged from sitting indoors because the space is small. In a quiet, landscaped area, the café serves breakfast, brunch and casual meals, including bagels, toast, pancakes, burgers, salads and fresh juices. It is a pleasant spot for coffee or lunch with your dog in Loures."
+  },
+  "295": {
+    "description": "Chão da Horta Country House in Papízios, Carregal do Sal, welcomes up to four dogs of any size. Dogs may stay indoors using their own beds, but cannot climb onto beds, sofas or armchairs. They are allowed in the swimming pool, and a washroom is available for bathing them. The property is fully walled and fenced. An extra €50 cleaning charge applies."
   },
   "296": {
     "description": "Legumi Sushi Vegan, on Rua Vicente Borga in Lisbon’s Madragoa neighbourhood, welcomes dogs of any size indoors and on the terrace, with no additional restrictions specified by the restaurant. Specialising in entirely vegan sushi, it replaces fish with creative combinations of vegetables, mushrooms, tofu, seaweed and other plant-based ingredients. A distinctive choice for Japanese-inspired food with your dog in Lisbon."
@@ -590,14 +635,26 @@
   "305": {
     "description": "The Westin Salgados Beach Resort in Albufeira welcomes dogs and cats weighing up to 10 kg, with a maximum of one pet per room. There is an additional charge of €17 per night. Pets may stay in the room, have water available and must be kept on a lead in permitted areas. Located between Salgados Beach and the lagoon in the Salgados Nature Reserve, the resort offers extensive outdoor spaces, pools, a spa and several restaurants for an Algarve holiday with your pet."
   },
+  "306": {
+    "description": "Praia de Paramos in Espinho allows dogs in the unpatrolled section of the beach. The broad Atlantic sands offer space for seaside walks, but visitors should respect the boundary between patrolled and unpatrolled areas, especially during the bathing season."
+  },
   "307": {
     "description": "Nosolo Itália in Portimão, on Praça Manuel Teixeira Gomes, allows dogs on the terrace, so you can enjoy a meal together in the city centre. This is where the Nosolo Italia concept began, and the extensive Italian-inspired menu includes pizza, pasta, salads, meat, fish, crêpes, waffles and its well-known handmade ice cream. It's a practical place for lunch, dinner or an ice cream with your dog near Portimão's waterfront."
+  },
+  "308": {
+    "description": "Pizzaria Casino da Ursa in Zambujeira do Mar welcomes dogs indoors and on its enclosed terrace, provided they stay on a lead. The restaurant serves wood-fired pizza, Portuguese dishes, meat, fresh fish, salads and vegetarian options on the Costa Vicentina."
+  },
+  "309": {
+    "description": "Kuala Brunch Restaurant on Avenida Combatentes da Grande Guerra in Leiria welcomes dogs indoors and offers water. The tropical-inspired café serves all-day brunch, pancakes, bowls, filled croissants, wraps, vegetarian and vegan options, juices and smoothies."
   },
   "310": {
     "description": "TJELA – Restelo, on Rua Duarte Pacheco Pereira in Lisbon, welcomes dogs of any size indoors and outside, but only one dog at a time is permitted. The all-day menu includes its signature 'tjelas', pancakes, açaí, salads, burgers, vegetarian dishes and smoothies. It is a relaxed place to eat with your dog in Restelo, with both indoor and outdoor seating."
   },
   "311": {
     "description": "Croissants do Passarinho, on Avenida Dom José I in Amadora, welcomes dogs of all sizes indoors and on its terrace. Specialising in sweet and savoury croissants, it serves classic flavours and indulgent combinations such as Nutella and strawberries, salted caramel, pistachio, egg cream and almond, and Lotus Biscoff. It is a friendly stop for breakfast or an afternoon snack with your dog in Amadora."
+  },
+  "312": {
+    "description": "Casas da Ribeira in Póvoa Velha, Seia, welcomes dogs and cats of all sizes indoors and outdoors. A €5 cleaning supplement applies to dogs weighing over 50 kg. Set in restored traditional granite houses in Serra da Estrela, the units have kitchens or kitchenettes and offer access to mountain walks."
   },
   "313": {
     "description": "Casa do Vinho Sintra Guest House, in Sintra’s historic centre, accepts pets on request for an indicated fee of €20 per accommodation unit per night. Food and water bowls are available in the room. The guest house has nine rooms, a garden and a terrace and is within walking distance of the National Palace and Quinta da Regaleira. Confirm pet conditions and availability before travelling."
@@ -628,6 +685,39 @@
   },
   "322": {
     "description": "NH Sintra Centro, close to Sintra’s historic centre, welcomes dogs and cats, up to a maximum of two animals per room. A fee of €25 per pet per night applies, and guests must contact the hotel before arrival and present a valid vaccination record at check-in. Guide dogs are exempt from the fee. Its central location makes it a practical base for visiting Sintra with your dog."
+  },
+  "323": {
+    "description": "Pousada de Valença within the historic fortress welcomes dogs in guest rooms and communal areas, except the restaurant, always on a lead. The fee is €20 per pet per night, and the dog must be declared when booking. The property overlooks the Minho River and Tui."
+  },
+  "324": {
+    "description": "Encosta do Monte in Arcozelo, near Ponte de Lima, welcomes dogs of any size without an additional fee under its published policy. The accommodation has a garden and parking, with easy access to the town and walks beside the Lima River. Confirm before booking."
+  },
+  "325": {
+    "description": "Margarida da Praça in the historic centre of Viana do Castelo welcomes dogs on request without an extra charge. Its location close to the waterfront and Gil Eannes museum ship is handy for walks through the old town and beside the river."
+  },
+  "326": {
+    "description": "Casa Azul d'Altamira in historic Viana do Castelo welcomes dogs on request, without an additional charge. The house has a garden, terrace, outdoor dining area and equipped kitchen, close to the river and Santa Luzia hill."
+  },
+  "327": {
+    "description": "Quinta de Santo António in Sá, between Monção and Melgaço, welcomes dogs of any size for an indicated €10 per pet per night. Food and water bowls are available. The rural estate has gardens and a pool and is a peaceful base for exploring the Alvarinho wine region."
+  },
+  "328": {
+    "description": "Casa Boavista in Formariz, Paredes de Coura, offers independent countryside chalets and welcomes dogs of any size without an extra fee under its published policy. Units have their own entrance and kitchen, with outdoor space and nature walks nearby. Confirm before booking."
+  },
+  "329": {
+    "description": "Quinta Lamosa Ecoturismo in Gondoriz, Arcos de Valdevez, offers independent holiday houses near Peneda-Gerês National Park. Dogs are accepted on request, subject to accommodation conditions. Confirm availability, any fee and the rules before booking."
+  },
+  "330": {
+    "description": "Hotel Cotto do Gatto in Grovelas, Ponte da Barca, welcomes dogs of any size without an additional charge. Pet beds and food and water bowls are provided. Its outdoor spaces and setting between the hills and Lima valley are convenient for exploring the area with your dog."
+  },
+  "331": {
+    "description": "Casa dos Confrades on Praça Municipal in central Arcos de Valdevez accepts dogs on request, and additional charges may apply. The property has a garden, a seasonal outdoor pool and some units with kitchenettes, close to riverside walks along the Vez."
+  },
+  "332": {
+    "description": "B&B HOTEL Viana do Castelo accepts dogs and cats for an indicated fee of €20 per pet per night. With a 24-hour reception and a location close to the centre, it provides a practical base for exploring Viana do Castelo with your dog. Confirm conditions and availability before booking."
+  },
+  "333": {
+    "description": "Pousada Mosteiro de Amares in Bouro welcomes dogs weighing up to 15 kg in selected room types, subject to availability and an additional fee. Set in a restored 12th-century Cistercian monastery between Braga and Gerês, it requires advance confirmation of the room, pet supplement and permitted areas."
   },
   "334": {
     "description": "Mercure Braga Centro on Praceta João XXI accepts small dogs for an additional fee. The hotel has air-conditioned rooms, paid parking, an outdoor pool and a panoramic bar, but pet admission does not guarantee access to all facilities. Confirm the size limit, fee and permitted areas before booking."
