@@ -89,20 +89,20 @@ function replaceElementHtml(html, id, value) {
 function slugify(value) {
   return String(value || '')
     .normalize('NFD')
-    .replace(/[\\u0300-\\u036f]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
 function cleanText(value) {
-  return String(value || '').replace(/\\s+/g, ' ').trim();
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
 function truncate(value, max = 180) {
   const text = cleanText(value);
   if (text.length <= max) return text;
-  return `${text.slice(0, max - 1).replace(/\\s+\\S*$/, '')}…`;
+  return `${text.slice(0, max - 1).replace(/\s+\S*$/, '')}…`;
 }
 
 function placeSlug(place) {
