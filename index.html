@@ -4014,12 +4014,12 @@
     }
 
     function getHomePath() {
-      return '/';
+      return /^\/en(?:\/|$)/.test(window.location.pathname) ? '/en/' : '/';
     }
 
     // Endereço público e partilhável do formulário de sugestão.
     function isSuggestPath() {
-      return window.location.pathname === '/adicionar-local' || window.location.pathname === '/adicionar-local/';
+      return ['/adicionar-local', '/adicionar-local/', '/en/adicionar-local', '/en/adicionar-local/'].includes(window.location.pathname);
     }
 
     function getPlaceSlug(loc) {
@@ -4030,7 +4030,7 @@
 
     function getPlaceDirectUrl(loc) {
       if (!loc || !loc.id) return `${window.location.origin}/`;
-      return `${window.location.origin}/local/${encodeURIComponent(getPlaceSlug(loc))}`;
+      return `${window.location.origin}${getHomePath().replace(/\/$/, '')}/local/${encodeURIComponent(getPlaceSlug(loc))}`;
     }
 
     async function copyPlaceDirectLink(id) {
@@ -7532,7 +7532,7 @@ function showView(view) {
   window.scrollTo({ top: 0, behavior: 'auto' });
 
   if (view === 'suggest' && !isSuggestPath()) {
-    window.history.pushState({ view: 'suggest' }, '', '/adicionar-local');
+    window.history.pushState({ view: 'suggest' }, '', `${getHomePath()}adicionar-local`);
   } else if (view !== 'suggest' && view !== 'detail' && view !== 'region' && (isSuggestPath() || window.location.search.includes('local=') || window.location.pathname.includes('/local/') || isGuidePath())) {
     window.history.pushState({ view }, '', `${getHomePath()}${window.location.hash || ''}`);
   }
@@ -7760,5 +7760,6 @@ function showView(view) {
 
     initApp();
   </script>
+  <script src="/i18n.js" defer></script>
 </body>
 </html>
