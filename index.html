@@ -7533,7 +7533,7 @@ function showView(view) {
 
   if (view === 'suggest' && !isSuggestPath()) {
     window.history.pushState({ view: 'suggest' }, '', '/adicionar-local');
-  } else if (view !== 'detail' && view !== 'region' && (isSuggestPath() || window.location.search.includes('local=') || window.location.pathname.includes('/local/') || isGuidePath())) {
+  } else if (view !== 'suggest' && view !== 'detail' && view !== 'region' && (isSuggestPath() || window.location.search.includes('local=') || window.location.pathname.includes('/local/') || isGuidePath())) {
     window.history.pushState({ view }, '', `${getHomePath()}${window.location.hash || ''}`);
   }
 
