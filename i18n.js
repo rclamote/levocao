@@ -282,6 +282,24 @@
   "Não aceita cães": "Dogs not allowed",
   "Com restrições": "Restrictions apply"
 });
+  Object.assign(translations, {
+  "Junta o teu cão aos Exploradores 🐾": "Join the Explorers with your dog 🐾",
+  "Descobre e confirma locais, partilha novos sítios e ganha pontos com o teu cão.": "Discover and confirm places, share new finds and earn points with your dog.",
+  "O teu email": "Your email",
+  "nome@exemplo.pt": "name@example.com",
+  "Continuar com email": "Continue with email",
+  "Sem palavra-passe. Enviamos um código de acesso. Se ainda não tens conta, é criada automaticamente.": "No password needed. We'll email you an access code. If you don't have an account yet, one will be created automatically.",
+  "Já tens conta? Usa o mesmo email para entrar.": "Already have an account? Use the same email to log in.",
+  "Acesso de administrador": "Administrator access",
+  "Introduz o código": "Enter the code",
+  "Introduz o código enviado para o teu email.": "Enter the code sent to your email.",
+  "Não recebeste o código?": "Didn't receive the code?",
+  "Voltar ao email": "Back to email",
+  "Verifica o teu email": "Check your email",
+  "Enviámos um código": "We've sent you a code",
+  "Email inválido": "Invalid email address",
+  "Tenta novamente": "Try again"
+});
   const originalText = new WeakMap();
   const lastRenderedText = new WeakMap();
   const originalAttributes = new WeakMap();
