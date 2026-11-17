@@ -3428,6 +3428,23 @@
         });
     }
 
+    // Traduções independentes dos dados originais em português.
+    let englishPlaceTranslations = null;
+
+    async function loadEnglishPlaceTranslations() {
+      if (!/^\/en(?:\/|$)/.test(window.location.pathname)) return {};
+      if (englishPlaceTranslations !== null) return englishPlaceTranslations;
+      try {
+        const response = await fetch('/translations/places-en.json');
+        if (!response.ok) throw new Error('English translations unavailable');
+        englishPlaceTranslations = await response.json();
+      } catch (error) {
+        console.warn('Traduções inglesas ainda indisponíveis:', error);
+        englishPlaceTranslations = {};
+      }
+      return englishPlaceTranslations;
+    }
+
     async function loadPlacesFromSupabase() {
       const loading = document.getElementById('loading-places');
       if (loading) loading.classList.remove('hidden');
@@ -3441,7 +3458,14 @@
 
         if (error) throw error;
 
-        locations = (data || []).map(normalizePlace);
+        const englishTranslations = await loadEnglishPlaceTranslations();
+        locations = (data || []).map((row) => {
+          const place = normalizePlace(row);
+          const translation = englishTranslations[String(place.id)];
+          if (translation?.description) place.desc = translation.description;
+          if (translation?.notes) place.notes = translation.notes;
+          return place;
+        });
 
         await Promise.all([
           loadConfirmationSummary(),
