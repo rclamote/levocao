@@ -388,7 +388,7 @@
     switcher.type = 'button';
     switcher.id = 'language-switcher';
     switcher.className = 'px-2 py-1.5 rounded-full border border-sand text-xs font-semibold text-sage hover:bg-sand transition';
-    switcher.textContent = isEnglish() ? '🇬🇧 EN ▾' : '🇵🇹 PT ▾';
+    switcher.textContent = isEnglish() ? '🇵🇹 PT' : '🇬🇧 EN';
     switcher.setAttribute('aria-label', isEnglish() ? 'Switch to Portuguese' : 'Switch to English');
     switcher.title = isEnglish() ? 'Mudar para português' : 'Switch to English';
     switcher.addEventListener('click', () => {
