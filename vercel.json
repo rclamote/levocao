@@ -1,10 +1,22 @@
 {
   "functions": {
     "api/local.js": {
-      "includeFiles": "index.html"
+      "includeFiles": [
+        "index.html",
+        "translations/places-en.json"
+      ]
     },
     "api/guide.js": {
       "includeFiles": "index.html"
+    },
+    "api/en.js": {
+      "includeFiles": [
+        "index.html",
+        "translations/interface-en.json"
+      ]
+    },
+    "api/sitemap.js": {
+      "includeFiles": "translations/places-en.json"
     }
   },
   "rewrites": [
@@ -30,11 +42,15 @@
     },
     {
       "source": "/en",
-      "destination": "/index.html"
+      "destination": "/api/en"
     },
     {
       "source": "/en/",
-      "destination": "/index.html"
+      "destination": "/api/en"
+    },
+    {
+      "source": "/en/local/:slug",
+      "destination": "/api/local?slug=:slug&lang=en"
     },
     {
       "source": "/en/:path*",
