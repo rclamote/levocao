@@ -206,8 +206,23 @@
   "101": {
     "description": "Kohima in Lisbon's Parque das Nações welcomes dogs indoors and on the terrace at lunchtime. This Portuguese-Indian fusion restaurant serves curries, naan, spice-led dishes and vegetarian choices, offering an option for dining with your dog in the area."
   },
+  "102": {
+    "description": "Monte do Cerro near Porto Covo welcomes up to two dogs per accommodation unit, for a fee of €20 per night. Dogs can stay inside the rural holiday houses, each with a fenced lawn or patio, close to the Alentejo coast."
+  },
+  "103": {
+    "description": "Slow Sourdough Bakery in Charneca da Caparica welcomes dogs of any size indoors and on its terrace. This vegan artisan bakery specialises in sourdough bread, croissants, cinnamon rolls, focaccia and cakes."
+  },
+  "104": {
+    "description": "Palacete do Guerreiro Charme Hotel & Spa in São Gião, Oliveira do Hospital, welcomes dogs in guest rooms and communal areas if they do not disturb other guests. Fees are €15 per day for one dog or €25 per day for two, with discounts for longer stays. Dog beds, food and water bowls and a welcome kit are available on request."
+  },
+  "105": {
+    "description": "Praia Irmão on Praia do Castelo in Costa da Caparica welcomes well-behaved dogs of any size indoors and on its terrace. The beach restaurant and bar serves Mediterranean-inspired food, artisan pizzas and cocktails by the sea."
+  },
   "106": {
     "description": "Ato Restaurante, on Rua do Albergue in Faro’s historic centre, welcomes dogs of any size indoors and has no terrace. Because the restaurant is small, guests are advised to give advance notice; admission depends on the dog’s behaviour and available space. Its contemporary cooking draws on seasonal Algarve ingredients. It is a distinctive option for dining with your dog in the heart of Faro."
+  },
+  "107": {
+    "description": "Quinta da Ribeirinha in Paços de Gaiolo, Marco de Canaveses, welcomes dogs of any size in guest rooms without an extra fee. Inform the accommodation when booking. It offers suites, a swimming pool and views over the Douro River."
   },
   "108": {
     "description": "Lemon Drops, at Albufeira Marina, welcomes dogs of any size both indoors and on the terrace. Its menu includes breakfast, light meals, salads, hummus, vegetarian and vegan dishes, fish, seafood and traditional Algarve cataplana. Overlooking the marina, it is a relaxed place to enjoy breakfast, lunch, dinner or a break with your dog in Albufeira."
@@ -230,6 +245,12 @@
   "114": {
     "description": "Taberna La Popular in Ericeira welcomes dogs in all areas, provided they are accompanied by their owners and kept on a lead when needed. The welcoming tavern serves Spanish tapas, small plates and wine for a relaxed meal with your dog."
   },
+  "115": {
+    "description": "Capt. Tap in central Setúbal welcomes dogs of all sizes and other pets indoors. There is no terrace. The craft beer bar serves draught beers, bottled and canned choices, snacks and informal meals."
+  },
+  "116": {
+    "description": "Soundwich in Porto's Parque da Cidade welcomes dogs of any size indoors and on its terrace and has a dedicated dog menu. It serves creative sandwiches, salads, burgers, artisan pizzas and brunch, making it a convenient stop after a park walk."
+  },
   "117": {
     "description": "Flores da Pampa on Praça das Flores in Lisbon welcomes dogs indoors; this is the only area available to them. The restaurant combines seasonal food, natural wines and live music in a relaxed setting, offering a place to eat or have a drink with your dog."
   },
@@ -245,6 +266,9 @@
   "121": {
     "description": "BrunchMe Beach Club in Ericeira welcomes dogs of all sizes indoors and on its terrace. A maximum of five dogs may be inside at the same time. The relaxed seaside menu includes brunch, burgers, crêpes and salads, as well as special dog-friendly doughnuts from Cookas Cookies."
   },
+  "122": {
+    "description": "Casa dos 2 Pátios in Vila Nova de Milfontes welcomes dogs throughout the house without an extra fee. The two-bedroom accommodation has two fenced patios, outdoor dining and barbecue areas and is a short walk from the beach."
+  },
   "123": {
     "description": "Galeria House of Wonders in central Cascais welcomes dogs throughout the venue, including indoors and on its terraces. This colourful vegetarian restaurant serves fresh dishes, juices and desserts, with a rooftop terrace for enjoying a meal alongside your dog."
   },
@@ -254,11 +278,17 @@
   "125": {
     "description": "Aldeia da Pedralva by WOT Signature, in the municipality of Vila do Bispo, offers dog-friendly accommodation in a restored village on the Vicentine Coast. Pets must be trained and accompanied and kept on a lead in shared areas, although they can be off-lead inside the guest room. A €25 daily pet fee and a €100 refundable security deposit apply, subject to any damage. It is a scenic base for exploring the western Algarve with your dog."
   },
+  "126": {
+    "description": "Hotel Horta da Moura near Monsaraz welcomes pets in rooms and communal areas, provided they are trained, accompanied and on a lead outside their room. A fee of €25 per day and a refundable €100 deposit apply, subject to no damage. The hotel has gardens and an outdoor pool."
+  },
   "127": {
     "description": "WOT Sarrazola Soul in Colares, Sintra, accepts up to two domestic dogs or cats per room. A fee of €15 per pet per day and a refundable €100 deposit apply, subject to no damage. Pets must be accompanied or in a suitable carrier and kept on a lead in communal areas. They are not allowed in restaurants, bars, spas or swimming pools and must not be left alone overnight."
   },
   "128": {
     "description": "WOT Lagos Montemar Soul, on Rua da Torraltinha in Lagos, accepts dogs and cats, with a maximum of two pets per room. The fee is €15 per pet per day, plus a refundable €100 deposit if no damage occurs. Pets must be supervised or in a carrier and kept on a lead in shared areas. They are not allowed in restaurants, bars, spas or swimming pools and cannot be left alone overnight. It is an accommodation option near central Lagos and its beaches for guests travelling with pets."
+  },
+  "129": {
+    "description": "WOT Pateira Soul in Fermentelos welcomes up to two dogs or cats per room, for a fee of €15 per pet per night and a refundable €100 deposit, subject to no damage. Pets must be accompanied or in carriers and kept on leads in common areas. They cannot enter the restaurant, bar, spa or pools or be left alone overnight."
   },
   "130": {
     "description": "WOT Lodge Soul in central Ericeira accepts up to two domestic dogs or cats per room, with a fee of €15 per pet per day and a refundable €100 deposit if there is no damage. Pets must be accompanied or in a suitable carrier and kept on a lead in communal areas. They cannot enter restaurants, bars, spas or pools or be left alone overnight."
@@ -275,11 +305,17 @@
   "134": {
     "description": "Fable – Books | Coffee | Community on Rua dos Prazeres in Lisbon welcomes dogs indoors. Combining an English-language bookshop with speciality coffee, light meals, natural wine and creative events, it is a welcoming place to browse, read or work with your dog nearby."
   },
+  "135": {
+    "description": "Hotel Octant Santiago in Santiago do Cacém accepts pets weighing up to 25 kg in guest rooms and has a terrace. A nightly supplement applies; confirm its amount and availability before booking. A pet welcome kit is provided."
+  },
   "136": {
     "description": "Coffee in Brew on Rua Luciano Cordeiro in Lisbon welcomes dogs of all sizes indoors and on its terrace. This speciality coffee shop roasts its own beans and serves espresso, filter coffee, cold brew, breakfast and brunch. A good stop for coffee lovers exploring Lisbon with their dogs."
   },
   "137": {
     "description": "ULU Cascais in Quinta da Bicuda welcomes dogs indoors and on the terrace, with water and dog biscuits available. The café serves breakfast, brunch and lunch, as well as speciality coffee and natural wines, making it a relaxed place to eat with your dog in Cascais."
+  },
+  "138": {
+    "description": "Páteo da Chica in Cano, Sousel, welcomes dogs of any size without a fixed number limit or extra fee. Dogs may stay in guest rooms and move throughout the house, but should not be left alone. Owners should take care near the pool, collect waste and take responsibility for damage."
   },
   "139": {
     "description": "Fábrica dos Óculos Lagos, on Rua dos Celeiros in Lagos, allows dogs inside its optical shop. The store offers optician and optometry services, prescription glasses, frames and sunglasses. It is a useful place to shop for eyewear or attend to your vision needs while your dog accompanies you indoors."
@@ -314,20 +350,74 @@
   "149": {
     "description": "Boa-Bao Lisboa, on Largo Rafael Bordalo Pinheiro in Chiado, welcomes dogs indoors and on its terrace. The menu explores Asian flavours inspired by Thailand, Vietnam, China, Japan, Korea and India, alongside signature cocktails and vegan and gluten-free options. It is a pet-friendly choice for lunch or dinner with your dog in central Lisbon."
   },
+  "150": {
+    "description": "Boa-Bao Porto on Rua da Picaria welcomes dogs indoors. This Asian-inspired restaurant serves dishes from several cuisines, signature cocktails and vegan and gluten-free options, making it a central Porto dining option with your dog."
+  },
+  "151": {
+    "description": "HI Serra da Estrela in Penhas da Saúde, Covilhã, welcomes up to three dogs of any size per room. A fee of €5 per pet per night applies, and a small pet bed is provided. Rooms are compact, so consider the space available when bringing several dogs. The mountain accommodation sits at around 1,500 metres altitude."
+  },
   "152": {
     "description": "Alma Veg in Carcavelos welcomes dogs of all sizes both indoors and on its terrace. This dog-friendly restaurant serves entirely vegan food, including bowls, salads, hummus and creative plant-based dishes, so you can enjoy a meal with your dog beside you."
+  },
+  "153": {
+    "description": "Florista Íris in Senhora da Hora, Matosinhos, welcomes dogs indoors and provides water. This florist sells fresh flowers, plants, arrangements and botanical decorations, making it an easy shop to visit with your dog."
+  },
+  "154": {
+    "description": "Oliveira Brava in Porto Covo, Sines, welcomes up to three dogs per stay with no additional fee. Dogs may stay inside the small holiday houses, although small or medium breeds are recommended because of the limited space."
+  },
+  "155": {
+    "description": "Alma-Rio Zêzere in Alqueidão near Tomar welcomes dogs of any size indoors and in outdoor areas. Dogs may stay in the accommodation, but cannot be left alone in the dome or tent because of the structure's fragility. A peaceful riverside retreat for a break with your dog."
   },
   "156": {
     "description": "Cape Cruiser, departing from Porto da Baleeira in Sagres, accepts small and medium-sized dogs on its dolphin- and whale-watching boat trips. Whether a dog can board depends on passenger numbers, sea conditions and safety requirements. Confirm your dog’s acceptance when booking so the operator can assess the conditions for your trip."
   },
+  "157": {
+    "description": "Monte da Casa Telhada in Ademas, Santiago do Cacém, welcomes up to two dogs of any size subject to prior confirmation, normally without a fee. The property is rented exclusively and has 3.5 hectares of private fenced land. Dogs must be supervised, cannot enter bedrooms or climb onto beds or sofas, and owners must collect waste."
+  },
+  "158": {
+    "description": "Casa das Mós between Amarante and Marco de Canaveses accepts up to three dogs of any size, subject to advance approval and a fee of €50 per dog. Dogs may stay in guest rooms but cannot access the pool or surrounding pool area. Bring their beds, food and bowls, and collect waste."
+  },
+  "159": {
+    "description": "Refúgio do Vidoeiro in Vila do Gerês accepts up to two small or medium dogs per stay, including in guest rooms. A food bowl, water bowl and private terrace are provided, and a €5 fee applies for the entire stay. Dogs must not be left alone for more than four hours; owners should provide pet details and respect quiet hours from 9 pm to 8 am."
+  },
+  "160": {
+    "description": "Doppo Gelateria on Praça do Comércio in Coimbra welcomes dogs on its terrace. It serves artisan ice cream and speciality coffee, with flavours ranging from classics to creative combinations. Dog-friendly ice cream flavours may occasionally be available."
+  },
+  "161": {
+    "description": "São Brás do Regedouro – Turismo na Aldeia near Évora welcomes dogs of any size indoors, in guest rooms and communal areas. There is no fixed number limit, although up to three dogs are recommended for everyone's comfort. A single €15 fee applies for the entire stay."
+  },
+  "162": {
+    "description": "Puro Dão Hotel & Spa in Nelas welcomes one dog weighing up to 10 kg per room, subject to availability. The fee is €45 for the first night and €30 per subsequent night. Dogs may stay in rooms but cannot be left alone and must be on leads. Restaurants, bars and social areas are off limits; bring the legally required pet documents."
+  },
+  "163": {
+    "description": "Beach House Babylon in Torreira welcomes dogs of any size in guest rooms, up to two per room or six when booking the entire house. The fee is €10 per dog per stay. Dogs cannot use the pool or remain unsupervised, and owners are responsible for any damage."
+  },
+  "164": {
+    "description": "Ria Surf House in Ovar welcomes dogs indoors and in guest rooms. Facing the Ria de Aveiro, the property has four bedrooms, living and dining space, kitchen, garden and outdoor pool. Praia do Areinho is nearby, and Praia do Furadouro is around three kilometres away."
+  },
+  "165": {
+    "description": "Moleiro da Costa Má in Silva Escura, Sever do Vouga, welcomes dogs indoors and in guest rooms. An indicated fee of €15 per pet per stay applies; confirm acceptance when booking. The rural property has a garden, terrace, seasonal outdoor pool and access to a riverside area."
+  },
+  "166": {
+    "description": "Do Largo in the historic centre of Évora welcomes dogs indoors and on its shaded terrace. The café and restaurant serves breakfast, brunch and lunch, offering a convenient break during a walk through Évora."
+  },
   "167": {
     "description": "CO-OP Layday in downtown Lisbon is a café and brunch spot where dogs of all sizes are welcome indoors. There is no outdoor terrace, but the café provides water bowls and dog treats, making it a convenient stop while exploring the city centre with your dog."
+  },
+  "168": {
+    "description": "Herdade da Terra Rica – The Club in Alcácer do Sal welcomes either one large dog or up to two small or medium dogs per house, without a pet fee. Dogs can stay indoors and explore the grounds under their owners' responsibility. They must be on a lead near the pool and cannot swim in it."
   },
   "169": {
     "description": "Parque Ribeirinho de Silves is a free riverside park beside the Arade River in Silves, with green spaces, a cycle path, a playground and a sports area. It is a pleasant place to walk your dog on a lead, with open space and water available. Keep your dog supervised and always clean up after it."
   },
   "170": {
     "description": "Vale Luís Neto – Retiro do Caldeirão in Salir, near Loulé, accepts up to three dogs of any size with no extra pet fee. Dogs cannot stay inside the bedrooms, but each of the three holiday houses has a private patio or garden where they can remain. Surrounded by the countryside of the Serra do Caldeirão, it is a peaceful accommodation option for visitors travelling with dogs in inland Algarve."
+  },
+  "171": {
+    "description": "Monte Val Murtinhais in Santa Cruz, Santiago do Cacém, welcomes up to two dogs of any size without an extra fee. Dogs can stay indoors and in guest rooms, provided they are sociable with people and other animals. Water is available."
+  },
+  "172": {
+    "description": "Monte do Melo near Montemor-o-Novo welcomes dogs of any size for an additional €10 per day. Dogs cannot enter bedrooms or the pool or climb onto sofas, and owners must collect waste. The estate is fenced, but the fence may not contain small or adventurous dogs. It offers ample outdoor space for groups travelling with dogs in the Alentejo."
   },
   "173": {
     "description": "Moinho da Alma in Porches, in the municipality of Lagoa, welcomes dogs in its accommodation without size restrictions, a stated limit on the number of dogs or an additional pet fee. Dogs may stay in the room but should not climb on beds or sofas; guests whose pets are used to doing so should bring protective covers. Owners must clean up after their dogs, respect other guests and take responsibility for damage. It is a flexible dog-friendly base for exploring the Algarve."
