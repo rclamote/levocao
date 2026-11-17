@@ -54,9 +54,12 @@ module.exports = async function handler(_req, res) {
     const entries = [
       `  <url><loc>${SITE_URL}/</loc>${alternateLinks(`${SITE_URL}/`, `${SITE_URL}/en/`)}<changefreq>weekly</changefreq><priority>1.0</priority></url>`,
       `  <url><loc>${SITE_URL}/en/</loc>${alternateLinks(`${SITE_URL}/`, `${SITE_URL}/en/`)}<changefreq>weekly</changefreq><priority>0.9</priority></url>`,
-      `  <url><loc>${SITE_URL}/onde-levar-o-cao-no-algarve</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
-      `  <url><loc>${SITE_URL}/onde-levar-o-cao-no-alentejo</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
-      `  <url><loc>${SITE_URL}/onde-levar-o-cao-em-lisboa</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+      `  <url><loc>${SITE_URL}/onde-levar-o-cao-no-algarve</loc>${alternateLinks(`${SITE_URL}/onde-levar-o-cao-no-algarve`, `${SITE_URL}/en/onde-levar-o-cao-no-algarve`)}<changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+      `  <url><loc>${SITE_URL}/en/onde-levar-o-cao-no-algarve</loc>${alternateLinks(`${SITE_URL}/onde-levar-o-cao-no-algarve`, `${SITE_URL}/en/onde-levar-o-cao-no-algarve`)}<changefreq>weekly</changefreq><priority>0.8</priority></url>`,
+      `  <url><loc>${SITE_URL}/onde-levar-o-cao-no-alentejo</loc>${alternateLinks(`${SITE_URL}/onde-levar-o-cao-no-alentejo`, `${SITE_URL}/en/onde-levar-o-cao-no-alentejo`)}<changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+      `  <url><loc>${SITE_URL}/en/onde-levar-o-cao-no-alentejo</loc>${alternateLinks(`${SITE_URL}/onde-levar-o-cao-no-alentejo`, `${SITE_URL}/en/onde-levar-o-cao-no-alentejo`)}<changefreq>weekly</changefreq><priority>0.8</priority></url>`,
+      `  <url><loc>${SITE_URL}/onde-levar-o-cao-em-lisboa</loc>${alternateLinks(`${SITE_URL}/onde-levar-o-cao-em-lisboa`, `${SITE_URL}/en/onde-levar-o-cao-em-lisboa`)}<changefreq>weekly</changefreq><priority>0.9</priority></url>`,
+      `  <url><loc>${SITE_URL}/en/onde-levar-o-cao-em-lisboa</loc>${alternateLinks(`${SITE_URL}/onde-levar-o-cao-em-lisboa`, `${SITE_URL}/en/onde-levar-o-cao-em-lisboa`)}<changefreq>weekly</changefreq><priority>0.8</priority></url>`,
       ...places.flatMap((place) => {
         const slug = `${slugify(place.name || 'local')}-${place.id}`;
         const portugueseUrl = `${SITE_URL}/local/${slug}`;
