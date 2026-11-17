@@ -367,7 +367,7 @@
       if (raw !== next) link.setAttribute('href', next);
     }
     document.documentElement.lang = english ? 'en' : 'pt';
-    if (english) {
+    if (english && /^\/en\/?$/.test(window.location.pathname)) {
       document.title = 'Levo o Cão | Dog-friendly places in Portugal';
       document.querySelector('meta[name="description"]')?.setAttribute('content',
         'Discover dog-friendly beaches, restaurants, accommodation and walks in Portugal. Real tips from a community of dog owners.');
