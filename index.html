@@ -4017,6 +4017,11 @@
       return '/';
     }
 
+    // Endereço público e partilhável do formulário de sugestão.
+    function isSuggestPath() {
+      return /^\\/adicionar-local\\/?$/.test(window.location.pathname);
+    }
+
     function getPlaceSlug(loc) {
       if (!loc || !loc.name) return '';
       const nameSlug = slugifyFilePart(loc.name || 'local');
@@ -7526,7 +7531,9 @@ function showView(view) {
   updateResultsBarVisibility(view);
   window.scrollTo({ top: 0, behavior: 'auto' });
 
-  if (view !== 'detail' && view !== 'region' && (window.location.search.includes('local=') || window.location.pathname.includes('/local/') || isGuidePath())) {
+  if (view === 'suggest' && !isSuggestPath()) {
+    window.history.pushState({ view: 'suggest' }, '', '/adicionar-local');
+  } else if (view !== 'detail' && view !== 'region' && (isSuggestPath() || window.location.search.includes('local=') || window.location.pathname.includes('/local/') || isGuidePath())) {
     window.history.pushState({ view }, '', `${getHomePath()}${window.location.hash || ''}`);
   }
 
@@ -7628,7 +7635,9 @@ function showView(view) {
     window.addEventListener('scroll', handleListScrollCollapse, { passive: true });
 
     window.addEventListener('popstate', () => {
-      if (!openLocalFromUrlParam() && !openGuideFromUrlPath()) {
+      if (isSuggestPath()) {
+        showView('suggest');
+      } else if (!openLocalFromUrlParam() && !openGuideFromUrlPath()) {
         showView('home');
       }
     });
@@ -7742,7 +7751,9 @@ function showView(view) {
         loadPlacesFromSupabase(),
         loadPublicDogExplorers()
       ]);
-      if (!openLocalFromUrlParam()) {
+      if (isSuggestPath()) {
+        showView('suggest');
+      } else if (!openLocalFromUrlParam()) {
         openGuideFromUrlPath();
       }
     }
