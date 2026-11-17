@@ -154,7 +154,7 @@
   }
 
   function insertSwitcher() {
-    const nav = document.querySelector('#app header, header');
+    const nav = document.querySelector('#app nav');
     const target = nav?.querySelector('.flex.items-center.gap-2');
     if (!target || document.getElementById('language-switcher')) return;
     const switcher = document.createElement('button');
