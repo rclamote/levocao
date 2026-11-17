@@ -4019,7 +4019,7 @@
 
     // Endereço público e partilhável do formulário de sugestão.
     function isSuggestPath() {
-      return /^\\/adicionar-local\\/?$/.test(window.location.pathname);
+      return window.location.pathname === '/adicionar-local' || window.location.pathname === '/adicionar-local/';
     }
 
     function getPlaceSlug(loc) {
