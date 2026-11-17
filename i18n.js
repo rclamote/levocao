@@ -258,6 +258,30 @@
   "Confirmações": "Confirmations",
   "Mais informações": "More information"
 });
+  Object.assign(translations, {
+  "🐕 Aceita cães": "🐕 Dogs allowed",
+  "🐕 Não aceita cães": "🐕 Dogs not allowed",
+  "que a informação continua correta": "that the information is still accurate",
+  "Abrir no Google Maps": "Open in Google Maps",
+  "Queres descobrir outras opções por perto?": "Want to discover more places nearby?",
+  "Ajuda-nos a levar mais cães connosco 🐾": "Help more dogs join the adventure 🐾",
+  "Conheces um sítio onde eles são bem-vindos? Partilha-o e ajuda esta comunidade a crescer.": "Know somewhere dogs are welcome? Share it and help our community grow.",
+  "Ver local anterior": "Previous place",
+  "Ver local seguinte": "Next place",
+  "Navegação entre locais": "Browse places",
+  "Com coordenadas": "With coordinates",
+  "Filtrar nesta zona": "Filter this region",
+  "Escolhe uma categoria ou vê todos os locais desta página.": "Choose a category or browse every place on this page.",
+  "Ver com filtros completos": "Open full filters",
+  "Ver mais locais em": "See more places in",
+  "Ver mais": "See more",
+  "Novo local": "New place",
+  "Local confirmado": "Confirmed place",
+  "perto de ti": "near you",
+  "Aceita cães": "Dogs allowed",
+  "Não aceita cães": "Dogs not allowed",
+  "Com restrições": "Restrictions apply"
+});
   const originalText = new WeakMap();
   const lastRenderedText = new WeakMap();
   const originalAttributes = new WeakMap();
@@ -280,6 +304,7 @@
       .replace(/(\d+)\s+pessoas/g, '$1 people')
       .replace(/(\d+)\s+locais encontrados/g, '$1 places found')
       .replace(/(\d+)\s+de\s+(\d+)/g, '$1 of $2');
+    next = next.replace(/Ver mais (\d+) locais em (.+)/g, 'See $1 more places in $2');
     return next;
   };
 
