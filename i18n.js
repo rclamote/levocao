@@ -156,10 +156,18 @@
   const originalAttributes = new WeakMap();
   const attributes = ['placeholder', 'aria-label', 'title'];
   const isEnglish = () => /^\/en(?:\/|$)/.test(window.location.pathname);
+  const longerPhrases = Object.keys(translations).filter((key) => key.length >= 20).sort((a, b) => b.length - a.length);
   const translateValue = (value) => {
     const trimmed = value.trim();
-    if (!Object.prototype.hasOwnProperty.call(translations, trimmed)) return value;
-    return value.replace(trimmed, translations[trimmed]);
+    if (Object.prototype.hasOwnProperty.call(translations, trimmed)) {
+      return value.replace(trimmed, translations[trimmed]);
+    }
+    // Some existing UI elements combine two phrases in the same text node.
+    let next = value;
+    for (const phrase of longerPhrases) {
+      if (next.includes(phrase)) next = next.split(phrase).join(translations[phrase]);
+    }
+    return next;
   };
 
   function applyTranslations(root = document.body) {
