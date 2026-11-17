@@ -1,6 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
+// Saved English descriptions are independent from Supabase's Portuguese originals.
+const ENGLISH_DESCRIPTIONS = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'translations/places-en.json'), 'utf8'));
+
+
 const SITE_URL = 'https://levocao.pt';
 const FALLBACK_SUPABASE_URL = 'https://mezeuxfoblyodjfaooan.supabase.co';
 const FALLBACK_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1lemV1eGZvYmx5b2RqZmFvb2FuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU5MjcxNDEsImV4cCI6MjA5MTUwMzE0MX0.UCzhiqF1dSKLou-Ma9RUkYepn0tc1LK_OsfS_80f-94';
@@ -93,11 +97,19 @@ function findPlace(places, rawSlug) {
     || null;
 }
 
-function injectSeo(html, place) {
-  const canonical = `${SITE_URL}/local/${encodeURIComponent(placeSlug(place))}`;
+function injectSeo(html, place, language = 'pt') {
+  const english = language === 'en';
+  const translatedDescription = ENGLISH_DESCRIPTIONS[String(place.id)]?.description || '';
+  const portugueseUrl = `${SITE_URL}/local/${encodeURIComponent(placeSlug(place))}`;
+  const englishUrl = `${SITE_URL}/en/local/${encodeURIComponent(placeSlug(place))}`;
+  const canonical = english ? englishUrl : portugueseUrl;
   const location = locationName(place);
-  const title = truncate(`${place.name} em ${location} | Levo o Cão`, 60);
-  const description = pageDescription(place);
+  const title = english
+    ? truncate(`${place.name} in ${location} | Dog-friendly Portugal`, 60)
+    : truncate(`${place.name} em ${location} | Levo o Cão`, 60);
+  const description = english
+    ? truncate(translatedDescription || `${place.name} is a dog-friendly place in ${location}, Portugal. Check the details before visiting with your dog.`, 160)
+    : pageDescription(place);
   const image = place.photo_url || `${SITE_URL}/mac.jpg`;
   const address = {
     '@type': 'PostalAddress',
@@ -128,10 +140,25 @@ function injectSeo(html, place) {
     ...(place.website ? { sameAs: place.website } : {}),
     additionalProperty: [{
       '@type': 'PropertyValue',
-      name: 'Aceita cães',
-      value: place.dog_status === 'no' ? 'Não' : place.dog_status === 'maybe' ? 'Com restrições' : 'Sim'
+      name: english ? 'Dogs allowed' : 'Aceita cães',
+      value: english
+        ? (place.dog_status === 'no' ? 'No' : place.dog_status === 'maybe' ? 'Restrictions apply' : 'Yes')
+        : (place.dog_status === 'no' ? 'Não' : place.dog_status === 'maybe' ? 'Com restrições' : 'Sim')
     }]
   };
+
+  if (english) {
+    html = html.replace('<html lang="pt"', '<html lang="en"')
+      .replace('<meta property="og:locale" content="pt_PT" />', '<meta property="og:locale" content="en_GB" />');
+  }
+
+  const alternates = translatedDescription ? [
+    `  <link rel="alternate" hreflang="pt-PT" href="${escapeHtml(portugueseUrl)}" />`,
+    `  <link rel="alternate" hreflang="en" href="${escapeHtml(englishUrl)}" />`,
+    `  <link rel="alternate" hreflang="x-default" href="${escapeHtml(portugueseUrl)}" />`
+  ].join('\n') + '\n' : '';
+  // Do not let generic, untranslated English pages enter Google's index.
+  const noindex = english && !translatedDescription ? '  <meta name="robots" content="noindex, follow" />\n' : '';
 
   html = html
     .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(title)}</title>`)
@@ -141,7 +168,7 @@ function injectSeo(html, place) {
     .replace(/<meta\s+property="og:description"\s+content="[^"]*"\s*\/?\s*>/i, `<meta property="og:description" content="${escapeHtml(description)}" />`)
     .replace(/<meta\s+property="og:url"\s+content="[^"]*"\s*\/?\s*>/i, `<meta property="og:url" content="${escapeHtml(canonical)}" />`)
     .replace(/<meta\s+property="og:image"\s+content="[^"]*"\s*\/?\s*>/i, `<meta property="og:image" content="${escapeHtml(image)}" />`)
-    .replace('</head>', `  <meta name="twitter:card" content="summary_large_image" />\n  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>\n</head>`);
+    .replace('</head>', `${alternates}${noindex}  <meta name="twitter:card" content="summary_large_image" />\n  <script type="application/ld+json">${JSON.stringify(jsonLd).replace(/</g, '\\u003c')}</script>\n</head>`);
 
   return html;
 }
@@ -160,7 +187,7 @@ module.exports = async function handler(req, res) {
       return res.end(html.replace('</head>', '  <meta name="robots" content="noindex" />\n</head>'));
     }
 
-    return res.status(200).end(injectSeo(html, place));
+    return res.status(200).end(injectSeo(html, place, req.query.lang === 'en' ? 'en' : 'pt'));
   } catch (error) {
     console.error('Local SEO render failed:', error);
     res.statusCode = 503;
