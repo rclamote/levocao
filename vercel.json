@@ -1,10 +1,16 @@
 {
   "functions": {
     "api/local.js": {
-      "includeFiles": "index.html"
+      "includeFiles": "{index.html,translations/places-en.json}"
     },
     "api/guide.js": {
-      "includeFiles": "index.html"
+      "includeFiles": "{index.html,translations/places-en.json}"
+    },
+    "api/en.js": {
+      "includeFiles": "{index.html,translations/interface-en.json}"
+    },
+    "api/sitemap.js": {
+      "includeFiles": "translations/places-en.json"
     }
   },
   "rewrites": [
@@ -27,6 +33,34 @@
     {
       "source": "/sitemap.xml",
       "destination": "/api/sitemap"
+    },
+    {
+      "source": "/en",
+      "destination": "/api/en"
+    },
+    {
+      "source": "/en/",
+      "destination": "/api/en"
+    },
+    {
+      "source": "/en/local/:slug",
+      "destination": "/api/local?slug=:slug&lang=en"
+    },
+    {
+      "source": "/en/onde-levar-o-cao-em-lisboa",
+      "destination": "/api/guide?slug=onde-levar-o-cao-em-lisboa&lang=en"
+    },
+    {
+      "source": "/en/onde-levar-o-cao-no-alentejo",
+      "destination": "/api/guide?slug=onde-levar-o-cao-no-alentejo&lang=en"
+    },
+    {
+      "source": "/en/onde-levar-o-cao-no-algarve",
+      "destination": "/api/guide?slug=onde-levar-o-cao-no-algarve&lang=en"
+    },
+    {
+      "source": "/en/:path*",
+      "destination": "/index.html"
     },
     {
       "source": "/:path*",

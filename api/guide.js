@@ -34,6 +34,39 @@ const GUIDES = {
   }
 };
 
+
+const GUIDES_EN = {
+  'onde-levar-o-cao-no-algarve': {
+    title: 'Dog-friendly Algarve | Where to take your dog',
+    description: 'Discover dog-friendly restaurants, beaches, accommodation and walks across the Algarve, with practical information from our community.',
+    eyebrow: 'Dog-friendly Algarve guide',
+    heading: 'Where to take your dog in the Algarve',
+    intro: 'Explore restaurants, beaches, accommodation, walks and experiences where dogs are welcome in the Algarve.',
+    resultsTitle: 'Places in the Algarve',
+    districts: ['Faro']
+  },
+  'onde-levar-o-cao-no-alentejo': {
+    title: 'Dog-friendly Alentejo | Where to take your dog',
+    description: 'Find dog-friendly accommodation, restaurants, walks and experiences across Alentejo, Portugal.',
+    eyebrow: 'Dog-friendly Alentejo guide',
+    heading: 'Where to take your dog in Alentejo',
+    intro: 'Discover places to stay, eat and explore with your dog throughout Alentejo.',
+    resultsTitle: 'Places in Alentejo',
+    districts: ['Beja', 'Évora', 'Portalegre']
+  },
+  'onde-levar-o-cao-em-lisboa': {
+    title: 'Dog-friendly Lisbon | Where to take your dog',
+    description: 'Discover dog-friendly cafés, restaurants, parks, accommodation and walks in Lisbon, Portugal.',
+    eyebrow: 'Dog-friendly Lisbon guide',
+    heading: 'Where to take your dog in Lisbon',
+    intro: 'Find restaurants, cafés, parks, walks and places to stay with your dog in Lisbon, including useful access rules.',
+    resultsTitle: 'Places in Lisbon',
+    districts: ['Lisboa'],
+    municipalities: ['Lisboa']
+  }
+};
+const ENGLISH_DESCRIPTIONS = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'translations/places-en.json'), 'utf8'));
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -56,20 +89,20 @@ function replaceElementHtml(html, id, value) {
 function slugify(value) {
   return String(value || '')
     .normalize('NFD')
-    .replace(/[\\u0300-\\u036f]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
 
 function cleanText(value) {
-  return String(value || '').replace(/\\s+/g, ' ').trim();
+  return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
 function truncate(value, max = 180) {
   const text = cleanText(value);
   if (text.length <= max) return text;
-  return `${text.slice(0, max - 1).replace(/\\s+\\S*$/, '')}…`;
+  return `${text.slice(0, max - 1).replace(/\s+\S*$/, '')}…`;
 }
 
 function placeSlug(place) {
@@ -120,13 +153,15 @@ function getGuidePlaces(places, guide) {
     .filter((place) => !municipalities.length || municipalities.includes(place.municipality));
 }
 
-function renderGuideCards(places) {
+function renderGuideCards(places, lang = 'pt') {
   return places.map((place) => {
-    const name = cleanText(place.name) || 'Local pet-friendly';
+    const name = cleanText(place.name) || (lang === 'en' ? 'Dog-friendly place' : 'Local pet-friendly');
     const location = locationName(place);
-    const type = cleanText(place.type) || 'Local pet-friendly';
-    const description = placeDescription(place);
-    const href = `/local/${encodeURIComponent(placeSlug(place))}`;
+    const categoryEnglish = {'Comer & Beber':'Food & Drink','Praias':'Beaches','Alojamentos':'Accommodation','Espaços comerciais':'Shops','Soltar o cão':'Off-leash areas','Passear com o cão':'Dog walks','Experiências':'Experiences'};
+    const rawType = cleanText(place.type) || 'Local pet-friendly';
+    const type = lang === 'en' ? (categoryEnglish[rawType] || rawType) : rawType;
+    const description = lang === 'en' ? (ENGLISH_DESCRIPTIONS[String(place.id)]?.description || '') : placeDescription(place);
+    const href = `${lang === 'en' ? '/en' : ''}/local/${encodeURIComponent(placeSlug(place))}`;
     const image = cleanText(place.photo_url);
 
     return `
@@ -144,8 +179,8 @@ function renderGuideCards(places) {
   }).join('');
 }
 
-function injectGuideSeo(html, slug, guide, places) {
-  const canonical = `${SITE_URL}/${slug}`;
+function injectGuideSeo(html, slug, guide, places, lang = 'pt') {
+  const canonical = `${SITE_URL}/${lang === 'en' ? 'en/' : ''}${slug}`;
   const image = `${SITE_URL}/mac.jpg`;
   const guidePlaces = getGuidePlaces(places, guide);
   const jsonLd = {
@@ -155,7 +190,7 @@ function injectGuideSeo(html, slug, guide, places) {
     description: guide.description,
     url: canonical,
     image,
-    inLanguage: 'pt-PT',
+    inLanguage: lang === 'en' ? 'en' : 'pt-PT',
     isPartOf: {
       '@type': 'WebSite',
       name: 'Levo o Cão',
@@ -168,12 +203,13 @@ function injectGuideSeo(html, slug, guide, places) {
         '@type': 'ListItem',
         position: index + 1,
         name: cleanText(place.name),
-        url: `${SITE_URL}/local/${encodeURIComponent(placeSlug(place))}`
+        url: `${SITE_URL}/${lang === 'en' ? 'en/' : ''}local/${encodeURIComponent(placeSlug(place))}`
       }))
     }
   };
 
   html = html
+     .replace(/<html lang="pt"/i, `<html lang="${lang === 'en' ? 'en' : 'pt'}"`)
     .replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(guide.title)}</title>`)
     .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/?\s*>/i, `<meta name="description" content="${escapeHtml(guide.description)}" />`)
     .replace(/<link\s+rel="canonical"\s+href="[^"]*"\s*\/?\s*>/i, `<link rel="canonical" href="${escapeHtml(canonical)}" />`)
@@ -189,10 +225,14 @@ function injectGuideSeo(html, slug, guide, places) {
   html = replaceElementText(html, 'region-eyebrow', guide.eyebrow);
   html = replaceElementText(html, 'region-title', guide.heading);
   html = replaceElementText(html, 'region-intro', guide.intro);
-  html = replaceElementText(html, 'region-count-pill', `${guidePlaces.length} ${guidePlaces.length === 1 ? 'local' : 'locais'} nesta zona`);
+  html = replaceElementText(html, 'region-count-pill', lang === 'en' ? `${guidePlaces.length} ${guidePlaces.length === 1 ? 'place' : 'places'} in this area` : `${guidePlaces.length} ${guidePlaces.length === 1 ? 'local' : 'locais'} nesta zona`);
   html = replaceElementText(html, 'region-results-title', guide.resultsTitle);
-  html = replaceElementText(html, 'region-results-subtitle', `${guidePlaces.length} ${guidePlaces.length === 1 ? 'local encontrado' : 'locais encontrados'}`);
-  html = replaceElementHtml(html, 'cards-region', renderGuideCards(guidePlaces));
+  html = replaceElementText(html, 'region-results-subtitle', lang === 'en' ? `${guidePlaces.length} ${guidePlaces.length === 1 ? 'place found' : 'places found'}` : `${guidePlaces.length} ${guidePlaces.length === 1 ? 'local encontrado' : 'locais encontrados'}`);
+  html = replaceElementHtml(html, 'cards-region', renderGuideCards(guidePlaces, lang));
+  if (lang === 'en') html = html.replace(/<meta\s+property="og:locale"\s+content="[^"]*"\s*\/?\s*>/i, '<meta property="og:locale" content="en_GB" />');
+  const portugueseUrl = `${SITE_URL}/${slug}`;
+  const englishUrl = `${SITE_URL}/en/${slug}`;
+  html = html.replace('</head>', `  <link rel="alternate" hreflang="pt-PT" href="${portugueseUrl}" />\n  <link rel="alternate" hreflang="en" href="${englishUrl}" />\n  <link rel="alternate" hreflang="x-default" href="${portugueseUrl}" />\n</head>`);
 
   return html;
 }
@@ -203,7 +243,8 @@ module.exports = async function handler(req, res) {
 
   try {
     const slug = String(req.query.slug || '').toLowerCase();
-    const guide = GUIDES[slug];
+    const lang = req.query.lang === 'en' ? 'en' : 'pt';
+    const guide = (lang === 'en' ? GUIDES_EN : GUIDES)[slug];
     const html = fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8');
 
     if (!guide) {
@@ -212,7 +253,7 @@ module.exports = async function handler(req, res) {
     }
 
     const places = await fetchPlaces(html);
-    return res.status(200).end(injectGuideSeo(html, slug, guide, places));
+    return res.status(200).end(injectGuideSeo(html, slug, guide, places, lang));
   } catch (error) {
     console.error('Guide SEO render failed:', error);
     res.statusCode = 503;
