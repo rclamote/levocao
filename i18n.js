@@ -152,7 +152,93 @@
   "🏖️ Praias": "🏖️ Beaches",
   "🏡 Alojamentos": "🏡 Accommodation"
 };
+  Object.assign(translations, {
+  "Explorar por categoria": "Browse by category",
+  "🐾 618 confirmações da comunidade": "🐾 618 community confirmations",
+  "confirmações da comunidade": "community confirmations",
+  "Locais pet-friendly em Portugal": "Dog-friendly places in Portugal",
+  "O Levo o Cão ajuda a descobrir onde podes ir com o teu cão em Portugal.": "Levo o Cão helps you discover places to visit with your dog across Portugal.",
+  "Aqui podes encontrar restaurantes que aceitam cães, praias pet-friendly, alojamentos onde os cães são bem-vindos, espaços comerciais e sítios para passear com o cão.": "Find restaurants that welcome dogs, dog-friendly beaches, accommodation, shops and places for walks with your dog.",
+  "A informação é prática, simples e feita por quem vive isto no dia a dia.": "Practical, straightforward information shared by people who enjoy life with their dogs.",
+  "A matilha que faz o mapa crescer": "The pack that makes the map grow",
+  "Comunidade": "Community",
+  "Exploradores em destaque": "Featured Explorers",
+  "🐾 Explorador Pioneiro": "🐾 Pioneer Explorer",
+  "Foi por causa do Mac que nasceu o Levo o Cão. A vontade de partilhar mais aventuras com os nossos cães continua a inspirar este projeto.": "Levo o Cão began because of Mac. The wish to share more adventures with our dogs continues to inspire this project.",
+  "Para sempre o nosso primeiro Explorador. ❤️": "Forever our very first Explorer. ❤️",
+  "Explorador do mês": "Explorer of the month",
+  "pontos este mês": "points this month",
+  "local descoberto": "place discovered",
+  "locais descobertos": "places discovered",
+  "confirmação": "confirmation",
+  "confirmações": "confirmations",
+  "Abriu caminho para outros cães": "Paved the way for other dogs",
+  "A ganhar terreno": "Making progress",
+  "Regista o teu cão, contribui para o mapa e ganha pontos pelas descobertas e confirmações.": "Register your dog, help grow the map and earn points for discoveries and confirmations.",
+  "O teu cão também pode aparecer aqui.": "Your dog could be featured here too.",
+  "Fotografias da comunidade": "Community photos",
+  "— se usares ambos, ainda melhor. Depois de aprovada, pode aparecer aqui e na página do local.": "— even better if you use both. Once approved, your photo may appear here and on the place’s page.",
+  "Novo": "New",
+  "Confirmado pelo estabelecimento": "Confirmed by the business",
+  "Confirmado pela comunidade": "Confirmed by the community",
+  "Ver detalhes de": "View details for",
+  "Última confirmação:": "Last confirmed:",
+  "pessoa confirmou": "person confirmed",
+  "pessoas confirmaram": "people confirmed",
+  "pessoas": "people",
+  "Mostra primeiro os locais com coordenadas mais próximos de ti.": "Show nearby places with available coordinates first.",
+  "Usar localização": "Use my location",
+  "Zonas": "Areas",
+  "Limpar tudo": "Clear all",
+  "Todas": "All",
+  "locais encontrados": "places found",
+  "local encontrado": "place found",
+  "Ex: Portimão": "E.g. Portimão",
+  "Ex: Rua..., Praia..., Zona antiga...": "E.g. street, beach or neighbourhood...",
+  "Ex: deixam entrar nas zonas comuns, algumas lojas não aceitam, trela obrigatória...": "E.g. dogs allowed in common areas, some shops restrict entry, lead required...",
+  "Ex: www.cafepark.pt": "E.g. www.example.com",
+  "+5 pontos": "+5 points",
+  "Adicionar um local": "Add a place",
+  "Agora não": "Not now",
+  "Procura por local, cidade ou categoria": "Search by place, city or category",
+  "Enviar": "Send",
+  "Sair": "Log out",
+  "Os meus cães": "My dogs",
+  "Meu perfil": "My profile",
+  "Carregar mais": "Load more",
+  "Ver detalhes": "View details",
+  "Ver no mapa": "View on map",
+  "Ver no Google Maps": "View on Google Maps",
+  "Copiar link": "Copy link",
+  "Link copiado!": "Link copied!",
+  "Confirmar informação": "Confirm information",
+  "Voltar à lista": "Back to list",
+  "Guardar": "Save",
+  "Cancelar": "Cancel",
+  "Fechar": "Close",
+  "Continuar": "Continue",
+  "Seguinte": "Next",
+  "Anterior": "Previous",
+  "Entrar com email": "Log in with email",
+  "Email": "Email",
+  "Código de acesso": "Access code",
+  "Confirmar código": "Confirm code",
+  "Enviar código": "Send code",
+  "Reenviar código": "Resend code",
+  "Verificar": "Verify",
+  "Última atualização": "Last updated",
+  "Sem informação": "No information",
+  "Nenhum local encontrado": "No places found",
+  "Sem resultados": "No results",
+  "Adicionar comentário": "Add comment",
+  "Nome do cão": "Dog's name",
+  "Adicionar cão": "Add dog",
+  "Editar cão": "Edit dog",
+  "Guardar alterações": "Save changes",
+  "Parabéns!": "Congratulations!"
+});
   const originalText = new WeakMap();
+  const lastRenderedText = new WeakMap();
   const originalAttributes = new WeakMap();
   const attributes = ['placeholder', 'aria-label', 'title'];
   const isEnglish = () => /^\/en(?:\/|$)/.test(window.location.pathname);
@@ -167,6 +253,12 @@
     for (const phrase of longerPhrases) {
       if (next.includes(phrase)) next = next.split(phrase).join(translations[phrase]);
     }
+    // Variable counts are rendered after the first page load.
+    next = next.replace(/(\d+)\s+pessoa confirmou/g, '$1 person confirmed')
+      .replace(/(\d+)\s+pessoas confirmaram/g, '$1 people confirmed')
+      .replace(/(\d+)\s+pessoas/g, '$1 people')
+      .replace(/(\d+)\s+locais encontrados/g, '$1 places found')
+      .replace(/(\d+)\s+de\s+(\d+)/g, '$1 of $2');
     return next;
   };
 
@@ -180,9 +272,11 @@
 
     for (const node of textNodes) {
       if (['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA'].includes(node.parentElement?.tagName)) continue;
-      if (!originalText.has(node)) originalText.set(node, node.textContent);
+      // Refresh the source when the app reuses a text node for new content.
+      if (!originalText.has(node) || (lastRenderedText.has(node) && node.textContent !== lastRenderedText.get(node))) originalText.set(node, node.textContent);
       const source = originalText.get(node);
       const next = english ? translateValue(source) : source;
+      lastRenderedText.set(node, next);
       if (node.textContent !== next) node.textContent = next;
     }
 
@@ -199,6 +293,14 @@
         const value = english ? translateValue(sources[attribute]) : sources[attribute];
         if (element.getAttribute(attribute) !== value) element.setAttribute(attribute, value);
       }
+    }
+    // Preserve the selected language when opening cards or regional guides
+    // in a new tab, without altering the Portuguese site.
+    for (const link of document.querySelectorAll('a[href^="/local/"], a[href^="/onde-levar-o-cao-"], a[href^="/en/local/"], a[href^="/en/onde-levar-o-cao-"]')) {
+      const raw = link.getAttribute('href') || '';
+      const bare = raw.replace(/^\/en(?=\/)/, '');
+      const next = english ? '/en' + bare : bare;
+      if (raw !== next) link.setAttribute('href', next);
     }
     document.documentElement.lang = english ? 'en' : 'pt';
     if (english) {
@@ -243,6 +345,6 @@
         applyTranslations();
       });
     });
-    observer.observe(document.body, { childList: true, subtree: true });
+    observer.observe(document.body, { childList: true, characterData: true, subtree: true });
   });
 })();
