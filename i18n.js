@@ -6,7 +6,7 @@
   "Adicionar local": "Add a place",
   "Sugerir local": "Suggest a place",
   "Lista de locais": "Places list",
-  "Levo o cão?": "Taking the dog?",
+  "Levo o cão?": "Can I bring my dog?",
   "Inspirado pelo Mac 🐾": "Inspired by Mac 🐾",
   "Descobre onde podes ir com ele antes de sair de casa.": "Find places to go with your dog before leaving home.",
   "🐾 A comunidade já começou a confirmar locais": "🐾 Our community is already confirming places",
