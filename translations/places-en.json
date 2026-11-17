@@ -26,8 +26,35 @@
   "41": {
     "description": "Praia Fluvial de Alte, near Fonte Grande in Alte, in the municipality of Loulé, is a riverside leisure area where dogs may accompany their owners on a lead. The site has a natural swimming pool, picnic areas, shade and spaces for relaxing beside Ribeira de Alte. Dogs are not allowed in the pool or spring, or within the spring’s protected perimeter. Respect the posted rules when visiting this inland Algarve attraction with your dog."
   },
+  "42": {
+    "description": "Buona Serra Pizzaria in Queluz welcomes dogs indoors. The Italian restaurant serves artisan pizzas, pasta and lasagne, including vegetarian options, making it a place for lunch or dinner with your dog in the Sintra area."
+  },
+  "43": {
+    "description": "Pet&Tea on Rua João Cabreira in downtown Coimbra is a cat café that welcomes pets indoors and on its terrace, provided they remain on a lead. Water bowls are available. The café supports responsible cat adoption, so visitors should respect the resident cats' welfare."
+  },
+  "44": {
+    "description": "Restaurante Trama Pasta Fresca in downtown Lisbon welcomes dogs indoors. Its speciality is fresh pasta made in-house, combining Italian recipes with influences from other cuisines, near Rua Augusta."
+  },
+  "45": {
+    "description": "The Bread Box Burgers in Belverde, Seixal, welcomes dogs indoors and has a terrace that can be more convenient for larger animals. It specialises in freshly prepared artisan burgers."
+  },
+  "46": {
+    "description": "Casa Nolita at Docas de Santo Amaro in Lisbon welcomes dogs of any size on its terrace only, not indoors. The Italian restaurant serves pizza, pasta and cocktails overlooking the Tagus."
+  },
   "47": {
     "description": "Restaurante Botânico in Ferrarias, Almancil, welcomes well-behaved dogs indoors and provides water for them. Its contemporary menu includes meat, fish, vegan and gluten-free options, served in a setting surrounded by greenery. It is a pleasant choice for lunch or dinner with your dog near Almancil and Quinta do Lago, provided your pet remains calm during the meal."
+  },
+  "48": {
+    "description": "Restaurante Retiro da Ponte in Vilar de Mouros, Caminha, welcomes dogs indoors and on the terrace. Near the village's historic bridge, it serves Portuguese dishes with traditional and contemporary influences and seasonal produce."
+  },
+  "49": {
+    "description": "Selllva on Rua Mouzinho da Silveira in Lisbon accepts dogs only in its outdoor seating area. The menu features brunch and internationally inspired healthy dishes, including vegetarian and vegan options, near Avenida da Liberdade."
+  },
+  "50": {
+    "description": "Tasca Ju in Espinheiro, Alcanena, welcomes dogs both indoors and on its small terrace. This informal local tavern serves snacks and drinks and offers a friendly stop with your dog."
+  },
+  "51": {
+    "description": "Dona Sardinha in Luso, Mealhada, welcomes dogs indoors and offers them biscuits. Near Parque do Lago, the restaurant serves creative vegetarian and vegan food in a peaceful green setting."
   },
   "52": {
     "description": "The Passadiços de Alvor boardwalks, near Portimão, offer an approximately six-kilometre, mostly flat route through the estuary, dunes and coastal landscape. Dogs can accompany walkers, but keeping them on a lead and remaining on the boardwalk are recommended to protect the ecosystem. There is little shade and the route can be busy on sunny days, so cooler hours are best."
@@ -35,11 +62,35 @@
   "53": {
     "description": "Parque Canino de Olhão in Quelfes, in the municipality of Olhão, is a fenced dog park where dogs can run and play safely off-lead. The enclosure has a drinking fountain, benches and obstacles for activity and training. It is a useful place for exercise and socialisation with your dog in the eastern Algarve."
   },
+  "54": {
+    "description": "C&C Artesanal Food on Rua dos Cedros in Porto welcomes dogs indoors and on the terrace. Dogs can move around the venue, and toys and treats are available. The pizzeria also has sofas, books and games for adults and children."
+  },
   "55": {
     "description": "Gaia Organic Shop & Kitchen in Rogil, near Aljezur, welcomes dogs of all sizes indoors and in its spacious garden, provided they stay on a lead. Water is available for pets. The venue combines an organic grocery shop with plant-based food in a relaxed, nature-inspired atmosphere. It is a convenient stop for eating, shopping or spending time with your dog along the Vicentine Coast."
   },
   "56": {
     "description": "Forum Algarve in Faro allows dogs in its common areas on a short lead. Dogs cannot enter the food court or hypermarket, and individual shops may apply their own rules. Outside, a dog-friendly area has drinking water, a dog toilet and play equipment, which should be used under supervision. Leads and muzzles can also be borrowed from the information desk against a deposit. It is a useful place to shop with your dog in Faro."
+  },
+  "58": {
+    "description": "Bipolar Restaurante in Cais do Sodré, Lisbon, welcomes dogs of all sizes indoors and outdoors. Overlooking the Tagus, it serves brunch, lunch and dinner, offering a riverside meal with your dog."
+  },
+  "59": {
+    "description": "Madrasta Restaurante in the municipal garden of Paço de Arcos welcomes dogs of any size on its terrace, but not indoors. Its Mediterranean-inspired menu includes Portuguese and Italian dishes, pizzas, pasta, fish and meat."
+  },
+  "60": {
+    "description": "Alegro Alfragide shopping centre welcomes dogs in common areas and participating shops displaying the 'Bem-vindos Cãopanheiros' sign. Register at the information desk on your first visit and present the required documents for a dog passport. Up to two dogs per person may enter, on non-retractable leads no longer than one metre. Food courts, the hypermarket, toilets and unmarked shops are excluded. A dog toilet area is available."
+  },
+  "61": {
+    "description": "Clube Royale on Rua do Poço dos Negros in Lisbon welcomes dogs indoors. The shop and creative studio focuses on vintage clothing, designer pieces and artistic projects, and also hosts music events."
+  },
+  "62": {
+    "description": "Praia das Amoreiras in Santa Cruz, Torres Vedras, has an official dog-friendly area with animal shelters, drinking fountains and waste-bag dispensers. Keep your dog under control, follow the signs and carry the required documents."
+  },
+  "63": {
+    "description": "Praia dos Pescadores (Praia Velha) in Paço de Arcos has a designated dog-friendly area open year-round. Facilities include a drinking fountain, dog-waste bag dispensers and regular cleaning. Dogs must stay on a lead, and owners must follow hygiene and identification rules."
+  },
+  "64": {
+    "description": "Praia do Porto da Areia Norte in Peniche welcomes dogs throughout the year. Portugal's first officially designated dog beach has around 80 metres of sand and dog-waste bag dispensers. Stay within the marked area and follow the signs."
   },
   "65": {
     "description": "Quiosque Keil do Amaral on Alameda Keil do Amaral in Lisbon's Monsanto Forest Park has a dog-friendly outdoor terrace with water available for dogs. Serving coffee, burgers, bagels, toast, bowls and drinks, it is a convenient stop during a walk in Monsanto, with views over Lisbon."
