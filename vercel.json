@@ -15,6 +15,10 @@
   },
   "rewrites": [
     {
+      "source": "/maps-sdk.js",
+      "destination": "/api/maps-sdk"
+    },
+    {
       "source": "/local/:slug",
       "destination": "/api/local?slug=:slug"
     },
